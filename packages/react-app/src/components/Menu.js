@@ -7,7 +7,6 @@ import {abis, addresses} from "../contracts";
 import {Button} from "./index";
 import {useQuery} from "@apollo/react-hooks";
 import useWeb3Modal from "../hooks/useWeb3Modal";
-import GET_TRANSFERS from "../graphql/subgraph";
 import {render} from "react-dom";
 import AccountInfo from "./AccountInfo";
 

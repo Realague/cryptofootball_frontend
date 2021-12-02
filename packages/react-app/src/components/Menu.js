@@ -3,7 +3,7 @@ import {Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {getDefaultProvider} from "@ethersproject/providers";
 import {Contract} from "@ethersproject/contracts";
-import {abis, addresses} from "@project/contracts";
+import {abis, addresses} from "../contracts";
 import {Button} from "./index";
 import {useQuery} from "@apollo/react-hooks";
 import useWeb3Modal from "../hooks/useWeb3Modal";

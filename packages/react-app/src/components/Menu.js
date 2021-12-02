@@ -21,7 +21,7 @@ async function readOnChainData() {
     console.log({tokenBalance: tokenBalance.toString()});
 }
 
-const chainId = 56;
+const CHAIN_ID = 56;
 
 const networkData =
     [{
@@ -87,7 +87,7 @@ function WalletButton({provider, loadWeb3Modal, logoutOfWeb3Modal}) {
                 });
 
                 let chainId = await provider.eth.getChainId();
-                if (chainId !== chainId) {
+                if (CHAIN_ID !== chainId) {
                     console.log("Wrong chain")
                     window.ethereum.request({
                         method: "wallet_addEthereumChain",
@@ -126,15 +126,7 @@ function WalletButton({provider, loadWeb3Modal, logoutOfWeb3Modal}) {
 
 
 function Menu() {
-    const {loading, error, data} = useQuery(GET_TRANSFERS);
     const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
-
-    React.useEffect(() => {
-        if (!loading && !error && data && data.transfers) {
-            console.log({transfers: data.transfers});
-        }
-    }, [loading, error, data]);
-
     return (
         <div>
             <div>

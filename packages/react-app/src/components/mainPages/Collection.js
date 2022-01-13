@@ -1,4 +1,3 @@
-import Menu from "../Menu";
 import AccountInfo from "./AccountInfo";
 import FootballPlayerCollection from "../FootballPlayerCollection";
 import {connect} from "react-redux";
@@ -16,12 +15,10 @@ class Collection extends React.Component {
                 {
                     this.props.isConnected ?
                     <div>
-                        <Menu/>
                         <AccountInfo/>
                         <FootballPlayerCollection/>
                     </div> :
                         <div>
-                            <Menu/>
                             <div style={{clear: 'both'}} className="loadingConnect">
                                 <img src="https://media4.giphy.com/media/lXh0orPunKyzrixoCG/giphy.gif" alt="this slowpoke moves" />
                                 <h2 className="text-center">Be your own hero</h2>

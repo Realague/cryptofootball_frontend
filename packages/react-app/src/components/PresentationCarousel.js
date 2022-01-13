@@ -1,4 +1,3 @@
-import Menu from "./Menu";
 import {Carousel} from "react-bootstrap";
 import football1 from '../images/football-1.jpg'
 import football2 from '../images/football-2.jpg'

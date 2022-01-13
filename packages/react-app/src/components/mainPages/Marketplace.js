@@ -1,4 +1,3 @@
-import Menu from "../Menu";
 import AccountInfo from "./AccountInfo";
 import React from "react";
 import FootballPlayerContract from "../../contractInteraction/FootballPlayerContract";
@@ -11,6 +10,7 @@ import {abis, addresses} from "@project/contracts";
 import Contract from "web3-eth-contract";
 import Loader from "../Loader";
 import CardsManager from "../cards/CardsManager";
+
 
 class Marketplace extends React.Component {
 
@@ -62,7 +62,6 @@ class Marketplace extends React.Component {
         let GBBalance = this.props.GBBalance;
         return (
             <div>
-                <Menu/>
                 <AccountInfo/>
                 <div>
                     {

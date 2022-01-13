@@ -1,16 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Container, Nav, Navbar} from "react-bootstrap";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
 import {abis, addresses} from "@project/contracts";
-import {BButton} from "./index";
-import useWeb3Modal from "../hooks/useWeb3Modal";
-import {connect, useDispatch} from 'react-redux'
 import Web3 from "web3";
-import GameContract from "../contractInteraction/GameContract";
-import FootballPlayerContract from "../contractInteraction/FootballPlayerContract";
-import MarketplaceContract from "../contractInteraction/MarketplaceContract";
-import ProjectLogo from "../images/projectLogo.jpg"
-const CHAIN_ID = 0x61;
+import GameContract from "../../../contractInteraction/GameContract";
+import FootballPlayerContract from "../../../contractInteraction/FootballPlayerContract";
+import MarketplaceContract from "../../../contractInteraction/MarketplaceContract";
+import {Button} from "@mui/material";
+import {useTheme} from "@emotion/react";
 const Contract = require('web3-eth-contract');
 
 const networkData =
@@ -25,9 +21,12 @@ const networkData =
         blockExplorerUrls: ["https://testnet.bscscan.com/"],
     }];
 
-function WalletButton({provider, loadWeb3Modal, logoutOfWeb3Modal}) {
+const CHAIN_ID = 0x61;
+
+const WalletButton = ({provider, loadWeb3Modal, logoutOfWeb3Modal}) => {
     const [rendered, setRendered] = useState("");
     const dispatch = useDispatch();
+    const theme = useTheme()
 
     function saveLoginInfos(account) {
         const action = {
@@ -98,7 +97,7 @@ function WalletButton({provider, loadWeb3Modal, logoutOfWeb3Modal}) {
                         });
                     }
                 });
-                
+
                 let chainId = await provider.eth.getChainId();
                 if (CHAIN_ID !== chainId) {
                     window.ethereum.request({
@@ -121,7 +120,9 @@ function WalletButton({provider, loadWeb3Modal, logoutOfWeb3Modal}) {
     }, [provider, setRendered]);
 
     return (
-        <BButton
+        <Button
+            variant="contained"
+            color="secondary"
             onClick={() => {
                 if (!provider) {
                     loadWeb3Modal();
@@ -132,44 +133,8 @@ function WalletButton({provider, loadWeb3Modal, logoutOfWeb3Modal}) {
         >
             {rendered === "" && "Connect Wallet"}
             {rendered !== "" && rendered}
-        </BButton>
+        </Button>
     );
 }
 
-function Menu(props) {
-    const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
-
-    return (
-        <div>
-            <div>
-                <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                    <Container>
-                        <Navbar.Brand href="/collection">
-                            <img src={ProjectLogo} alt="" className="nav-logo" style={{borderRadius: 100, float: "inline-start"}}/>
-                        </Navbar.Brand>
-                        <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
-                        <Navbar.Collapse id="responsive-navbar-nav">
-                            <Nav className="me-auto">
-                                <Nav.Link href="/collection">Collection</Nav.Link>
-                                <Nav.Link href="/match">Match</Nav.Link>
-                                <Nav.Link href="/marketplace">Marketplace</Nav.Link>
-                                <Nav.Link href="/claims">Claim tokens</Nav.Link>
-                                <Nav.Link href="https://footballheroes.gitbook.io/footballheroes/">Whitepaper</Nav.Link>
-                            </Nav>
-                            <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal}
-                                          logoutOfWeb3Modal={logoutOfWeb3Modal}/>
-                            <div className="noselect">{"gggggg"}</div>
-                            <Button variant="secondary">GB: ${parseFloat(props.GBPrice).toFixed(2)}</Button>
-                        </Navbar.Collapse>
-                    </Container>
-                </Navbar>
-            </div>
-        </div>
-    )
-}
-
-const mapStateToProps = (state) => ({
-    GBPrice: state.pReducer.GBPrice
-});
-
-export default connect(mapStateToProps)(Menu);
+export default WalletButton

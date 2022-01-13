@@ -40,14 +40,6 @@ class MintButton extends React.Component {
         this.setState({transaction: FootballPlayerContract.getContract().methods.mintPlayer().send({from: account})});
     }
 
-    showLoader(show) {
-        this.setState({showLoader: show, showMint: false, player: {}});
-    }
-
-    showMintedPlayer() {
-        this.setState({showLoader: false, showMint: true, player: {}});
-    }
-
     render() {
         return (
             <div className="navMenu" style={{clear: 'both'}}>
@@ -57,15 +49,7 @@ class MintButton extends React.Component {
                 }}>Mint
                 </button>
                 <Loader transaction={this.state.transaction} account={this.props.account}/>
-                <Modal show={this.state.showMint}
-                       onHide={() => this.setState({showLoader: false, showMint: false, player: {}})}>
-                    <Modal.Header closeButton/>
-                    <Modal.Body>
-                        <CardsManager player={this.state.player} account={this.props.account}/>
-                    </Modal.Body>
-                </Modal>
             </div>
-
         )
     }
 }

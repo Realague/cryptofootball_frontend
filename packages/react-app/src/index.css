@@ -20,3 +20,62 @@ code {
   text-align: center;
   display: inline-block;
 }
+
+.button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}
+
+.nav-logo {
+  max-width: 40px;
+  max-height: 40px;
+}
+
+.title-contact {
+  color: white;
+  text-align: center;
+  margin-top: 2%;
+}
+
+.button-token {
+  background-color: #4267B2;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 100px;
+}
+
+.font-bahnschrift {
+  font-family: Bahnschrift;
+}
+
+.loading {
+  position:absolute;
+  left:0;
+  right:0;
+  height: 500px;
+}
+
+.loadingConnect {
+  position:absolute;
+  margin-top: 5%;
+  left:0;
+  right:0;
+  height: 400px;
+}

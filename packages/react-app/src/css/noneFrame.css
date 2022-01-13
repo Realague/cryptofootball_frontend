@@ -1,0 +1,160 @@
+.playerCard {
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: white;
+    height: 20rem;
+    max-width: 230px;
+    min-width: 230px;
+}
+
+.playerCards {
+    display: grid;
+    margin-left: 2%;
+    margin-right: auto;
+    grid-gap: 1rem;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+@media (min-width: 200px) {
+    .playerCards { grid-template-columns: repeat(1, 1fr); }
+}
+
+@media (min-width: 500px) {
+    .playerCards { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 800px) {
+    .playerCards { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1050px) {
+    .playerCards { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (min-width: 1300px) {
+    .playerCards { grid-template-columns: repeat(5, 1fr); }
+}
+
+@media (min-width: 1500px) {
+    .playerCards { grid-template-columns: repeat(6, 1fr); }
+}
+
+.card-info-name {
+    margin: 0;
+    padding: 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.player-position {
+    font-weight: bold;
+}
+
+.player-info {
+    text-align: center;
+}
+
+.player-score {
+    margin-left: 73%;
+    font-size: 20px;
+    font-weight: bold;
+    color: gold;
+}
+
+.player-name {
+    text-align: center;
+    font-size: 20px;
+    color: gold;
+    font-weight: bold;
+}
+
+label {
+    font-size: 1rem;
+}
+
+#file-none {
+    width: 42%;
+    height: 1.8rem;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+#file-none:before {
+    content: attr(value);
+    font-size: 10px;
+    margin-top: 0;
+    padding-top: 0;
+    color: gold;
+    font-weight: bold;
+}
+
+#fileStamina-none {
+    width: 42%;
+    height: 1.8rem;
+    text-align: center;
+    position: relative;
+}
+
+#fileStamina-none:before {
+    content: attr(value);
+    margin-top: 0;
+    padding-top: 0;
+    font-size: 10px;
+    color: gold;
+    font-weight: bold;
+}
+
+.player-image {
+    height: 80px;
+}
+
+img {
+    width: 100%; /* or any custom size */
+    height: 100%;
+    object-fit: contain;
+}
+
+.modal-body-player {
+    background: #181818;
+}
+
+.button-detail-player {
+    padding: 15px 32px;
+    margin-top: 4px;
+    width: 200px;
+}
+
+.align-div-horizontally-container {
+
+}
+
+.left-div {
+    float: left;
+    width: 45%;
+}
+
+.right-div {
+    margin-top: 10%;
+    float: right;
+    width: 45%;
+}
+
+.player-score-none {
+    margin-left: 56%;
+    font-size: 20px;
+    font-weight: bold;
+    color: gold;
+}

@@ -1,0 +1,17 @@
+.container-partenaire {
+    display: flex;
+    margin-bottom: 3%;
+}
+
+.partenaire-left {
+    padding-left: 10%;
+    padding-right: 10%;
+    width: 50%;
+}
+
+.partenaire-right {
+    padding-right: 10%;
+    padding-left: 10%;
+    width: 50%;
+}
+

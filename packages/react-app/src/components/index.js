@@ -35,13 +35,13 @@ export const Link = styled.a.attrs({
   margin-top: 10px;
 `;
 
-export const Button = styled.button`
-  background-color: #ffbb11;
+export const BButton = styled.button`
+  background-color: #4267B2;
   border: none;
   border-radius: 8px;
   color: white;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 12px;
   text-align: center;
   text-decoration: none;
   padding: 12px 24px;

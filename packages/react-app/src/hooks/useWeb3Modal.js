@@ -1,8 +1,8 @@
-import {Web3Provider} from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import {useCallback, useEffect, useState} from "react";
 import Web3Modal from "web3modal";
 import Web3 from "web3";
+import { useDispatch } from 'react-redux';
 
 const NETWORK = "binance";
 
@@ -10,16 +10,17 @@ function useWeb3Modal(config = {}) {
     const [provider, setProvider] = useState();
     const [autoLoaded, setAutoLoaded] = useState(false);
     const {autoLoad = true, network = NETWORK} = config;
+    const dispatch = useDispatch();
 
     const providerOptions = {
         walletconnect: {
             package: WalletConnectProvider,
             options: {
                 rpc: {
-                    56: 'https://bsc-dataseed.binance.org/',
+                    97: 'https://data-seed-prebsc-1-s1.binance.org:8545',
                 },
                 network: 'binance',
-                chainId: 56
+                chainId: 97
             }
         }
     };
@@ -40,6 +41,10 @@ function useWeb3Modal(config = {}) {
         async function () {
             await web3Modal.clearCachedProvider();
             window.location.reload();
+            const action = {
+                type: 'LOGOUT'
+            };
+            dispatch(action);
         },
         [web3Modal],
     );

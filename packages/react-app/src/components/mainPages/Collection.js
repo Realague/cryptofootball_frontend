@@ -2,6 +2,7 @@ import AccountInfo from "./AccountInfo";
 import FootballPlayerCollection from "../FootballPlayerCollection";
 import {connect} from "react-redux";
 import React from "react";
+import {Box, Typography} from '@mui/material';
 
 class Collection extends React.Component {
 
@@ -11,21 +12,19 @@ class Collection extends React.Component {
 
     render() {
         return (
-            <div>
+            <Box>
                 {
                     this.props.isConnected ?
-                    <div>
-                        <AccountInfo/>
-                        <FootballPlayerCollection/>
-                    </div> :
-                        <div>
-                            <div style={{clear: 'both'}} className="loadingConnect">
-                                <img src="https://media4.giphy.com/media/lXh0orPunKyzrixoCG/giphy.gif" alt="this slowpoke moves" />
-                                <h2 className="text-center">Be your own hero</h2>
-                            </div>
-                        </div>
+                        <Box>
+                            <AccountInfo/>
+                            <FootballPlayerCollection/>
+                        </Box> :
+                        <Box style={{clear: 'both'}} className="loadingConnect">
+                            <img src="https://media4.giphy.com/media/lXh0orPunKyzrixoCG/giphy.gif" alt=""/>
+                            <Typography variant="h2">Be your own hero</Typography>
+                        </Box>
                 }
-            </div>
+            </Box>
         )
     }
 }

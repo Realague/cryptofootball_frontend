@@ -1,10 +1,11 @@
 import PresentationCarousel from "./PresentationCarousel";
+import {Box} from '@mui/material';
 
 function Home() {
     return (
-        <div>
+        <Box>
             <PresentationCarousel/>
-        </div>
+        </Box>
     )
 }
 

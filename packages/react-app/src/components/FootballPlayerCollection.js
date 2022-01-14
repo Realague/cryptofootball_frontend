@@ -1,12 +1,11 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import {connect} from 'react-redux';
-import '../css/toggleButton.css'
 import FootballPlayerContract from "../contractInteraction/FootballPlayerContract";
 import CardsManager from "./cards/CardsManager";
 import MintButton from "./MintButton";
 import Marketplace from "../contractInteraction/MarketplaceContract";
 import LoadingImage from "../images/gifs/loading.gif"
+import {Box, Button, Typography} from '@mui/material';
 
 class FootballPlayerCollection extends React.Component {
 
@@ -57,7 +56,7 @@ class FootballPlayerCollection extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.playersId !== this.props.playersId) {
-            this.getPlayers().then(() => this.setState({ loading: false }));
+            this.getPlayers().then(() => this.setState({loading: false}));
         }
     }
 
@@ -65,46 +64,43 @@ class FootballPlayerCollection extends React.Component {
         let marketItems = this.state.marketItems;
 
         return (
-            <div>
+            <Box>
                 {
                     this.props.account !== '' ?
-                        <div>
+                        <Box>
                             <MintButton/>
-                            <div className="accountInfo float-right">
-                                <div className="switch-button" style={{clear: 'both'}}>
-                                    <input className="switch-button-checkbox" onClick={() => this.changeSwitchValue()} type="checkbox"/>
-                                    <label className="switch-button-label" htmlFor=""><span
-                                        className="switch-button-label-span">All player</span></label>
-                                </div>
-                            </div>
-                            <div className="white-color playerCards" style={{clear: 'both'}}>
+                            <Box className="switch-button accountInfo float-right" style={{clear: 'both'}}>
+                                <input className="switch-button-checkbox" onClick={() => this.changeSwitchValue()}
+                                       type="checkbox"/>
+                                <label className="switch-button-label" htmlFor=""><span
+                                    className="switch-button-label-span">All player</span></label>
+                            </Box>
+                            <Box className="white-color playerCards" style={{clear: 'both'}}>
                                 {
                                     this.state.showAllPlayer && this.state.players ?
-                                    this.state.players.map(function (player, idx) {
-                                        return (
-                                            <div key={idx}>
-                                                <CardsManager player={player} isForSale={false} marketItem={[]}/>
-                                            </div>
-                                        )
-                                    }) : !this.state.showAllPlayer && marketItems ?
+                                        this.state.players.map(function (player, idx) {
+                                            return (
+                                                <CardsManager player={player} isForSale={false} marketItem={[]}
+                                                              key={idx}/>
+                                            )
+                                        }) : !this.state.showAllPlayer && marketItems ?
                                             this.state.playersForSale.map(function (player, idx) {
                                                 return (
-                                                    <div key={idx}>
-                                                        <CardsManager player={player} isForSale={true} marketItem={marketItems[idx]}/>
-                                                    </div>
+                                                    <CardsManager player={player} isForSale={true}
+                                                                  marketItem={marketItems[idx]} key={idx}/>
                                                 )
                                             })
                                             :
-                                            <div style={{clear: 'both'}} className="loading">
-                                                <img src={LoadingImage} alt="" />
-                                                <h3 className="text-center">Loading...</h3>
-                                            </div>
+                                            <Box>
+                                                <img src={LoadingImage} alt=""/>
+                                                <Typography variant="h3">Loading...</Typography>
+                                            </Box>
                                 }
-                            </div>
-                        </div>
+                            </Box>
+                        </Box>
                         : ''
                 }
-            </div>
+            </Box>
         )
     }
 }

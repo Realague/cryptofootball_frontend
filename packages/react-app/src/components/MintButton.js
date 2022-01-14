@@ -6,9 +6,8 @@ import FootballPlayerContract from "../contractInteraction/FootballPlayerContrac
 import Contract from "web3-eth-contract";
 import {abis, addresses} from "@project/contracts";
 import Web3 from "web3";
-import {Modal} from "react-bootstrap";
 import Loader from "./Loader";
-import CardsManager from "./cards/CardsManager";
+import {Box, Button} from '@mui/material';
 
 class MintButton extends React.Component {
 
@@ -42,14 +41,14 @@ class MintButton extends React.Component {
 
     render() {
         return (
-            <div className="navMenu" style={{clear: 'both'}}>
-                <button
-                    className="button accountInfo float-left" onClick={() => {
+            <Box className="navMenu" style={{clear: 'both'}}>
+                <Button sx={{margin: "10px"}} variant="contained" color="primary"
+                    className="float-left" onClick={() => {
                     this.mint(this.props.account, this.props.GBPrice, this.props.BUSDBalance, this.props.GBBalance);
                 }}>Mint
-                </button>
+                </Button>
                 <Loader transaction={this.state.transaction} account={this.props.account}/>
-            </div>
+            </Box>
         )
     }
 }

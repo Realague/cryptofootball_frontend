@@ -1,10 +1,10 @@
-import {Button, Image, Modal} from "react-bootstrap";
 import React from "react";
-import success from "../images/succes.png";
-import error from "../images/error.png";
 import CardsManager from "./cards/CardsManager";
 import FootballPlayerContract from "../contractInteraction/FootballPlayerContract";
 import LoadingImage from "../images/gifs/loading.gif";
+import {CancelOutlined, CheckCircleOutlined} from '@mui/icons-material';
+import {Modal, Button, Stack, Typography} from '@mui/material';
+import {darkModal} from "../css/style";
 
 class Loader extends React.Component {
     constructor(props) {
@@ -67,55 +67,50 @@ class Loader extends React.Component {
 
     render() {
         return (
-            <Modal show={this.state.showLoader} onHide={() => this.onHide()}>
-                {
+            <Modal open={this.state.showLoader} onClose={() => this.onHide()}>
+                <Stack alignItems="center" direction="column" spacing={2} sx={darkModal}>
                     {
-                        'confirmation':
-                            <Modal.Body>
-                                <div className="loading">
+                        {
+                            'confirmation':
+                                <>
                                     <img style={{width: 200, height: 200}} src={LoadingImage}
-                                         alt=""/>
-                                    <h5 className="text-center">Waiting confirmation...</h5>
-                                </div>
-                            </Modal.Body>,
-                        'loading':
-                            <Modal.Body>
-                                <div className="loading">
+                                    alt=""/>
+                                    <Typography variant="h5">Waiting confirmation...</Typography>
+                                </>,
+                            'loading':
+                                <>
                                     <img style={{width: 100, height: 100}} src={LoadingImage}
                                          alt=""/>
-                                    <h5 className="text-center">Loading...</h5>
-                                </div>
-                            </Modal.Body>,
-                        'error':
-                                <Modal.Body>
-                                    <Image style={{width: 100, height: 100}} src={error}/>
-                                    <h5 className="text-center">Transaction encountered an error</h5>
-                                </Modal.Body>,
-                        'success':
-                            <Modal.Body>
-                                <Image style={{width: 100, height: 100}} src={success}/>
-                                <h5 className="text-center">Success!</h5>
-                            </Modal.Body>,
-                        'mint':
-                            <Modal.Body>
-                                <CardsManager player={this.state.player} isForSale={false} marketItem={[]}/>
-                                <Button variant="primary" onClick={() => this.onHide()}>Collect</Button>
-                            </Modal.Body>,
-                        'trainingDone':
-                            <Modal.Body>
-                                <div>{this.state.rewards}</div>
-                                <Button variant="primary" onClick={() => this.onHide()}>Collect</Button>
-                            </Modal.Body>
-                    }[this.state.transactionState]
-                }
-                {
-                    this.state.transactionState === 'success' || this.state.transactionState === 'error' ?
-                        <Modal.Footer>
-                            <Button variant="primary" onClick={() => this.onHide()}>
-                                Continue
-                            </Button>
-                        </Modal.Footer> : ""
-                }
+                                    <Typography variant="h5">Loading...</Typography>
+                                </>,
+                            'error':
+                                <>
+                                    <CancelOutlined color="error" sx={{width: 100, height: 100}}/>
+                                    <Typography variant="h5">Transaction encountered an error</Typography>
+                                </>,
+                            'success':
+                                <>
+                                    <CheckCircleOutlined color="success" sx={{width: 100, height: 100}}/>
+                                    <Typography variant="h5">Success!</Typography>
+                                </>,
+                            'mint':
+                                <>
+                                    <CardsManager player={this.state.player} isForSale={false} marketItem={[]}/>
+                                    <Button variant="primary" onClick={() => this.onHide()}>Collect</Button>
+                                </>,
+                            'trainingDone':
+                                <>
+                                    <Typography variant="h5">{this.state.rewards}</Typography>
+                                    <Button variant="primary" onClick={() => this.onHide()}>Collect</Button>
+                                </>
+                        }[this.state.transactionState]
+                    }
+                    <Button
+                        hidden={this.state.transactionState !== 'success' && this.state.transactionState !== 'error'}
+                        variant="contained" color="primary" onClick={() => this.onHide()}>
+                        Continue
+                    </Button>
+                </Stack>
             </Modal>
         );
     }

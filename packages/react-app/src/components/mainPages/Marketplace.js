@@ -3,13 +3,12 @@ import React from "react";
 import FootballPlayerContract from "../../contractInteraction/FootballPlayerContract";
 import {connect} from "react-redux";
 import MarketplaceContract from "../../contractInteraction/MarketplaceContract";
-import {Button} from "react-bootstrap";
 import Web3 from "web3";
-import MarketplaceCardsManager from "../cards/MarketplaceCardsManager";
 import {abis, addresses} from "@project/contracts";
 import Contract from "web3-eth-contract";
 import Loader from "../Loader";
 import CardsManager from "../cards/CardsManager";
+import {Box, Button, Stack} from '@mui/material';
 
 
 class Marketplace extends React.Component {
@@ -61,32 +60,30 @@ class Marketplace extends React.Component {
         let account = this.props.account;
         let GBBalance = this.props.GBBalance;
         return (
-            <div>
+            <Box>
                 <AccountInfo/>
-                <div>
+                <Box>
                     {
                         this.props.account !== '' ?
-                            <div>
-                                <div className="white-color playerCards" style={{clear: 'both'}}>
+                            <Box>
+                                <Box className="white-color playerCards" style={{clear: 'both'}}>
                                     {
                                         this.state.marketItems.map(function (marketItem, idx) {
                                             return (
-                                                <div key={idx}>
+                                                <Stack direction="column" alignItems="center" key={idx}>
                                                     <CardsManager player={marketItem.player} account={account} />
-                                                    { Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price || marketItem.marketItem.seller === account ?
-                                                        <Button variant="secondary" disabled>{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB</Button> :
-                                                    <Button onClick={() => buyPlayer(marketItem.marketItem)} variant="primary">{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB</Button> }
-                                                </div>
+                                                    <Button sx={{margin: "10px"}} disabled={Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price || marketItem.marketItem.seller === account} variant="contained" color="primary" onClick={() => buyPlayer(marketItem.marketItem)}>{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB</Button>
+                                                </Stack>
                                             )
                                         })
                                     }
-                                </div>
-                            </div>
+                                </Box>
+                            </Box>
                             : ''
                     }
-                </div>
+                </Box>
                 <Loader transaction={this.state.transaction} account={this.props.account}/>
-            </div>
+            </Box>
         )
     }
 }

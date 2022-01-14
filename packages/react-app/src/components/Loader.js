@@ -75,23 +75,23 @@ class Loader extends React.Component {
                                 <>
                                     <img style={{width: 200, height: 200}} src={LoadingImage}
                                     alt=""/>
-                                    <Typography variant="h5">Waiting confirmation...</Typography>
+                                    <Typography variant="h6">Waiting confirmation...</Typography>
                                 </>,
                             'loading':
                                 <>
                                     <img style={{width: 100, height: 100}} src={LoadingImage}
                                          alt=""/>
-                                    <Typography variant="h5">Loading...</Typography>
+                                    <Typography variant="h6">Loading...</Typography>
                                 </>,
                             'error':
                                 <>
                                     <CancelOutlined color="error" sx={{width: 100, height: 100}}/>
-                                    <Typography variant="h5">Transaction encountered an error</Typography>
+                                    <Typography variant="h6">Transaction encountered an error</Typography>
                                 </>,
                             'success':
                                 <>
                                     <CheckCircleOutlined color="success" sx={{width: 100, height: 100}}/>
-                                    <Typography variant="h5">Success!</Typography>
+                                    <Typography variant="h6">Success!</Typography>
                                 </>,
                             'mint':
                                 <>
@@ -100,7 +100,7 @@ class Loader extends React.Component {
                                 </>,
                             'trainingDone':
                                 <>
-                                    <Typography variant="h5">{this.state.rewards}</Typography>
+                                    <Typography variant="h6">{this.state.rewards}</Typography>
                                     <Button variant="primary" onClick={() => this.onHide()}>Collect</Button>
                                 </>
                         }[this.state.transactionState]

@@ -70,9 +70,9 @@ class Marketplace extends React.Component {
                                     {
                                         this.state.marketItems.map(function (marketItem, idx) {
                                             return (
-                                                <Stack direction="column" alignItems="center" key={idx}>
+                                                <Stack direction="column" alignItems="center" key={idx} spacing={2}>
                                                     <CardsManager player={marketItem.player} account={account} />
-                                                    <Button sx={{margin: "10px"}} disabled={Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price || marketItem.marketItem.seller === account} variant="contained" color="primary" onClick={() => buyPlayer(marketItem.marketItem)}>{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB</Button>
+                                                    <Button disabled={Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price || marketItem.marketItem.seller === account} variant="contained" color="primary" onClick={() => buyPlayer(marketItem.marketItem)}>{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB</Button>
                                                 </Stack>
                                             )
                                         })

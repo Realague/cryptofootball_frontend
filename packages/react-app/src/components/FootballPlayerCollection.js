@@ -5,7 +5,7 @@ import CardsManager from "./cards/CardsManager";
 import MintButton from "./MintButton";
 import Marketplace from "../contractInteraction/MarketplaceContract";
 import LoadingImage from "../images/gifs/loading.gif"
-import {Box, Button, Typography} from '@mui/material';
+import {Box, Button, Stack, Typography} from '@mui/material';
 
 class FootballPlayerCollection extends React.Component {
 
@@ -75,26 +75,31 @@ class FootballPlayerCollection extends React.Component {
                                 <label className="switch-button-label" htmlFor=""><span
                                     className="switch-button-label-span">All player</span></label>
                             </Box>
-                            <Box className="white-color playerCards" style={{clear: 'both'}}>
+                            <Box alignItems="center" className="white-color playerCards" style={{clear: 'both'}}>
                                 {
                                     this.state.showAllPlayer && this.state.players ?
                                         this.state.players.map(function (player, idx) {
                                             return (
-                                                <CardsManager player={player} isForSale={false} marketItem={[]}
-                                                              key={idx}/>
+                                                <Box>
+                                                    <CardsManager player={player} isForSale={false} marketItem={[]}
+                                                                  key={idx}/>
+                                                </Box>
                                             )
                                         }) : !this.state.showAllPlayer && marketItems ?
                                             this.state.playersForSale.map(function (player, idx) {
                                                 return (
-                                                    <CardsManager player={player} isForSale={true}
-                                                                  marketItem={marketItems[idx]} key={idx}/>
+                                                    <Box>
+                                                        <CardsManager player={player} isForSale={true}
+                                                                      marketItem={marketItems[idx]} key={idx}/>
+                                                    </Box>
                                                 )
                                             })
                                             :
-                                            <Box>
+                                            <Stack alignItems="center" direction="column"
+                                                   sx={{width: "200px", height: "200px"}}>
                                                 <img src={LoadingImage} alt=""/>
-                                                <Typography variant="h3">Loading...</Typography>
-                                            </Box>
+                                                <Typography variant="h5">Loading...</Typography>
+                                            </Stack>
                                 }
                             </Box>
                         </Box>

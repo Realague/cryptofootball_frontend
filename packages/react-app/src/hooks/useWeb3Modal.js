@@ -49,7 +49,7 @@ function useWeb3Modal(config = {}) {
         [web3Modal],
     );
 
-    // If autoLoad is enabled and the the wallet had been loaded before, load it automatically now.
+    // If autoLoad is enabled and the wallet had been loaded before, load it automatically now.
     useEffect(() => {
         if (autoLoad && !autoLoaded && web3Modal.cachedProvider) {
             loadWeb3Modal();

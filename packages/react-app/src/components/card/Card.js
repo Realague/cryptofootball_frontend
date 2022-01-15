@@ -17,21 +17,7 @@ import ExperienceProgressBar from "./components/ExperienceProgressBar";
 import StaminaProgressBar from "./components/StaminaProgressBar";
 
 const Card = ({ player, marketItem }) => {
-	const account = useSelector(state => state.user.account)
 	const [stamina, setStamina] = useState(0)
-	const [show, setShow] = useState(false)
-	const [transaction, setTransaction] = useState(undefined)
-	const [showPriceChoice, setShowPriceChoice] = useState(false)
-	const [showTraining, setShowTraining] = useState(false)
-	const [showLevelUp, setShowLevelUp] = useState(false)
-	const [showLoader, setShowLoader] = useState(false)
-	const [rewards, setRewards] = useState(undefined)
-	const [win, setWin] = useState(undefined)
-	const [price, setPrice] = useState(undefined)
-	const [showResult, setShowResult] = useState(false)
-	const [changePrice, setChangePrice] = useState(false)
-	const [isForSale, setIsForSale] = useState(false)
-
 	const [openedModal, setOpenedModal] = useState(undefined)
 
 	useEffect(() => {
@@ -42,53 +28,6 @@ const Card = ({ player, marketItem }) => {
 		await new Promise(r => setTimeout(r, 250))
 		let stamina = await GameContract.getContract().methods.getCurrentStamina(player.id).call()
 		setStamina(stamina)
-	}
-
-	const listFootballPlayer = async (price) => {
-		if (!price || parseInt(price) <= 0) {
-			return
-		}
-		setShowPriceChoice(false)
-		price = Web3.utils.toWei(price, 'ether')
-		let BUSDTestnet = new Contract(abis.erc20, addresses.BUSDTestnet)
-		/*if (!await FootballPlayerContract.isApprovedForAll(account)) {
-			let transaction = FootballPlayerContract.getContract().methods.setApprovalForAll(addresses.Marketplace, true).send({from: account})
-			setTransaction(transaction)
-			await transaction
-		}
-		let busdAllowance = await BUSDTestnet.methods.allowance(account, addresses.Marketplace).call()
-		if (parseInt(Web3.utils.fromWei(busdAllowance)) < parseInt(await Marketplace.getListingFees())) {
-			let transaction = BUSDTestnet.methods.approve(addresses.Marketplace, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({from: account})
-			setTransaction(transaction)
-			await transaction
-		}*/
-		setTransaction(Marketplace.getContract().methods.listPlayer(player.id, price).send({from: account}))
-	}
-
-	const changePriceFun = (price) => {
-		price = Web3.utils.toWei(price, 'ether')
-		setTransaction(
-			Marketplace.getContract().methods.changePrice(marketItem.itemId, price).send({from: account})
-		)
-	}
-
-	const cancelListing = () => {
-		setTransaction(Marketplace.getContract().methods.cancelListing(marketItem.itemId).send({from: account}))
-	}
-
-	const showResultFun = (rewards, win) => {
-		setShowLoader(false)
-		setRewards(rewards)
-		setWin(win)
-		setShow(true)
-		setShowResult(true)
-	}
-
-	const trainPlayer = (trainingGroundId) => {
-	    setShowTraining(false)
-		setTransaction(
-			GameContract.getContract().methods.trainingGround(trainingGroundId, player.id).send({from: account})
-		)
 	}
 
 	const renderCard = () => (

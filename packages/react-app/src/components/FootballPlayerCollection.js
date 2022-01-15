@@ -89,7 +89,6 @@ const FootballPlayerCollection = () => {
                                     </Stack>
                             }
                         </Box>
-                        <Loader/>
                     </Box>
                     : ''
             }

@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />
 })
 
-const AccountInfo = (props) => {
+const AccountInfo = () => {
 	const {
 		account,
 		BUSDBalance,
@@ -53,7 +53,6 @@ const AccountInfo = (props) => {
 	}
 
 	const secondsToTime = (secs) => {
-		console.log('ici1')
 		let hours = Math.floor(secs / (60 * 60))
 
 		let divisorForMinutes = secs % (60 * 60)

@@ -4,6 +4,7 @@ import Navbar from './layout/navbar/Navbar'
 import {Outlet} from 'react-router-dom'
 import {ThemeProvider} from '@emotion/react'
 import { theme, lightTheme } from './theme'
+import Loader from "./components/Loader";
 
 const App = () => {
 	const [themeMode, setThemeMode] = useState('dark')
@@ -17,6 +18,7 @@ const App = () => {
 			<Box>
 				<Navbar toggleTheme={toggleThemeMode}/>
 				<Outlet/>
+				<Loader/>
 			</Box>
 		</ThemeProvider>
 	)

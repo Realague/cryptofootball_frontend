@@ -16,7 +16,7 @@ const Loader = () => {
     const { transaction } = useSelector(state => state.game)
     const { account } = useSelector(state => state.user)
     useEffect(() => {
-        if (transaction !== undefined) {
+        if (transaction !== undefined && transactionState === "") {
             callBack()
         }
     }, [transaction])
@@ -82,7 +82,7 @@ const Loader = () => {
                             </>,
                         'mint':
                             <>
-                                <Card player={player} isForSale={false} marketItem={[]}/>
+                                <Card player={player} marketItem={undefined}/>
                                 <Button variant="primary" onClick={onHide}>Collect</Button>
                             </>,
                         'trainingDone':

@@ -23,15 +23,17 @@ import {abis, addresses} from "@project/contracts";
 import FootballPlayerContract from "../../../contractInteraction/FootballPlayerContract";
 import Marketplace from "../../../contractInteraction/MarketplaceContract";
 import {setTransaction} from "../../../features/gameSlice";
+import GameContract from "../../../contractInteraction/GameContract";
+import MarketplaceContract from "../../../contractInteraction/MarketplaceContract";
 
 
 const InformationModal = ({open, onClose, frame, player, marketItem}) => {
-    const { account } = useSelector(state => state.user)
+    const {account, GBBalance} = useSelector(state => state.user)
     const [action, setAction] = useState(undefined)
     const ref = createRef()
     const informationRef = createRef()
     const [informationShown, setInformationShown] = useState(true)
-    const sellForm = useForm({ mode: 'onChange' })
+    const sellForm = useForm({mode: 'onChange'})
     const dispatch = useDispatch()
 
     const chooseAction = (value) => {
@@ -40,25 +42,55 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
         }
     }
 
-    console.log(account)
+    const cancelListing = () => {
+        dispatch(setTransaction({transaction: Marketplace.getContract().methods.cancelListing(marketItem.itemId).send({from: account})}))
+    }
+
+    const trainPlayer = (trainingGroundId) => {
+        dispatch(setTransaction({transaction: GameContract.getContract().methods.trainingGround(trainingGroundId, player.id).send({from: account})}))
+    }
+
+    const buyPlayer = async () => {
+        //TODO check price in wei
+        if (Web3.utils.toWei(GBBalance, 'ether') < marketItem.price) {
+            return
+        }
+
+        let GBToken = new Contract(abis.erc20, addresses.GBTOKEN)
+        let GBAllowance = await GBToken.methods.allowance(account, addresses.Marketplace).call()
+
+        if (parseInt(GBAllowance) < marketItem.price) {
+            let transaction = GBToken.methods.approve(addresses.Marketplace, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({from: account})
+            dispatch(setTransaction({transaction: transaction}))
+            await transaction
+        }
+        dispatch(setTransaction({transaction: MarketplaceContract.getContract().methods.buyPlayer(marketItem.itemId, marketItem.price).send({from: account})}))
+    }
 
     const InformationContent = (
         <Stack display="flex" height={'100%'} spacing={2} flexDirection="column" alignItems="center"
                justifyContent="center" width="240px">
             <Typography variant="h6">Actions</Typography>
             <Divider flexItem color="primary"/>
-            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('level-up')} fullWidth color="primary" variant="contained">Level
+            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('level-up')} fullWidth color="primary"
+                    variant="contained">Level
                 Up</Button>
-            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('improve-frame')} fullWidth color="primary" variant="contained">Improve
+            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('improve-frame')} fullWidth
+                    color="primary" variant="contained">Improve
                 Frame</Button>
-            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('train')} fullWidth color="primary" variant="contained">Train</Button>
-            <Button hidden={marketItem !== undefined} onClick={() => listFootballPlayer("10")} fullWidth color="secondary" variant="contained"
+            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('train')} fullWidth color="primary"
+                    variant="contained">Train</Button>
+            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('sell')} fullWidth color="secondary"
+                    variant="contained"
                     my={4}>Sell</Button>
-            <Button hidden={marketItem === undefined || marketItem.seller !== account} onClick={() => chooseAction('cancelListing')} fullWidth color="secondary" variant="contained"
+            <Button hidden={marketItem === undefined || marketItem.seller !== account}
+                    onClick={() => chooseAction('sell')} fullWidth color="secondary" variant="contained"
                     my={4}>Change price</Button>
-            <Button hidden={marketItem === undefined || marketItem.seller !== account} onClick={() => chooseAction('changePrice')} fullWidth color="secondary" variant="contained"
+            <Button hidden={marketItem === undefined || marketItem.seller !== account} onClick={cancelListing} fullWidth
+                    color="secondary" variant="contained"
                     my={4}>Cancel listing</Button>
-            <Button hidden={marketItem === undefined || marketItem.seller === account} onClick={() => chooseAction('buy')} fullWidth color="secondary" variant="contained"
+            <Button hidden={marketItem === undefined || marketItem.seller === account} onClick={buyPlayer} fullWidth
+                    color="secondary" variant="contained"
                     my={4}>Buy</Button>
             <Divider flexItem color="primary"/>
             <Button onClick={() => onClose()} fullWidth color="error" variant="outlined" my={4}>Close</Button>
@@ -66,10 +98,10 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
     )
 
     const listFootballPlayer = async (price) => {
-        /*if (!price || parseInt(price) <= 0) {
+        console.log(price)
+        if (!price || parseInt(price) <= 0) {
             return
         }
-        setShowPriceChoice(false)*/
         price = Web3.utils.toWei(price, 'ether')
         let BUSDTestnet = new Contract(abis.erc20, addresses.BUSDTestnet)
         if (!await FootballPlayerContract.isApprovedForAll(account)) {
@@ -84,6 +116,10 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
             await transaction
         }
         dispatch(setTransaction({transaction: Marketplace.getContract().methods.listPlayer(player.id, price).send({from: account})}))
+    }
+    const changePrice = (price) => {
+        price = Web3.utils.toWei(price, 'ether')
+        dispatch(setTransaction({transaction: Marketplace.getContract().methods.changePrice(marketItem.itemId, price).send({from: account})}))
     }
 
     const LayoutContent = forwardRef(({children, name}, ref) => (
@@ -122,7 +158,7 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
                     error={sellForm.formState.errors.price !== undefined}
                     type="number"
                     name="price"
-                    {...sellForm.register("price", { required: true, minLength: 1})}
+                    {...sellForm.register("price", {required: true, minLength: 1})}
                     fullWidth
                     startAdornment={<InputAdornment position="start">$GB</InputAdornment>}
                 />
@@ -130,7 +166,9 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
                     fullWidth
                     color="primary"
                     variant="contained"
-                    onClick={() => { console.log(sellForm.getValues(), sellForm.formState.errors) }}
+                    onClick={() => {
+                        marketItem === undefined ? listFootballPlayer(sellForm.getValues().price) : changePrice(sellForm.getValues().price)
+                    }}
                 >
                     Confirm
                 </Button>

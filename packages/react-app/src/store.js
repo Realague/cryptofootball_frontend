@@ -1,6 +1,16 @@
 import {combineReducers, configureStore, getDefaultMiddleware} from '@reduxjs/toolkit'
 import userReducer from './features/userSlice'
-import {persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, persistStore} from 'reduxjs-toolkit-persist'
+import gameReducer from './features/gameSlice'
+import {
+	persistReducer,
+	FLUSH,
+	REHYDRATE,
+	PAUSE,
+	PERSIST,
+	PURGE,
+	REGISTER,
+	persistStore,
+} from 'reduxjs-toolkit-persist'
 
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import storage from 'reduxjs-toolkit-persist/lib/storage'
@@ -8,11 +18,13 @@ import storage from 'reduxjs-toolkit-persist/lib/storage'
 const persistConfig = {
 	key: 'root',
 	storage,
-	stateReconciler: autoMergeLevel2
+	stateReconciler: autoMergeLevel2,
+	blacklist: ['game'],
 }
 
 const reducers = combineReducers({
 	user: userReducer,
+	game: gameReducer,
 })
 
 const _persistedReducer = persistReducer(persistConfig, reducers)

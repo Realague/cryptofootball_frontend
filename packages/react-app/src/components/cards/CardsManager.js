@@ -7,13 +7,15 @@ import DiamondFrame from './DiamondFrame'
 import GameContract from '../../contractInteraction/GameContract'
 import Marketplace from '../../contractInteraction/MarketplaceContract'
 import Button from '@mui/material/Button'
-import {Form, FormControl, InputGroup, Modal} from 'react-bootstrap'
+import {Form, FormControl, InputGroup} from 'react-bootstrap'
 import Loader from '../Loader'
 import Web3 from 'web3'
 import FootballPlayerContract from '../../contractInteraction/FootballPlayerContract'
 import {abis, addresses} from '@project/contracts'
 import Contract from 'web3-eth-contract'
 import {useSelector} from 'react-redux'
+import {Backdrop, Box, Chip, Divider, Fade, Modal, Slide, Stack, Typography} from '@mui/material'
+import {darkModal, darkModalNoFlex} from '../../css/style'
 
 const CardsManager = ({ player }) => {
 	const account = useSelector(state => state.user.account)
@@ -23,7 +25,6 @@ const CardsManager = ({ player }) => {
 	const [showPriceChoice, setShowPriceChoice] = useState(false)
 	const [showTraining, setShowTraining] = useState(false)
 	const [showLevelUp, setShowLevelUp] = useState(false)
-	const [players, setPlayers] = useState([])
 	const [showLoader, setShowLoader] = useState(false)
 	const [rewards, setRewards] = useState(undefined)
 	const [win, setWin] = useState(undefined)
@@ -32,6 +33,8 @@ const CardsManager = ({ player }) => {
 	const [changePrice, setChangePrice] = useState(false)
 	const [isForSale, setIsForSale] = useState(false)
 	const [marketItem, setMarketItem] = useState(undefined)
+
+	const [openedModal, setOpenedModal] = useState(undefined)
 
 	useEffect(() => {
 		getPlayerStamina()
@@ -109,11 +112,47 @@ const CardsManager = ({ player }) => {
 	}
 
 	return (
-		<div>
-			<div onClick={() => setShow(true)}>
+		<Stack direction="column" alignItems="center">
+			<Box onClick={() => setOpenedModal('information')}>
 				{ selectFrame() }
-			</div>
-			<Modal show={show} onHide={() => setShow(false)}>
+			</Box>
+			<Loader transaction={transaction} account={account}/>
+			<Modal
+				closeAfterTransition
+				open={openedModal === 'information'}
+				onClose={() => setOpenedModal(undefined)}
+				BackdropProps={{
+					timeout: 500,
+				}}
+				width={'600px'}
+				height={'600px'}
+			>
+				<Fade in={openedModal === 'information'}>
+					<Stack sx={darkModalNoFlex} spacing={4} display="flex" direction="row" justifyContent="space-around" alignItems="center">
+						<Box width="240px">
+							{selectFrame()}
+						</Box>
+						<Stack display="flex" spacing={2} flexDirection="column" alignItems="center" justifyContent="center" width="240px">
+							<Typography variant="h6">Actions</Typography>
+							<Divider flexItem color="primary" />
+							<Button fullWidth color="primary" variant="contained">Level Up</Button>
+							<Button fullWidth color="primary" variant="contained">Improve Frame</Button>
+							<Button fullWidth color="primary" variant="contained">Train</Button>
+							<Button fullWidth color="secondary" variant="outlined" my={4}>Sell</Button>
+						</Stack>
+					</Stack>
+				</Fade>
+			</Modal>
+
+		</Stack>
+	)
+}
+
+export default CardsManager
+
+/*
+
+	<Modal show={show} onHide={() => setShow(false)}>
 				<Modal.Header closeButton/>
 				<Modal.Body className="modal-body-player">
 					<div className="align-div-horizontally-container">
@@ -155,12 +194,10 @@ const CardsManager = ({ player }) => {
 					</div>
 				</Modal.Body>
 			</Modal>
-			<Loader transaction={transaction} account={account}/>
-			<Modal show={showPriceChoice}
-				onHide={() => {
-					setShowPriceChoice(false)
-					setChangePrice(false)
-				}}>
+			<Modal show={showPriceChoice} onHide={() => {
+				setShowPriceChoice(false)
+				setChangePrice(false)
+			}}>
 				<Modal.Body>
 					<Form>
 						<InputGroup className="mb-2">
@@ -213,8 +250,5 @@ const CardsManager = ({ player }) => {
 					}
 				</Modal.Body>
 			</Modal>
-		</div>
-	)
-}
 
-export default CardsManager
+ */

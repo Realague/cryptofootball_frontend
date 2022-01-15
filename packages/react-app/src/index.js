@@ -1,18 +1,43 @@
 import './index.css'
 
-import React from 'react'
+import React, {useEffect} from 'react'
 import ReactDOM from 'react-dom'
 
 import App from './App'
-import {Provider} from 'react-redux'
+import {Provider, useSelector} from 'react-redux'
 import {ThemeProvider} from '@emotion/react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Collection from './components/mainPages/Collection'
 import Marketplace from './components/mainPages/Marketplace'
 import {PersistGate} from 'redux-persist/lib/integration/react'
 import theme from './theme'
-import {CssBaseline} from '@mui/material'
+import {Box, CircularProgress, CssBaseline, Typography} from '@mui/material'
 import {persistor, store} from './store'
+
+const AuthenticatedRoute = ({ render }) => {
+	const { account } = useSelector(state => state.user)
+	const isReady = useSelector(state => state.game.isReady)
+
+	if (account === undefined || !isReady) {
+		return (
+			<Box
+				sx={{
+					display: 'flex',
+					justifyContent: 'center',
+				}}
+			>
+				<Typography color={'primary'}>
+					{
+						account === undefined ?
+							'You first need to connect your wallet' :
+							<CircularProgress/>
+					}
+				</Typography>
+			</Box>
+		)
+	}
+	return render
+}
 
 ReactDOM.render(
 	<Provider store={store}>
@@ -22,8 +47,8 @@ ReactDOM.render(
 				<BrowserRouter>
 					<Routes>
 						<Route path="/" element={<App/>}>
-							<Route path="/collection" element={<Collection/>}/>
-							<Route path="/marketplace" element={<Marketplace/>}/>
+							<Route path="/collection" element={<AuthenticatedRoute render={<Collection/>}/>}/>
+							<Route path="/marketplace" element={<AuthenticatedRoute render={<Marketplace/>}/>}/>
 						</Route>
 					</Routes>
 				</BrowserRouter>

@@ -7,7 +7,7 @@ import {abis, addresses} from '@project/contracts'
 import Contract from 'web3-eth-contract'
 import Loader from '../Loader'
 import CardsManager from '../cards/CardsManager'
-import {Box, Button, Stack} from '@mui/material'
+import {Box, Button, Grid, Paper, Stack} from '@mui/material'
 import {useSelector} from 'react-redux'
 
 
@@ -17,21 +17,8 @@ const Marketplace = () => {
 	const [transaction, setTransaction] = useState(undefined)
 
 	useEffect(() => {
-		if (account !== '') {
-			firstCall()
-		}
+		getMarketItems()
 	}, [])
-
-	if (GBBalance === undefined) {
-		return <Box>oui</Box>
-	}
-
-	const firstCall = async () => {
-		while (!MarketplaceContract.getContract()) {
-			await new Promise(r => setTimeout(r, 100))
-		}
-		await getMarketItems()
-	}
 
 	const buyPlayer = async (marketItem) => {
 		//TODO check price in wei
@@ -65,33 +52,29 @@ const Marketplace = () => {
 
 
 	return (
-		<Box>
+		<Stack direction="column" justifyContent="center" alignItems="center">
 			<AccountInfo/>
-			<Box>
+			<Grid container>
 				{
-					account !== '' ?
-						<Box>
-							<Box className="white-color playerCards" style={{clear: 'both'}}>
-								{
-									marketItems.map(function (marketItem, idx) {
-										return (
-											<Stack direction="column" alignItems="center" key={idx} spacing={2}>
-												<CardsManager player={marketItem.player} account={account}/>
-												<Button
-													disabled={Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price || marketItem.marketItem.seller === account}
-													variant="contained" color="primary"
-													onClick={() => buyPlayer(marketItem.marketItem)}>{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB</Button>
-											</Stack>
-										)
-									})
+					marketItems.map((marketItem, idx) => (
+						<Grid item component={Paper} m={2} p={2} display="flex" direction="column" alignItems="center" width="240px" key={idx}>
+							<CardsManager player={marketItem.player}/>
+							<Button
+								disabled={
+									Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price
+									|| marketItem.marketItem.seller === account
 								}
-							</Box>
-						</Box>
-						: ''
+								variant="contained" color="primary"
+								onClick={() => buyPlayer(marketItem.marketItem)}
+							>
+								{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB
+							</Button>
+						</Grid>
+					))
 				}
-			</Box>
+			</Grid>
 			<Loader transaction={transaction} account={account}/>
-		</Box>
+		</Stack>
 	)
 }
 

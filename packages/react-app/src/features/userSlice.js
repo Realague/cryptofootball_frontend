@@ -1,4 +1,4 @@
-import {createDraftSafeSelector, createSlice} from '@reduxjs/toolkit'
+import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
 	account: undefined,
@@ -8,7 +8,7 @@ const initialState = {
 	claimFee: '0',
 	rewards: '0',
 	playersId: [],
-	isConnected: false
+	isConnected: false,
 }
 
 export const userSlice = createSlice({

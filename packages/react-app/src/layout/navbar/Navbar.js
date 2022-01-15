@@ -10,11 +10,6 @@ import NavigationLink from './components/NavbarLink'
 
 const Navbar = ({ toggleTheme }) => {
 	const GBPrice = useSelector(state => state.user.GBPrice)
-	const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal()
-
-	useEffect(() => {
-
-	})
 
 	return (
 		<AppBar variant={'elevation'} position="sticky">
@@ -42,8 +37,7 @@ const Navbar = ({ toggleTheme }) => {
 					))}
 				</Stack>
 				<Stack spacing={2} direction="row">
-					<WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal}
-						logoutOfWeb3Modal={logoutOfWeb3Modal}/>
+					<WalletButton/>
 					<Button onClick={toggleTheme} variant="contained" color="secondary">
                         GB: ${parseFloat(GBPrice).toFixed(2)}
 					</Button>

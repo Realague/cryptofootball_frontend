@@ -8,6 +8,8 @@ import {Button} from '@mui/material'
 import {useDispatch} from 'react-redux'
 import {login, updateAccount} from '../../../features/userSlice'
 import Contract from 'web3-eth-contract'
+import useWeb3Modal from '../../../hooks/useWeb3Modal'
+import {setReady} from '../../../features/gameSlice'
 
 const networkData =
     [{
@@ -23,13 +25,10 @@ const networkData =
 
 const CHAIN_ID = 0x61
 
-const WalletButton = ({provider, loadWeb3Modal, logoutOfWeb3Modal}) => {
+const WalletButton = () => {
+	const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal()
 	const [rendered, setRendered] = useState('')
 	const dispatch = useDispatch()
-
-	function saveLoginInfos(account) {
-		dispatch(login(account))
-	}
 
 	function saveAccountInfo(GBPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId) {
 		dispatch(updateAccount({
@@ -57,7 +56,6 @@ const WalletButton = ({provider, loadWeb3Modal, logoutOfWeb3Modal}) => {
 	}
 
 	useEffect(() => {
-
 		async function fetchAccount() {
 			try {
 				if (!provider) {
@@ -66,16 +64,18 @@ const WalletButton = ({provider, loadWeb3Modal, logoutOfWeb3Modal}) => {
 				if (GameContract.getContract()) {
 					return
 				}
-
 				const accounts = await provider.eth.getAccounts()
 				Contract.setProvider(provider, accounts[0])
 				GameContract.setProvider(provider, accounts[0])
+
 				FootballPlayerContract.setProvider(provider, accounts[0])
 				MarketplaceContract.setProvider(provider, accounts[0])
 
+				console.log('setting contracts')
+
 				// Subscribe to accounts change
 				provider.currentProvider.on('accountsChanged', (accounts) => {
-					saveLoginInfos(accounts[0])
+					dispatch(login(accounts[0]))
 					readOnChainData(accounts[0])
 					setRendered(accounts[0].substring(0, 6) + '...' + accounts[0].substring(36))
 				})
@@ -100,17 +100,19 @@ const WalletButton = ({provider, loadWeb3Modal, logoutOfWeb3Modal}) => {
 				}
 
 				setRendered(accounts[0].substring(0, 6) + '...' + accounts[0].substring(36))
-				saveLoginInfos(accounts[0])
-				readOnChainData(accounts[0])
+				dispatch(login(accounts[0]))
+				await readOnChainData(accounts[0])
+				dispatch(setReady(true))
 			} catch (err) {
 				setRendered('')
 				logoutOfWeb3Modal()
-				console.error(err)
+				console.error('eee', err)
 			}
 		}
-
-		fetchAccount()
-	}, [provider, setRendered])
+		if (provider !== undefined) {
+			fetchAccount()
+		}
+	}, [provider])
 
 	return (
 		<Button

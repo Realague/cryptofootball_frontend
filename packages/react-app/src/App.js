@@ -5,10 +5,12 @@ import {Outlet} from 'react-router-dom'
 import {ThemeProvider} from '@emotion/react'
 import { theme, lightTheme } from './theme'
 import Loader from "./components/Loader";
+import {useSelector} from "react-redux";
+import AccountInfo from "./components/mainPages/AccountInfo";
 
 const App = () => {
 	const [themeMode, setThemeMode] = useState('dark')
-
+	const { account } = useSelector(state => state.user)
 	const toggleThemeMode = () => {
 		setThemeMode(themeMode === 'dark' ? 'light' : 'dark')
 	}
@@ -17,6 +19,9 @@ const App = () => {
 		<ThemeProvider theme={themeMode === 'dark' ? theme : lightTheme}>
 			<Box>
 				<Navbar toggleTheme={toggleThemeMode}/>
+				{
+					account && <AccountInfo/>
+				}
 				<Outlet/>
 				<Loader/>
 			</Box>

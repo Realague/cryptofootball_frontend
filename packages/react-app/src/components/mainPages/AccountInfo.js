@@ -9,9 +9,13 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogContentText,
-	DialogTitle, Slide,
+	DialogTitle, Divider, Slide, Stack,
 	Typography
 } from '@mui/material'
+import {ClaimModal} from "../accountInfo/modals/ClaimModal";
+import {useTheme} from "@emotion/react";
+import LoadingImage from "../../images/gifs/loading.gif";
+import TokenImage from "../../images/token.png";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />
@@ -29,6 +33,7 @@ const AccountInfo = () => {
 	const [time, setTime] = useState({'h': 0, 'm': 0, 's': 0})
 	const [rewards, setRewards] = useState(0)
 	const [seconds, setSeconds] = useState(0)
+	const theme = useTheme()
 
 	useEffect(() => {
 		if (account !== '' && seconds === 0) {
@@ -88,42 +93,53 @@ const AccountInfo = () => {
     }*/
 
 	return (
-		<Box className="navMenu">
-			{
-				account !== '' ?
-					<Box>
-						<p className="accountInfo float-left">Rewards: {parseFloat(rewards).toFixed(2)}
-                            $GB {rewards === '0' ? '' : ' | Claim fee ' + claimFee + '%'}
-							{seconds > 0 ? ' | Next claim in ' + time.h + 'h' + time.m + 'm' + time.s + 's' : rewards !== '0' ? <>{' |'}
-								<Button variant="link" onClick={checkClaimRewards}>Claim</Button></> : ''}</p>
-						<p className="accountInfo float-right">Wallet
-                            balance: {parseFloat(GBBalance).toFixed(2)} $GB
-                            | {parseFloat(BUSDBalance).toFixed(2)} $BUSD</p>
-					</Box>
-					: ''}
-			<Dialog
-				open={open}
-				TransitionComponent={Transition}
-				keepMounted
-				onClose={() => setOpen(false)}
+		<>
+			<Stack
+				display="flex"
+				direction="row"
+				justifyContent="space-between"
+				alignItems="center"
+				paddingX={3}
+				sx={{
+					backgroundColor: theme.palette.background.paper,
+					boxShadow: `inset -5px -5px 5px 5px ${theme.palette.background.paper}`,
+				}}
 			>
-				<DialogTitle>Claim Rewards</DialogTitle>
-				<DialogContent>
-					<DialogContentText id="alert-dialog-slide-description">
-						With your current {claimFee}% claim fee, you'll
-                            receive {rewards} $GB
-                            out of {rewards} $GB
-						Claim fee decay at a rate of 2% everyday
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button color="error" variant="outlined"
-						onClick={() => setOpen(false)}>Cancel</Button>
-					<Button color="success" variant="contained"
-					>Claim</Button>
-				</DialogActions>
-			</Dialog>
-		</Box>
+				<Stack
+					direction="row"
+					spacing={1}
+					alignItems="center"
+					p={1}
+				>
+					<Stack
+						direction="row"
+						alignItems="center"
+						spacing={1}
+					>
+						<Typography variant="subtitle2">
+							Rewards:
+						</Typography>
+						<Typography variant="subtitle1">{parseFloat(rewards).toFixed(2)}</Typography>
+						<img style={{width: 20, height: 20}} src={TokenImage} alt="token"/>
+					</Stack>
+					<Typography>
+						Claim fee: {claimFee}%
+					</Typography>
+					{seconds > 0 ?
+						<Typography>Next claim in {`${time.h}h${time.m}m${time.s}s`}</Typography>
+						: rewards !== '0' ?
+							<Button variant="contained" onClick={checkClaimRewards}>Claim</Button>
+							: ''
+					}
+				</Stack>
+				<Typography>Wallet
+					balance: {parseFloat(GBBalance).toFixed(2)} $GB
+					| {parseFloat(BUSDBalance).toFixed(2)} $BUSD
+				</Typography>
+
+			</Stack>
+			<ClaimModal claimFee={claimFee} rewards={rewards} open={open} onClose={() =>  setOpen(false)} />
+		</>
 	)
 }
 

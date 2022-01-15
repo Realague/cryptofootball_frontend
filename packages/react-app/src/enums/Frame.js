@@ -1,12 +1,14 @@
 class Frame {
-    static None = new Frame(0)
-    static Bronze = new Frame(1)
-    static Silver = new Frame(2)
-    static Gold = new Frame(3)
-    static Diamond = new Frame(4)
+    static None = new Frame(0, 'None')
+    static Bronze = new Frame(1, 'Bronze')
+    static Silver = new Frame(2, 'Silver')
+    static Gold = new Frame(3, 'Gold')
+    static Diamond = new Frame(4, 'Diamond')
+    static TierList = [Frame.None, Frame.Bronze, Frame.Silver, Frame.Gold, Frame.Diamond]
 
-    constructor(id) {
+    constructor(id, name) {
         this.id = id;
+        this.name = name;
     }
 
     static frameIdToString(id) {

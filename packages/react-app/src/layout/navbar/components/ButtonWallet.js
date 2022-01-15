@@ -55,60 +55,64 @@ const WalletButton = () => {
 		saveAccountInfo(GBPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId)
 	}
 
-	useEffect(() => {
-		async function fetchAccount() {
-			try {
-				if (!provider) {
-					return
-				}
-				if (GameContract.getContract()) {
-					return
-				}
-				const accounts = await provider.eth.getAccounts()
-				Contract.setProvider(provider, accounts[0])
-				GameContract.setProvider(provider, accounts[0])
+	async function fetchAccount() {
+		try {
+			if (!provider) {
+				return
+			}
+			if (GameContract.getContract()) {
+				return
+			}
+			const accounts = await provider.eth.getAccounts()
+			Contract.setProvider(provider, accounts[0])
+			GameContract.setProvider(provider, accounts[0])
 
-				FootballPlayerContract.setProvider(provider, accounts[0])
-				MarketplaceContract.setProvider(provider, accounts[0])
+			FootballPlayerContract.setProvider(provider, accounts[0])
+			MarketplaceContract.setProvider(provider, accounts[0])
 
-				console.log('setting contracts')
+			console.log('setting contracts')
 
-				// Subscribe to accounts change
-				provider.currentProvider.on('accountsChanged', (accounts) => {
-					dispatch(login(accounts[0]))
-					readOnChainData(accounts[0])
-					setRendered(accounts[0].substring(0, 6) + '...' + accounts[0].substring(36))
-				})
+			// Subscribe to accounts change
+			provider.currentProvider.on('accountsChanged', (accounts) => {
+				dispatch(login(accounts[0]))
+				readOnChainData(accounts[0])
+				setRendered(accounts[0].substring(0, 6) + '...' + accounts[0].substring(36))
+			})
 
-				// Subscribe to chainId change
-				provider.currentProvider.on('chainChanged', (chainId) => {
-					console.log(chainId)
-					if (chainId !== networkData[0].chainId) {
-						window.ethereum.request({
-							method: 'wallet_addEthereumChain',
-							params: networkData
-						})
-					}
-				})
-
-				let chainId = await provider.eth.getChainId()
-				if (CHAIN_ID !== chainId) {
+			// Subscribe to chainId change
+			provider.currentProvider.on('chainChanged', (chainId) => {
+				console.log(chainId)
+				if (chainId !== networkData[0].chainId) {
 					window.ethereum.request({
 						method: 'wallet_addEthereumChain',
 						params: networkData
 					})
 				}
+			})
 
-				setRendered(accounts[0].substring(0, 6) + '...' + accounts[0].substring(36))
-				dispatch(login(accounts[0]))
-				await readOnChainData(accounts[0])
-				dispatch(setReady(true))
-			} catch (err) {
-				setRendered('')
-				logoutOfWeb3Modal()
-				console.error('eee', err)
+			let chainId = await provider.eth.getChainId()
+			if (CHAIN_ID !== chainId) {
+				window.ethereum.request({
+					method: 'wallet_addEthereumChain',
+					params: networkData
+				})
 			}
+
+			setRendered(accounts[0].substring(0, 6) + '...' + accounts[0].substring(36))
+			dispatch(login(accounts[0]))
+			await readOnChainData(accounts[0])
+			dispatch(setReady(true))
+		} catch (err) {
+			setRendered('')
+			logoutOfWeb3Modal()
+			console.error('eee', err)
 		}
+	}
+
+	useEffect(() => {
+	}, [])
+
+	useEffect(() => {
 		if (provider !== undefined) {
 			fetchAccount()
 		}

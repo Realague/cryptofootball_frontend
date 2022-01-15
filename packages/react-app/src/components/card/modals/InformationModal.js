@@ -166,7 +166,7 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
                     fullWidth
                     color="primary"
                     variant="contained"
-                    onClick={() => {
+                        onClick={() => {
                         marketItem === undefined ? listFootballPlayer(sellForm.getValues().price) : changePrice(sellForm.getValues().price)
                     }}
                 >

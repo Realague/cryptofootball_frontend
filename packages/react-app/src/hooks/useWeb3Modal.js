@@ -3,6 +3,7 @@ import {useCallback, useEffect, useState} from 'react'
 import Web3Modal from 'web3modal'
 import Web3 from 'web3'
 import { useDispatch } from 'react-redux'
+import {logout} from "../features/userSlice";
 
 const NETWORK = 'binance'
 
@@ -41,17 +42,14 @@ function useWeb3Modal(config = {}) {
 		async function () {
 			await web3Modal.clearCachedProvider()
 			window.location.reload()
-			const action = {
-				type: 'LOGOUT'
-			}
-			dispatch(action)
+			dispatch(logout())
 		},
 		[web3Modal],
 	)
 
 	// If autoLoad is enabled and the wallet had been loaded before, load it automatically now.
 	useEffect(() => {
-		if (autoLoad && !autoLoaded && web3Modal.cachedProvider) {
+		if (!autoLoaded && web3Modal.cachedProvider) {
 			loadWeb3Modal()
 			setAutoLoaded(true)
 		}

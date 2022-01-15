@@ -5,7 +5,9 @@ import Card from './card/Card'
 import MintButton from './MintButton'
 import Marketplace from '../contractInteraction/MarketplaceContract'
 import LoadingImage from '../images/gifs/loading.gif'
-import {Box, Stack, Typography} from '@mui/material'
+import {Box, Stack, Tab, Tabs, Typography} from '@mui/material'
+import Frame from "../enums/Frame";
+
 
 const FootballPlayerCollection = () => {
     const {account, playersId} = useSelector(state => state.user)
@@ -13,19 +15,11 @@ const FootballPlayerCollection = () => {
     const [players, setPlayers] = useState(true)
     const [playersForSale, setPlayersForSale] = useState([])
     const [marketItems, setMarketItems] = useState([])
+    const [tabValue, setTabValue] = useState(0);
 
     useEffect(() => {
-        if (account !== undefined) {
-            firstCall()
-        }
+        getPlayers()
     }, [])
-
-    const firstCall = async () => {
-        while (!FootballPlayerContract.getContract()) {
-            await new Promise(r => setTimeout(r, 100))
-        }
-        await getPlayers()
-    }
 
     const getPlayers = async () => {
         let players = []
@@ -57,11 +51,66 @@ const FootballPlayerCollection = () => {
         }
     }
 
+
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+    };
+
+    function TabPanel(props) {
+        const { children, value, index, ...other } = props;
+
+        return (
+            <div
+                role="tabpanel"
+                hidden={value !== index}
+                id={`vertical-tabpanel-${index}`}
+                aria-labelledby={`vertical-tab-${index}`}
+                {...other}
+            >
+                {value === index && (
+                    <Box sx={{ p: 3 }}>
+                        {children}
+                    </Box>
+                )}
+            </div>
+        );
+    }
+
     return (
-        <Box>
-            {
-                account !== undefined ?
-                    <Box>
+        <Box sx={{ width: '100%', display: 'flex', height: "100%" }}>
+            <Tabs
+                orientation="vertical"
+                variant="fullWidth"
+                value={tabValue}
+                onChange={handleTabChange}
+                textColor="secondary"
+                indicatorColor="secondary"
+                sx={{ borderRight: 1, borderColor: 'divider', width: '150px', height: '100%' }}
+            >
+                {
+                    ['Mint', 'All', ...Frame.TierList.map(t => t.name).reverse()].map((c, i) => (
+                        <Tab value={i} key={i} label={c} />
+                    ))
+                }
+            </Tabs>
+            <TabPanel value={tabValue} index={0}>
+                <MintButton>Mint</MintButton>
+            </TabPanel>
+            <TabPanel value={tabValue} index={1}>
+                Item Two
+            </TabPanel>
+            <TabPanel value={tabValue} index={2}>
+                Item Three
+            </TabPanel>
+        </Box>
+    )
+}
+
+
+export default FootballPlayerCollection
+
+/*
+ <Box>
                         <MintButton/>
                         <Box className="switch-button accountInfo float-right" style={{clear: 'both'}}>
                             <input className="switch-button-checkbox" onClick={() => changeSwitchValue()}
@@ -89,13 +138,4 @@ const FootballPlayerCollection = () => {
                             }
                         </Box>
                     </Box>
-                    : ''
-            }
-        </Box>
-    )
-}
-
-
-export default FootballPlayerCollection
-
-
+ */

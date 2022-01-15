@@ -7,12 +7,12 @@ import App from './App'
 import {Provider, useSelector} from 'react-redux'
 import {ThemeProvider} from '@emotion/react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import Collection from './components/mainPages/Collection'
 import Marketplace from './components/mainPages/Marketplace'
 import {PersistGate} from 'redux-persist/lib/integration/react'
 import theme from './theme'
 import {Box, CircularProgress, CssBaseline, Typography} from '@mui/material'
 import {persistor, store} from './store'
+import CollectionPage from "./pages/collection/CollectionPage.js";
 
 const AuthenticatedRoute = ({ render }) => {
 	const { account } = useSelector(state => state.user)
@@ -47,7 +47,7 @@ ReactDOM.render(
 				<BrowserRouter>
 					<Routes>
 						<Route path="/" element={<App/>}>
-							<Route path="/collection" element={<AuthenticatedRoute render={<Collection/>}/>}/>
+							<Route path="/collection" element={<AuthenticatedRoute render={<CollectionPage/>}/>}/>
 							<Route path="/marketplace" element={<AuthenticatedRoute render={<Marketplace/>}/>}/>
 						</Route>
 					</Routes>

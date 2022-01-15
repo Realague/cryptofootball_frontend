@@ -140,6 +140,7 @@ const Card = ({ player }) => {
 						boxShadow: '0px 0px 5px #d0ad34',
 						border: "1px solid #d0ad34",
 						objectFit: 'cover',
+						outline: 'none',
 					}}
 				/>
 			</Box>

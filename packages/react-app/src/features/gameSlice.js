@@ -1,7 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
-	isReady: false
+	isReady: false,
+	transaction: undefined,
 }
 
 export const gameSlice = createSlice({
@@ -11,11 +12,15 @@ export const gameSlice = createSlice({
 		setReady: (state, action) => {
 			state.isReady = action.payload
 		},
+		setTransaction: (state, action) => {
+			state.transaction = action.payload
+		},
 	},
 })
 
 export const {
 	setReady,
+	setTransaction,
 } = gameSlice.actions
 
 export default gameSlice.reducer

@@ -58,7 +58,7 @@ const Marketplace = () => {
 				{
 					marketItems.map((marketItem, idx) => (
 						<Grid item m={2} p={2} display="flex" flexDirection="column" alignItems="center" width="240px" key={idx}>
-							<Card player={marketItem.player}/>
+							<Card player={marketItem.player} marketItem={marketItem.marketItem}/>
 							<Button
 								disabled={
 									Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price
@@ -73,7 +73,6 @@ const Marketplace = () => {
 					))
 				}
 			</Grid>
-			<Loader transaction={transaction} account={account}/>
 		</Stack>
 	)
 }

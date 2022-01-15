@@ -7,6 +7,7 @@ import WalletButton from './components/ButtonWallet'
 import Button from '@mui/material/Button'
 import {AppBar, Stack, Toolbar} from '@mui/material'
 import NavigationLink from './components/NavbarLink'
+import Loader from "../../components/Loader";
 
 const Navbar = ({ toggleTheme }) => {
 	const GBPrice = useSelector(state => state.user.GBPrice)

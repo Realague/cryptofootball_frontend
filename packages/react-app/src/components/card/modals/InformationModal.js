@@ -16,13 +16,23 @@ import {
 import {darkModalNoFlex} from '../../../css/style'
 import Button from '@mui/material/Button'
 import {useForm} from "react-hook-form";
+import {useDispatch, useSelector} from "react-redux";
+import Web3 from "web3";
+import Contract from "web3-eth-contract";
+import {abis, addresses} from "@project/contracts";
+import FootballPlayerContract from "../../../contractInteraction/FootballPlayerContract";
+import Marketplace from "../../../contractInteraction/MarketplaceContract";
+import {setTransaction} from "../../../features/gameSlice";
 
-const InformationModal = ({open, onClose, frame}) => {
+
+const InformationModal = ({open, onClose, frame, player, marketItem}) => {
+    const { account } = useSelector(state => state.user)
     const [action, setAction] = useState(undefined)
     const ref = createRef()
     const informationRef = createRef()
     const [informationShown, setInformationShown] = useState(true)
     const sellForm = useForm({ mode: 'onChange' })
+    const dispatch = useDispatch()
 
     const chooseAction = (value) => {
         setAction(action === value ? undefined : value)
@@ -30,22 +40,51 @@ const InformationModal = ({open, onClose, frame}) => {
         }
     }
 
+    console.log(account)
+
     const InformationContent = (
         <Stack display="flex" height={'100%'} spacing={2} flexDirection="column" alignItems="center"
                justifyContent="center" width="240px">
             <Typography variant="h6">Actions</Typography>
             <Divider flexItem color="primary"/>
-            <Button onClick={() => chooseAction('level-up')} fullWidth color="primary" variant="contained">Level
+            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('level-up')} fullWidth color="primary" variant="contained">Level
                 Up</Button>
-            <Button onClick={() => chooseAction('improve-frame')} fullWidth color="primary" variant="contained">Improve
+            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('improve-frame')} fullWidth color="primary" variant="contained">Improve
                 Frame</Button>
-            <Button onClick={() => chooseAction('train')} fullWidth color="primary" variant="contained">Train</Button>
-            <Button onClick={() => chooseAction('sell')} fullWidth color="secondary" variant="contained"
+            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('train')} fullWidth color="primary" variant="contained">Train</Button>
+            <Button hidden={marketItem !== undefined} onClick={() => listFootballPlayer("10")} fullWidth color="secondary" variant="contained"
                     my={4}>Sell</Button>
+            <Button hidden={marketItem === undefined || marketItem.seller !== account} onClick={() => chooseAction('cancelListing')} fullWidth color="secondary" variant="contained"
+                    my={4}>Change price</Button>
+            <Button hidden={marketItem === undefined || marketItem.seller !== account} onClick={() => chooseAction('changePrice')} fullWidth color="secondary" variant="contained"
+                    my={4}>Cancel listing</Button>
+            <Button hidden={marketItem === undefined || marketItem.seller === account} onClick={() => chooseAction('buy')} fullWidth color="secondary" variant="contained"
+                    my={4}>Buy</Button>
             <Divider flexItem color="primary"/>
             <Button onClick={() => onClose()} fullWidth color="error" variant="outlined" my={4}>Close</Button>
         </Stack>
     )
+
+    const listFootballPlayer = async (price) => {
+        /*if (!price || parseInt(price) <= 0) {
+            return
+        }
+        setShowPriceChoice(false)*/
+        price = Web3.utils.toWei(price, 'ether')
+        let BUSDTestnet = new Contract(abis.erc20, addresses.BUSDTestnet)
+        if (!await FootballPlayerContract.isApprovedForAll(account)) {
+            let transaction = FootballPlayerContract.getContract().methods.setApprovalForAll(addresses.Marketplace, true).send({from: account})
+            dispatch(setTransaction({transaction: transaction}))
+            await transaction
+        }
+        let busdAllowance = await BUSDTestnet.methods.allowance(account, addresses.Marketplace).call()
+        if (parseInt(Web3.utils.fromWei(busdAllowance)) < parseInt(await Marketplace.getListingFees())) {
+            let transaction = BUSDTestnet.methods.approve(addresses.Marketplace, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({from: account})
+            dispatch(setTransaction({transaction: transaction}))
+            await transaction
+        }
+        dispatch(setTransaction({transaction: Marketplace.getContract().methods.listPlayer(player.id, price).send({from: account})}))
+    }
 
     const LayoutContent = forwardRef(({children, name}, ref) => (
         <Stack ref={ref} display="flex" height={'100%'} spacing={2} flexDirection="column" alignItems="center"

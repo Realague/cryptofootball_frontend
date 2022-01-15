@@ -56,7 +56,6 @@ const MintButton = () => {
 					mint(account, GBPrice, BUSDBalance, GBBalance)
 				}}>Mint
 			</Button>
-			<Loader transaction={transaction} account={account}/>
 		</Box>
 	)
 }

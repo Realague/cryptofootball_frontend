@@ -63,7 +63,6 @@ class MarketplaceCardsManager extends React.Component {
                 <div onClick={() => this.setState({stamina: this.state.stamina, show: true})}>
                     {this.selectRightFrame()}
                 </div>
-                <Loader showLoader={this.state.showLoader}/>
             </div>
         )
     }

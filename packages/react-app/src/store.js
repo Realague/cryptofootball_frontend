@@ -41,6 +41,12 @@ export const store = configureStore({
 				PURGE,
 				REGISTER
 			],
+			ignoredActionPaths: [
+					'payload.transaction',
+			],
+			ignoredPaths: [
+					'game.transaction',
+			],
 		},
 	}),
 })

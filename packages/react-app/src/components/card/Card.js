@@ -16,7 +16,7 @@ import {BsFillLightningChargeFill} from "react-icons/bs";
 import ExperienceProgressBar from "./components/ExperienceProgressBar";
 import StaminaProgressBar from "./components/StaminaProgressBar";
 
-const Card = ({ player }) => {
+const Card = ({ player, marketItem }) => {
 	const account = useSelector(state => state.user.account)
 	const [stamina, setStamina] = useState(0)
 	const [show, setShow] = useState(false)
@@ -31,7 +31,6 @@ const Card = ({ player }) => {
 	const [showResult, setShowResult] = useState(false)
 	const [changePrice, setChangePrice] = useState(false)
 	const [isForSale, setIsForSale] = useState(false)
-	const [marketItem, setMarketItem] = useState(undefined)
 
 	const [openedModal, setOpenedModal] = useState(undefined)
 
@@ -52,7 +51,7 @@ const Card = ({ player }) => {
 		setShowPriceChoice(false)
 		price = Web3.utils.toWei(price, 'ether')
 		let BUSDTestnet = new Contract(abis.erc20, addresses.BUSDTestnet)
-		if (!await FootballPlayerContract.isApprovedForAll(account)) {
+		/*if (!await FootballPlayerContract.isApprovedForAll(account)) {
 			let transaction = FootballPlayerContract.getContract().methods.setApprovalForAll(addresses.Marketplace, true).send({from: account})
 			setTransaction(transaction)
 			await transaction
@@ -62,7 +61,7 @@ const Card = ({ player }) => {
 			let transaction = BUSDTestnet.methods.approve(addresses.Marketplace, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({from: account})
 			setTransaction(transaction)
 			await transaction
-		}
+		}*/
 		setTransaction(Marketplace.getContract().methods.listPlayer(player.id, price).send({from: account}))
 	}
 
@@ -170,11 +169,12 @@ const Card = ({ player }) => {
 	return (
 		<Stack direction="column" alignItems="center" width="100%">
 			{renderCard()}
-			<Loader transaction={transaction} account={account}/>
 			<InformationModal
 				onClose={() => setOpenedModal(undefined)}
 				open={openedModal === 'information'}
 				frame={renderCard}
+				player={player}
+				marketItem={marketItem}
 			/>
 
 		</Stack>

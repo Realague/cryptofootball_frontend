@@ -5,8 +5,7 @@ import Card from './card/Card'
 import MintButton from './MintButton'
 import Marketplace from '../contractInteraction/MarketplaceContract'
 import LoadingImage from '../images/gifs/loading.gif'
-import {Box, Button, Stack, Typography} from '@mui/material'
-import Loader from "./Loader";
+import {Box, Stack, Typography} from '@mui/material'
 
 const FootballPlayerCollection = () => {
     const {account, playersId} = useSelector(state => state.user)
@@ -76,7 +75,7 @@ const FootballPlayerCollection = () => {
                                     players.map(function (player, idx) {
                                         return (
                                             <Box key={idx}>
-                                                <Card player={player}
+                                                <Card player={!showAllPlayer && marketItems ? playersForSale : player}
                                                       marketItem={!showAllPlayer && marketItems ? marketItems[idx] : undefined}/>
                                             </Box>
                                         )

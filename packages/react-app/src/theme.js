@@ -38,6 +38,19 @@ export const theme = createTheme({
 		].join(','),
 		h6: {
 			fontSize: 16,
+			fontWeight: 700,
+		},
+		h5: {
+			fontSize: 16,
+			fontWeight: 400,
+		},
+		subtitle1: {
+			fontSize: 14,
+			fontWeight: 700,
+		},
+		subtitle2: {
+			fontSize: 14,
+			fontWeight: 400,
 		},
 		body1: {
 			fontSize: 12

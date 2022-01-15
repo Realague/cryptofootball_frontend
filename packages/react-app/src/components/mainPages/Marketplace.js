@@ -6,7 +6,7 @@ import Web3 from 'web3'
 import {abis, addresses} from '@project/contracts'
 import Contract from 'web3-eth-contract'
 import Loader from '../Loader'
-import CardsManager from '../cards/CardsManager'
+import Card from '../card/Card'
 import {Box, Button, Grid, Paper, Stack} from '@mui/material'
 import {useSelector} from 'react-redux'
 
@@ -54,11 +54,11 @@ const Marketplace = () => {
 	return (
 		<Stack direction="column" justifyContent="center" alignItems="center">
 			<AccountInfo/>
-			<Grid container>
+			<Grid container spacing={2}>
 				{
 					marketItems.map((marketItem, idx) => (
-						<Grid item component={Paper} m={2} p={2} display="flex" direction="column" alignItems="center" width="240px" key={idx}>
-							<CardsManager player={marketItem.player}/>
+						<Grid item m={2} p={2} display="flex" flexDirection="column" alignItems="center" width="240px" key={idx}>
+							<Card player={marketItem.player}/>
 							<Button
 								disabled={
 									Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price

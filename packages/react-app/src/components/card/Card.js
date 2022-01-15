@@ -1,13 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import NoneFrame from './NoneFrame'
-import BronzeFrame from './BronzeFrame'
-import SilverFrame from './SilverFrame'
-import GoldFrame from './GoldFrame'
-import DiamondFrame from './DiamondFrame'
 import GameContract from '../../contractInteraction/GameContract'
 import Marketplace from '../../contractInteraction/MarketplaceContract'
-import Button from '@mui/material/Button'
-import {Form, FormControl, InputGroup} from 'react-bootstrap'
 import Loader from '../Loader'
 import Web3 from 'web3'
 import FootballPlayerContract from '../../contractInteraction/FootballPlayerContract'
@@ -15,10 +8,15 @@ import {abis, addresses} from '@project/contracts'
 import Contract from 'web3-eth-contract'
 import {useSelector} from 'react-redux'
 import {Backdrop, Box, Chip, Divider, Fade, Modal, Slide, Stack, Typography} from '@mui/material'
-import {darkModal, darkModalNoFlex} from '../../css/style'
 import InformationModal from './modals/InformationModal'
+import Frame from "../../enums/Frame";
+import Position from "../../enums/Position";
+import messi from "../../images/footballplayer/messi.jpeg";
+import {BsFillLightningChargeFill} from "react-icons/bs";
+import ExperienceProgressBar from "./components/ExperienceProgressBar";
+import StaminaProgressBar from "./components/StaminaProgressBar";
 
-const CardsManager = ({ player }) => {
+const Card = ({ player }) => {
 	const account = useSelector(state => state.user.account)
 	const [stamina, setStamina] = useState(0)
 	const [show, setShow] = useState(false)
@@ -94,41 +92,95 @@ const CardsManager = ({ player }) => {
 		)
 	}
 
-	const selectFrame = () => {
-		return (<>
-			{
-				{
-					'0': <NoneFrame player={player} account={account}
-						stamina={stamina}/>,
-					'1': <BronzeFrame player={player} account={account}
-						stamina={stamina}/>,
-					'2': <SilverFrame player={player} account={account}
-						stamina={stamina}/>,
-					'3': <GoldFrame player={player} account={account}
-						stamina={stamina}/>,
-					'4': <DiamondFrame player={player} account={account}
-						stamina={stamina}/>
-				}[player.frame]
-			}</>)
-	}
+	const renderCard = () => (
+		<Stack
+			onClick={() => setOpenedModal('information')}
+			width="250px"
+			height="350px"
+			sx={{
+				backgroundImage: `url(${Frame.frameIdToString(player.frame)})`,
+				backgroundSize: "auto 100%",
+				backgroundRepeat: "no-repeat",
+				backgroundPosition: "center",
+			}}
+			padding={6}
+			paddingTop="70px"
+			>
+			<Stack
+				direction="row"
+				justifyContent="space-between"
+			>
+				<Typography
+					variant="subtitle1"
+					display="flex"
+					justifyContent="flex-end"
+					sx={{
+						textShadow: '1px 1px 0 black'
+					}}
+				>
+					{Position.positionIdToString(player.position)}
+				</Typography>
+				<Typography
+					variant="h6"
+					display="flex"
+					justifyContent="center"
+					sx={{
+						textShadow: '0 0 10px yellow'
+					}}
+				>
+					{player.score}
+				</Typography>
+			</Stack>
+			<Box display="flex" justifyContent="center">
+				<img
+					src={messi}
+					style={{
+						height: "126px",
+						width: "126px",
+						boxShadow: '0px 0px 5px #d0ad34',
+						border: "1px solid #d0ad34",
+						objectFit: 'cover',
+					}}
+				/>
+			</Box>
+			<Stack justifyContent="center" alignItems="center">
+				<Typography variant="h6">
+					{FootballPlayerContract.getPlayersName(player)}
+				</Typography>
+				<Stack spacing={1} direction="row" width="100%" alignItems="center" justifyContent="space-around">
+					<Typography variant="subtitle2">XP</Typography>
+					<ExperienceProgressBar
+						variant="determinate"
+						value={(player.xp / GameContract.getXpRequireToLvlUp(player.score))  * 100}
+					/>
+				</Stack>
+				<Stack spacing={1} direction="row" width="100%" alignItems="center" justifyContent="space-around">
+					<BsFillLightningChargeFill
+						style={{color: 'yellow'}}/>
+					<StaminaProgressBar
+						variant="determinate"
+						value={+stamina}
+					/>
+				</Stack>
+			</Stack>
+		</Stack>
+	)
 
 	return (
-		<Stack direction="column" alignItems="center">
-			<Box onClick={() => setOpenedModal('information')}>
-				{ selectFrame() }
-			</Box>
+		<Stack direction="column" alignItems="center" width="100%">
+			{renderCard()}
 			<Loader transaction={transaction} account={account}/>
 			<InformationModal
 				onClose={() => setOpenedModal(undefined)}
 				open={openedModal === 'information'}
-				frame={selectFrame}
+				frame={renderCard}
 			/>
 
 		</Stack>
 	)
 }
 
-export default CardsManager
+export default Card
 
 /*
 

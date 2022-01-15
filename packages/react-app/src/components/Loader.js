@@ -1,5 +1,5 @@
 import React from "react";
-import CardsManager from "./cards/CardsManager";
+import Card from "./card/Card";
 import FootballPlayerContract from "../contractInteraction/FootballPlayerContract";
 import LoadingImage from "../images/gifs/loading.gif";
 import {CancelOutlined, CheckCircleOutlined} from '@mui/icons-material';
@@ -95,7 +95,7 @@ class Loader extends React.Component {
                                 </>,
                             'mint':
                                 <>
-                                    <CardsManager player={this.state.player} isForSale={false} marketItem={[]}/>
+                                    <Card player={this.state.player} isForSale={false} marketItem={[]}/>
                                     <Button variant="primary" onClick={() => this.onHide()}>Collect</Button>
                                 </>,
                             'trainingDone':

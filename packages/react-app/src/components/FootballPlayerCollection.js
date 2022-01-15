@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 import FootballPlayerContract from '../contractInteraction/FootballPlayerContract'
-import CardsManager from './cards/CardsManager'
+import Card from './card/Card'
 import MintButton from './MintButton'
 import Marketplace from '../contractInteraction/MarketplaceContract'
 import LoadingImage from '../images/gifs/loading.gif'
@@ -75,16 +75,16 @@ const FootballPlayerCollection  = () => {
 									players.map(function (player, idx) {
 										return (
 											<Box key={idx}>
-												<CardsManager player={player} isForSale={false} marketItem={[]}
-													key={idx}/>
+												<Card player={player} isForSale={false} marketItem={[]}
+													  key={idx}/>
 											</Box>
 										)
 									}) : !showAllPlayer && marketItems ?
 										playersForSale.map(function (player, idx) {
 											return (
 												<Box>
-													<CardsManager player={player} isForSale={true}
-														marketItem={marketItems[idx]} key={idx}/>
+													<Card player={player} isForSale={true}
+														  marketItem={marketItems[idx]} key={idx}/>
 												</Box>
 											)
 										})

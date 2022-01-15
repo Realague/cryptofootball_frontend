@@ -26,4 +26,5 @@ export const darkModalNoFlex = {
 	boxShadow: 24,
 	p: 4,
 	outline: 'none',
+	overflow: 'hidden',
 }

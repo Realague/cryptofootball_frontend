@@ -16,6 +16,7 @@ import Contract from 'web3-eth-contract'
 import {useSelector} from 'react-redux'
 import {Backdrop, Box, Chip, Divider, Fade, Modal, Slide, Stack, Typography} from '@mui/material'
 import {darkModal, darkModalNoFlex} from '../../css/style'
+import InformationModal from './modals/InformationModal'
 
 const CardsManager = ({ player }) => {
 	const account = useSelector(state => state.user.account)
@@ -117,32 +118,11 @@ const CardsManager = ({ player }) => {
 				{ selectFrame() }
 			</Box>
 			<Loader transaction={transaction} account={account}/>
-			<Modal
-				closeAfterTransition
-				open={openedModal === 'information'}
+			<InformationModal
 				onClose={() => setOpenedModal(undefined)}
-				BackdropProps={{
-					timeout: 500,
-				}}
-				width={'600px'}
-				height={'600px'}
-			>
-				<Fade in={openedModal === 'information'}>
-					<Stack sx={darkModalNoFlex} spacing={4} display="flex" direction="row" justifyContent="space-around" alignItems="center">
-						<Box width="240px">
-							{selectFrame()}
-						</Box>
-						<Stack display="flex" spacing={2} flexDirection="column" alignItems="center" justifyContent="center" width="240px">
-							<Typography variant="h6">Actions</Typography>
-							<Divider flexItem color="primary" />
-							<Button fullWidth color="primary" variant="contained">Level Up</Button>
-							<Button fullWidth color="primary" variant="contained">Improve Frame</Button>
-							<Button fullWidth color="primary" variant="contained">Train</Button>
-							<Button fullWidth color="secondary" variant="outlined" my={4}>Sell</Button>
-						</Stack>
-					</Stack>
-				</Fade>
-			</Modal>
+				open={openedModal === 'information'}
+				frame={selectFrame}
+			/>
 
 		</Stack>
 	)

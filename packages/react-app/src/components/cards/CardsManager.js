@@ -111,14 +111,14 @@ const CardsManager = ({ player }) => {
 	return (
 		<div>
 			<div onClick={() => setShow(true)}>
-				{ /* selectFrame() */ }
+				{ selectFrame() }
 			</div>
 			<Modal show={show} onHide={() => setShow(false)}>
 				<Modal.Header closeButton/>
 				<Modal.Body className="modal-body-player">
 					<div className="align-div-horizontally-container">
 						<div className="left-div">
-							{ /* selectFrame() */ }
+							{ selectFrame() }
 						</div>
 						<div className="right-div">
 							{

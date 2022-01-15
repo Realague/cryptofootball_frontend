@@ -74,7 +74,7 @@ const FootballPlayerCollection  = () => {
 								(showAllPlayer && players && players.length > 0) ?
 									players.map(function (player, idx) {
 										return (
-											<Box>
+											<Box key={idx}>
 												<CardsManager player={player} isForSale={false} marketItem={[]}
 													key={idx}/>
 											</Box>

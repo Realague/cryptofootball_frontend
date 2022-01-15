@@ -1,120 +1,109 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import FootballPlayerContract from "../contractInteraction/FootballPlayerContract";
-import CardsManager from "./cards/CardsManager";
-import MintButton from "./MintButton";
-import Marketplace from "../contractInteraction/MarketplaceContract";
-import LoadingImage from "../images/gifs/loading.gif"
-import {Box, Button, Stack, Typography} from '@mui/material';
+import React, {useEffect, useState} from 'react'
+import {useSelector} from 'react-redux'
+import FootballPlayerContract from '../contractInteraction/FootballPlayerContract'
+import CardsManager from './cards/CardsManager'
+import MintButton from './MintButton'
+import Marketplace from '../contractInteraction/MarketplaceContract'
+import LoadingImage from '../images/gifs/loading.gif'
+import {Box, Button, Stack, Typography} from '@mui/material'
 
-class FootballPlayerCollection extends React.Component {
+const FootballPlayerCollection  = () => {
+	const { account, playersId } = useSelector(state => state.user)
+	const [showAllPlayer, setShowAllPlayer] = useState(true)
+	const [players, setPlayers] = useState(true)
+	const [playersForSale, setPlayersForSale] = useState([])
+	const [marketItems, setMarketItems] = useState([])
 
-    constructor(props) {
-        super(props);
-        this.state = {show: false, showAllPlayer: true};
-        if (props.account !== '') {
-            this.firstCall();
-        }
-    }
+	useEffect(() => {
+		if (account !== undefined) {
+			firstCall()
+		}
+	}, [])
 
-    async firstCall() {
-        while (!FootballPlayerContract.getContract()) {
-            await new Promise(r => setTimeout(r, 100));
-        }
-        await this.getPlayers();
-    }
+	const firstCall = async () => {
+		while (!FootballPlayerContract.getContract()) {
+			await new Promise(r => setTimeout(r, 100))
+		}
+		await getPlayers()
+	}
 
-    async getPlayers() {
-        let playersId = this.props.playersId;
-        let players = [];
-        for (let i = 0; i !== playersId.length; i++) {
-            players.push(await FootballPlayerContract.getFootballPlayer(playersId[i]));
-        }
-        this.setState({players: players});
-    }
+	const getPlayers = async () => {
+		let players = []
+		for (let i = 0; i !== playersId.length; i++) {
+			players.push(await FootballPlayerContract.getFootballPlayer(playersId[i]))
+		}
+		setPlayers(players)
+	}
 
-    async getPlayersListed() {
-        let marketItemsId = await Marketplace.getListedPlayerOfAddress(this.props.account);
-        let players = [];
-        let marketItems = [];
-        for (let i = 0; i !== marketItemsId.length; i++) {
-            let marketItem = await Marketplace.getMarketItem(marketItemsId[i]);
-            marketItems.push(marketItem);
-            players.push(await FootballPlayerContract.getFootballPlayer(marketItem.tokenId));
-        }
-        this.setState({playersForSale: players, marketItems: marketItems});
-    }
+	const getPlayersListed = async () => {
+		let marketItemsId = await Marketplace.getListedPlayerOfAddress(account)
+		let players = []
+		let marketItems = []
+		for (let i = 0; i !== marketItemsId.length; i++) {
+			let marketItem = await Marketplace.getMarketItem(marketItemsId[i])
+			marketItems.push(marketItem)
+			players.push(await FootballPlayerContract.getFootballPlayer(marketItem.tokenId))
+		}
+		setPlayersForSale(players)
+		setMarketItems(marketItems)
+	}
 
-    async changeSwitchValue() {
-        this.setState({showAllPlayer: !this.state.showAllPlayer});
-        if (!this.state.showAllPlayer) {
-            await this.getPlayers();
-        } else {
-            await this.getPlayersListed();
-        }
-    }
+	const changeSwitchValue = async () => {
+		setShowAllPlayer(!showAllPlayer)
+		if (!showAllPlayer) {
+			await getPlayers()
+		} else {
+			await getPlayersListed()
+		}
+	}
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.playersId !== this.props.playersId) {
-            this.getPlayers().then(() => this.setState({loading: false}));
-        }
-    }
-
-    render() {
-        let marketItems = this.state.marketItems;
-
-        return (
-            <Box>
-                {
-                    this.props.account !== '' ?
-                        <Box>
-                            <MintButton/>
-                            <Box className="switch-button accountInfo float-right" style={{clear: 'both'}}>
-                                <input className="switch-button-checkbox" onClick={() => this.changeSwitchValue()}
-                                       type="checkbox"/>
-                                <label className="switch-button-label" htmlFor=""><span
-                                    className="switch-button-label-span">All player</span></label>
-                            </Box>
-                            <Box alignItems="center" className="white-color playerCards" style={{clear: 'both'}}>
-                                {
-                                    this.state.showAllPlayer && this.state.players ?
-                                        this.state.players.map(function (player, idx) {
-                                            return (
-                                                <Box>
-                                                    <CardsManager player={player} isForSale={false} marketItem={[]}
-                                                                  key={idx}/>
-                                                </Box>
-                                            )
-                                        }) : !this.state.showAllPlayer && marketItems ?
-                                            this.state.playersForSale.map(function (player, idx) {
-                                                return (
-                                                    <Box>
-                                                        <CardsManager player={player} isForSale={true}
-                                                                      marketItem={marketItems[idx]} key={idx}/>
-                                                    </Box>
-                                                )
-                                            })
-                                            :
-                                            <Stack alignItems="center" direction="column"
-                                                   sx={{width: "200px", height: "200px"}}>
-                                                <img src={LoadingImage} alt=""/>
-                                                <Typography variant="h5">Loading...</Typography>
-                                            </Stack>
-                                }
-                            </Box>
-                        </Box>
-                        : ''
-                }
-            </Box>
-        )
-    }
+	return (
+		<Box>
+			{
+				account !== undefined ?
+					<Box>
+						<MintButton/>
+						<Box className="switch-button accountInfo float-right" style={{clear: 'both'}}>
+							<input className="switch-button-checkbox" onClick={() => changeSwitchValue()}
+								type="checkbox"/>
+							<label className="switch-button-label" htmlFor=""><span
+								className="switch-button-label-span">All player</span></label>
+						</Box>
+						<Box alignItems="center" className="white-color playerCards" style={{clear: 'both'}}>
+							{
+								(showAllPlayer && players && players.length > 0) ?
+									players.map(function (player, idx) {
+										return (
+											<Box>
+												<CardsManager player={player} isForSale={false} marketItem={[]}
+													key={idx}/>
+											</Box>
+										)
+									}) : !showAllPlayer && marketItems ?
+										playersForSale.map(function (player, idx) {
+											return (
+												<Box>
+													<CardsManager player={player} isForSale={true}
+														marketItem={marketItems[idx]} key={idx}/>
+												</Box>
+											)
+										})
+										:
+										<Stack alignItems="center" direction="column"
+											sx={{width: '200px', height: '200px'}}>
+											<img src={LoadingImage} alt=""/>
+											<Typography variant="h5">Loading...</Typography>
+										</Stack>
+							}
+						</Box>
+					</Box>
+					: ''
+			}
+		</Box>
+	)
 }
 
-const mapStateToProps = (state) => ({
-    account: state.pReducer.account,
-    playersId: state.pReducer.playersId
-});
 
-export default connect(mapStateToProps)(FootballPlayerCollection);
+export default FootballPlayerCollection
 
 

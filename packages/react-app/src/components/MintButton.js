@@ -1,64 +1,64 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {connect} from 'react-redux';
+import React, {useEffect, useState} from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import {connect, useSelector} from 'react-redux'
 import '../css/toggleButton.css'
-import FootballPlayerContract from "../contractInteraction/FootballPlayerContract";
-import Contract from "web3-eth-contract";
-import {abis, addresses} from "@project/contracts";
-import Web3 from "web3";
-import Loader from "./Loader";
-import {Box, Button} from '@mui/material';
+import FootballPlayerContract from '../contractInteraction/FootballPlayerContract'
+import Contract from 'web3-eth-contract'
+import {abis, addresses} from '@project/contracts'
+import Web3 from 'web3'
+import Loader from './Loader'
+import {Box, Button} from '@mui/material'
 
-class MintButton extends React.Component {
+const MintButton = () => {
+	const {
+		account,
+		provider,
+		BUSDBalance,
+		GBBalance,
+		GBPrice,
+	} = useSelector(state => state.user)
+	const [showLoader, setShowLoader] = useState(false)
+	const [showMint, setShowMint] = useState(false)
+	const [player, setPlayer] = useState(undefined)
+	const [transaction, setTransaction] = useState(undefined)
 
-    constructor(props) {
-        super(props);
-        this.state = {showLoader: false, showMint: false, player: {}};
-    }
+	useEffect(() => {
 
-    async mint(account, gbTokenPrice, busdBalance, gbBalance) {
-        const mintPrice = await FootballPlayerContract.getMintPrice();
-        const mintFees = await FootballPlayerContract.getMintFees();
-        if (parseInt(Web3.utils.toWei(busdBalance, 'ether')) < parseInt(mintFees) && parseInt(Web3.utils.toWei(gbBalance, 'ether')) < mintPrice * gbTokenPrice) {
-            return;
-        }
-        let BUSDTestnet = new Contract(abis.erc20, addresses.BUSDTestnet);
-        let GBToken = new Contract(abis.erc20, addresses.GBTOKEN);
-        let busdAllowance = await BUSDTestnet.methods.allowance(account, addresses.FootballPlayers).call();
-        let gbAllowance = await GBToken.methods.allowance(account, addresses.FootballPlayers).call();
-        if (parseInt(Web3.utils.fromWei(busdAllowance)) < parseInt(Web3.utils.fromWei(mintFees))) {
-            let transaction = BUSDTestnet.methods.approve(addresses.FootballPlayers, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({from: account});
-            this.setState({transaction: transaction});
-            await transaction;
-        }
-        if (parseInt(Web3.utils.fromWei(gbAllowance)) < Web3.utils.fromWei((mintPrice * gbTokenPrice).toString())) {
-            let transaction = GBToken.methods.approve(addresses.FootballPlayers, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({from: account});
-            this.setState({transaction: transaction});
-            await transaction;
-        }
-        this.setState({transaction: FootballPlayerContract.getContract().methods.mintPlayer().send({from: account})});
-    }
+	}, [])
 
-    render() {
-        return (
-            <Box className="navMenu" style={{clear: 'both'}}>
-                <Button sx={{margin: "10px"}} variant="contained" color="primary"
-                    className="float-left" onClick={() => {
-                    this.mint(this.props.account, this.props.GBPrice, this.props.BUSDBalance, this.props.GBBalance);
-                }}>Mint
-                </Button>
-                <Loader transaction={this.state.transaction} account={this.props.account}/>
-            </Box>
-        )
-    }
+	const mint = async (account, gbTokenPrice, busdBalance, gbBalance) => {
+		const mintPrice = await FootballPlayerContract.getMintPrice()
+		const mintFees = await FootballPlayerContract.getMintFees()
+		if (parseInt(Web3.utils.toWei(busdBalance, 'ether')) < parseInt(mintFees) && parseInt(Web3.utils.toWei(gbBalance, 'ether')) < mintPrice * gbTokenPrice) {
+			return
+		}
+		let BUSDTestnet = new Contract(abis.erc20, addresses.BUSDTestnet)
+		let GBToken = new Contract(abis.erc20, addresses.GBTOKEN)
+		let busdAllowance = await BUSDTestnet.methods.allowance(account, addresses.FootballPlayers).call()
+		let gbAllowance = await GBToken.methods.allowance(account, addresses.FootballPlayers).call()
+		if (parseInt(Web3.utils.fromWei(busdAllowance)) < parseInt(Web3.utils.fromWei(mintFees))) {
+			let transaction = BUSDTestnet.methods.approve(addresses.FootballPlayers, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({from: account})
+			setTransaction(transaction)
+			await transaction
+		}
+		if (parseInt(Web3.utils.fromWei(gbAllowance)) < Web3.utils.fromWei((mintPrice * gbTokenPrice).toString())) {
+			let transaction = GBToken.methods.approve(addresses.FootballPlayers, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({from: account})
+			setTransaction(transaction)
+			await transaction
+		}
+		setTransaction({transaction: FootballPlayerContract.getContract().methods.mintPlayer().send({from: account})})
+	}
+
+	return (
+		<Box className="navMenu" style={{clear: 'both'}}>
+			<Button sx={{margin: '10px'}} variant="contained" color="primary"
+				className="float-left" onClick={() => {
+					mint(account, GBPrice, BUSDBalance, GBBalance)
+				}}>Mint
+			</Button>
+			<Loader transaction={transaction} account={account}/>
+		</Box>
+	)
 }
 
-const mapStateToProps = (state) => ({
-    account: state.pReducer.account,
-    provider: state.pReducer.provider,
-    BUSDBalance: state.pReducer.BUSDBalance,
-    GBBalance: state.pReducer.GBBalance,
-    GBPrice: state.pReducer.GBPrice,
-});
-
-export default connect(mapStateToProps)(MintButton);
+export default MintButton

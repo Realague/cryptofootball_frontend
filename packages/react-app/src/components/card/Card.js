@@ -148,14 +148,14 @@ const Card = ({ player }) => {
 				<Typography variant="h6">
 					{FootballPlayerContract.getPlayersName(player)}
 				</Typography>
-				<Stack spacing={1} direction="row" width="100%" alignItems="center" justifyContent="space-around">
+				<Stack direction="row" width="100%" alignItems="center" justifyContent="space-evenly">
 					<Typography variant="subtitle2">XP</Typography>
 					<ExperienceProgressBar
 						variant="determinate"
 						value={(player.xp / GameContract.getXpRequireToLvlUp(player.score))  * 100}
 					/>
 				</Stack>
-				<Stack spacing={1} direction="row" width="100%" alignItems="center" justifyContent="space-around">
+				<Stack direction="row" width="100%" alignItems="center" justifyContent="space-evenly">
 					<BsFillLightningChargeFill
 						style={{color: 'yellow'}}/>
 					<StaminaProgressBar

@@ -10,6 +10,8 @@ import Frame from "../enums/Frame";
 import Button from "@mui/material/Button";
 import Loader from "./Loader";
 import {ArrowDropDown, ArrowDropUp} from "@mui/icons-material";
+import Position from "../enums/Position";
+import {useTheme} from "@emotion/react";
 
 
 const FootballPlayerCollection = () => {
@@ -24,6 +26,7 @@ const FootballPlayerCollection = () => {
     const [sortOption, setSortOption] = useState('score')
     const [sortDirection, setSortDirection] = useState('desc')
     const ref = createRef()
+    const theme = useTheme()
 
     const handleSortChange = (event) => {
         setSortOption(event.target.value);
@@ -93,7 +96,12 @@ const FootballPlayerCollection = () => {
         </Box>
     ))
 
-    const renderPlayer = (filter = undefined, isSell = false, sortMethod = (a, b) => parseFloat(b.id) - parseFloat(a.id)) => {
+    const renderPlayer = (
+        filter = undefined,
+        isSell = false,
+        sortMethod = (a, b) => parseFloat(b.id) - parseFloat(a.id),
+        filterProperty = 'frame',
+        ) => {
         return (
             <>
                 { !isSell &&
@@ -158,18 +166,21 @@ const FootballPlayerCollection = () => {
                                     </Grid>
                                 ))
                             :
-                    players.filter(p => filter === undefined ? true : p.frame == filter).sort(sortMethod).map((player, idx) => (
-                        <Grid item key={idx}>
-                            <Slide direction="up" appear={true} in={true}>
-                                <LayoutContent ref={ref}>
-                                    <Card
-                                        player={!showAllPlayer && marketItems ? playersForSale : player}
-                                        marketItem={!showAllPlayer && marketItems ? marketItems[idx] : undefined}
-                                    />
-                                </LayoutContent>
-                            </Slide>
-                        </Grid>
-                    ))
+                    players
+                        .filter(p => filter === undefined ? true : p[filterProperty] == filter)
+                        .sort(sortMethod)
+                        .map((player, idx) => (
+                            <Grid item key={idx}>
+                                <Slide direction="up" appear={true} in={true}>
+                                    <LayoutContent ref={ref}>
+                                        <Card
+                                            player={!showAllPlayer && marketItems ? playersForSale : player}
+                                            marketItem={!showAllPlayer && marketItems ? marketItems[idx] : undefined}
+                                        />
+                                    </LayoutContent>
+                                </Slide>
+                            </Grid>
+                        ))
                 }
             </Grid>
             </>
@@ -181,16 +192,41 @@ const FootballPlayerCollection = () => {
         <Box sx={{width: '100%', display: 'flex', height: "100%"}}>
             <Tabs
                 orientation="vertical"
-                variant="fullWidth"
+                variant="scrollable"
                 value={tabValue}
                 onChange={handleTabChange}
                 textColor="secondary"
                 indicatorColor="secondary"
-                sx={{borderRight: 1, position: 'fixed', borderColor: 'divider', width: '150px', height: '100%'}}
+                scrollButtons={false}
+                sx={{
+                    borderRight: 1,
+                    position: 'fixed',
+                    borderColor: 'divider',
+                    width: '150px',
+                    height: '80%',
+                    overflowY: 'scroll',
+                }}
             >
                 {
-                    ['Mint', 'All', 'Listed', ...frames].map((c, i) => (
-                        <Tab value={i} key={i} label={c.name || c}/>
+                    [
+                        'Mint', 'All', 'Listed',
+                        { name: 'Tier', disabled: true} , ...frames,
+                        { name: 'Position', disabled: true} , ...Position.Positions
+                    ].map((c, i) => (
+                       c === 'Mint' ?
+                        <Box p={2} display="flex" alignItems="center" justifyContent="center">
+                            <Button fullWidth variant="contained" onClick={() => setTabValue(0)}>Mint</Button>
+                        </Box>
+                           :
+                           <Tab
+                               value={i}
+                               key={i}
+                               label={c.name || c} disabled={c.disabled || false}
+                               sx={{
+                                   textTransform: c.disabled ? "uppercase" : "none",
+                                   backgroundColor: c.disabled ? theme.palette.background.paper : "",
+                               }}
+                           />
                     ))
                 }
             </Tabs>
@@ -221,9 +257,24 @@ const FootballPlayerCollection = () => {
             </TabPanel>
             {
                 frames.map((t, i) => (
-                    <TabPanel key={3 + i} value={tabValue} index={3 + i}>
+                    <TabPanel key={4 + i} value={tabValue} index={4 + i}>
                         {
                             renderPlayer(t.id)
+                        }
+                    </TabPanel>
+                ))
+            }
+            {
+                Position.Positions.map((t, i) => (
+                    <TabPanel key={10 + i} value={tabValue} index={10 + i}>
+                        {
+                            renderPlayer(t.id, false,(a, b) => {
+                                if (sortDirection === 'desc') {
+                                    return parseFloat(b[sortOption]) - parseFloat(a[sortOption])
+                                } else {
+                                    return parseFloat(a[sortOption]) - parseFloat(b[sortOption])
+                                }
+                            } , 'position')
                         }
                     </TabPanel>
                 ))

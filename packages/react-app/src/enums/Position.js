@@ -3,6 +3,7 @@ class Position {
     static Defender = new Position(1, "DE")
     static Midfielder = new Position(2, "MID")
     static Attacker = new Position(3, "AT")
+    static Positions = [Position.GoalKeeper, Position.Defender, Position.Midfielder, Position.Attacker]
 
     constructor(id, name) {
         this.id = id;

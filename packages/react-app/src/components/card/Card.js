@@ -82,20 +82,20 @@ const Card = ({ player, marketItem }) => {
 					}}
 				/>
 			</Box>
-			<Stack justifyContent="center" alignItems="center">
+			<Stack justifyContent="center" alignItems="center" spacing={0.25}>
 				<Typography variant="h6">
 					{FootballPlayerContract.getPlayersName(player)}
 				</Typography>
-				<Stack direction="row" width="100%" alignItems="center" justifyContent="space-evenly">
-					<Typography variant="subtitle2">XP</Typography>
+				<Stack direction="row" width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
+					<Typography width="20px" variant="subtitle2">XP</Typography>
 					<ExperienceProgressBar
 						variant="determinate"
 						value={(player.xp / GameContract.getXpRequireToLvlUp(player.score))  * 100}
 					/>
 				</Stack>
-				<Stack direction="row" width="100%" alignItems="center" justifyContent="space-evenly">
+				<Stack direction="row" width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
 					<BsFillLightningChargeFill
-						style={{color: 'yellow'}}/>
+						style={{color: 'yellow', width: "20px"}}/>
 					<StaminaProgressBar
 						variant="determinate"
 						value={+stamina}

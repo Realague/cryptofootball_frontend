@@ -46,12 +46,12 @@ export const theme = createTheme({
 		},
 		subtitle1: {
 			fontSize: 14,
-			fontWeight: 700,
+			fontWeight: 400,
 			lineHeight: 1,
 		},
 		subtitle2: {
 			fontSize: 14,
-			fontWeight: 400,
+			fontWeight: 700,
 			lineHeight: 1,
 		},
 		body1: {

@@ -1,33 +1,19 @@
 import React, {useEffect, useState} from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {connect, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 import '../../css/accountInfo.css'
 import GameContract from '../../contractInteraction/GameContract'
-import {
-    Box,
-    Button, Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle, Divider, Slide, Stack,
-    Typography
-} from '@mui/material'
+import {Button, Slide, Stack, Typography} from '@mui/material'
 import {ClaimModal} from "../accountInfo/modals/ClaimModal";
 import {useTheme} from "@emotion/react";
-import LoadingImage from "../../images/gifs/loading.gif";
 import TokenImage from "../../images/token.png";
 import BusdImage from "../../images/busd.png";
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />
-})
 
 const AccountInfo = () => {
     const {
         account,
         BUSDBalance,
         GBBalance,
-        GBPrice,
         claimFee,
     } = useSelector(state => state.user)
     const [open, setOpen] = useState(false)
@@ -142,7 +128,6 @@ const AccountInfo = () => {
                             : ''
                     }
                 </Stack>
-
                 <Stack direction="column">
                     <Stack direction="row" alignItems="center" spacing={1}>
                         <Typography variant="body1">{parseFloat(GBBalance).toFixed(2)}</Typography>
@@ -155,8 +140,6 @@ const AccountInfo = () => {
                         <img style={{width: 20, height: 20}} src={BusdImage} alt="busd"/>
                     </Stack>
                 </Stack>
-
-
             </Stack>
             <ClaimModal claimFee={claimFee} rewards={rewards} open={open} onClose={() => setOpen(false)}/>
         </>

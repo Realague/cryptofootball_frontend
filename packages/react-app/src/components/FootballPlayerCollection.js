@@ -5,10 +5,11 @@ import Card from './card/Card'
 import MintButton from './MintButton'
 import Marketplace from '../contractInteraction/MarketplaceContract'
 import LoadingImage from '../images/gifs/loading.gif'
-import {Box, Divider, Grid, Grow, Paper, Slide, Stack, Tab, Tabs, Typography} from '@mui/material'
+import {Box, Divider, Grid, Grow, MenuItem, Paper, Select, Slide, Stack, Tab, Tabs, Typography} from '@mui/material'
 import Frame from "../enums/Frame";
 import Button from "@mui/material/Button";
 import Loader from "./Loader";
+import {ArrowDropDown, ArrowDropUp} from "@mui/icons-material";
 
 
 const FootballPlayerCollection = () => {
@@ -20,8 +21,13 @@ const FootballPlayerCollection = () => {
     const [tabValue, setTabValue] = useState(1);
     const [isFetchingData, setIsFetchingData] = useState(false)
     const frames = Frame.TierList.slice().reverse()
+    const [sortOption, setSortOption] = useState('score')
+    const [sortDirection, setSortDirection] = useState('desc')
     const ref = createRef()
 
+    const handleSortChange = (event) => {
+        setSortOption(event.target.value);
+    };
 
     useEffect(() => {
         setIsFetchingData(true)
@@ -87,9 +93,53 @@ const FootballPlayerCollection = () => {
         </Box>
     ))
 
-    const renderPlayer = (filter = undefined, isSell = false) => {
+    const renderPlayer = (filter = undefined, isSell = false, sortMethod = (a, b) => parseFloat(b.id) - parseFloat(a.id)) => {
         return (
-            <Grid container>
+            <>
+                { !isSell &&
+                    <Stack direction="column" spacing={2}>
+                        <Stack
+                            display="flex"
+                            direction="row"
+                            alignItems="center"
+                            spacing={2}
+                            sx={{
+                                height: "30px",
+                            }}
+                        >
+                            <Typography variant="subtitle1">Sort:</Typography>
+                            <Select
+                                value={sortOption}
+                                label="Sort"
+                                color="secondary"
+                                onChange={handleSortChange}
+                                sx={{
+                                    height: "30px",
+                                    width: "100px",
+                                }}
+                            >
+                                <MenuItem value={'score'}>Score</MenuItem>
+                                <MenuItem value={'id'}>Id</MenuItem>
+                                <MenuItem value={'frame'}>Tier</MenuItem>
+                            </Select>
+                            <Button
+                                sx={{
+                                    height: "30px",
+                                    width: "70px",
+                                }}
+                                variant="outlined"
+                                color="secondary"
+                                endIcon={sortDirection === 'desc' ? <ArrowDropDown /> : <ArrowDropUp/>}
+                                onClick={() => setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')}
+                            >
+                                { sortDirection }
+                            </Button>
+                        </Stack>
+                        <Divider flexItem color="primary"/>
+                    </Stack>
+
+              }
+            <Grid container pt={2}>
                 {
                     isFetchingData ?
                         LoadingContent  :
@@ -98,25 +148,32 @@ const FootballPlayerCollection = () => {
                                     <Grid item key={idx}>
                                         <Slide direction="up" appear={true} in={true}>
                                             <LayoutContent ref={ref}>
-                                                <Card player={player} isForSale={true}
-                                                      marketItem={marketItems[idx]} key={idx}/>
+                                                <Card
+                                                    player={player}
+                                                    isForSale={true}
+                                                    marketItem={marketItems[idx]}
+                                                />
                                             </LayoutContent>
                                         </Slide>
                                     </Grid>
                                 ))
                             :
-                    players.filter(p => filter === undefined ? true : p.frame == filter).map((player, idx) => (
+                    players.filter(p => filter === undefined ? true : p.frame == filter).sort(sortMethod).map((player, idx) => (
                         <Grid item key={idx}>
                             <Slide direction="up" appear={true} in={true}>
                                 <LayoutContent ref={ref}>
-                                    <Card player={!showAllPlayer && marketItems ? playersForSale : player}
-                                          marketItem={!showAllPlayer && marketItems ? marketItems[idx] : undefined}/>
+                                    <Card
+                                        player={!showAllPlayer && marketItems ? playersForSale : player}
+                                        marketItem={!showAllPlayer && marketItems ? marketItems[idx] : undefined}
+                                    />
                                 </LayoutContent>
                             </Slide>
                         </Grid>
                     ))
                 }
             </Grid>
+            </>
+
         )
     }
 
@@ -142,7 +199,17 @@ const FootballPlayerCollection = () => {
             </TabPanel>
             <TabPanel value={tabValue} index={1}>
                 {
-                    renderPlayer()
+                    renderPlayer(
+                        undefined,
+                        false,
+                        (a, b) => {
+                            if (sortDirection === 'desc') {
+                                return parseFloat(b[sortOption]) - parseFloat(a[sortOption])
+                            } else {
+                                return parseFloat(a[sortOption]) - parseFloat(b[sortOption])
+                            }
+                        }
+                    )
                 }
             </TabPanel>
             <TabPanel value={tabValue} index={2}>

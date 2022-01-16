@@ -5,12 +5,13 @@ import {useSelector} from 'react-redux'
 import ProjectLogo from '../../images/projectLogo.jpg'
 import WalletButton from './components/ButtonWallet'
 import Button from '@mui/material/Button'
-import {AppBar, Stack, Toolbar} from '@mui/material'
+import {AppBar, Box, Stack, Toolbar} from '@mui/material'
 import NavigationLink from './components/NavbarLink'
 import Loader from "../../components/Loader";
+import AccountInfo from "../../components/mainPages/AccountInfo";
 
 const Navbar = ({ toggleTheme }) => {
-	const GBPrice = useSelector(state => state.user.GBPrice)
+	const {GBPrice, account} = useSelector(state => state.user)
 
 	return (
 		<AppBar variant={'elevation'} position="sticky">
@@ -44,6 +45,9 @@ const Navbar = ({ toggleTheme }) => {
 					</Button>
 				</Stack>
 			</Toolbar>
+			{
+				account && <AccountInfo/>
+			}
 		</AppBar>
 	)
 }

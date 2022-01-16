@@ -1,38 +1,44 @@
-import React, {useEffect, useState} from 'react'
+import React, {createRef, forwardRef, useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 import FootballPlayerContract from '../contractInteraction/FootballPlayerContract'
 import Card from './card/Card'
 import MintButton from './MintButton'
 import Marketplace from '../contractInteraction/MarketplaceContract'
 import LoadingImage from '../images/gifs/loading.gif'
-import {Box, Stack, Tab, Tabs, Typography} from '@mui/material'
+import {Box, Divider, Grid, Grow, Paper, Slide, Stack, Tab, Tabs, Typography} from '@mui/material'
 import Frame from "../enums/Frame";
+import Button from "@mui/material/Button";
+import Loader from "./Loader";
 
 
 const FootballPlayerCollection = () => {
     const {account, playersId} = useSelector(state => state.user)
     const [showAllPlayer, setShowAllPlayer] = useState(true)
-    const [players, setPlayers] = useState(true)
+    const [players, setPlayers] = useState([])
     const [playersForSale, setPlayersForSale] = useState([])
     const [marketItems, setMarketItems] = useState([])
-    const [tabValue, setTabValue] = useState(0);
+    const [tabValue, setTabValue] = useState(1);
+    const [isFetchingData, setIsFetchingData] = useState(false)
+    const frames = Frame.TierList.slice().reverse()
+    const ref = createRef()
+
 
     useEffect(() => {
-        getPlayers()
+        setIsFetchingData(true)
+        Promise.all([getPlayers(), getPlayersListed()])
+            .finally(() => setIsFetchingData(false))
     }, [])
 
     const getPlayers = async () => {
         let players = []
-        for (let i = 0; i !== playersId.length; i++) {
-            players.push(await FootballPlayerContract.getFootballPlayer(playersId[i]))
+        for (let playerId of playersId) {
+            players.push(await FootballPlayerContract.getFootballPlayer(playerId))
         }
         setPlayers(players)
     }
 
     const getPlayersListed = async () => {
         let marketItemsId = await Marketplace.getListedPlayerOfAddress(account)
-        let players = []
-        let marketItems = []
         for (let i = 0; i !== marketItemsId.length; i++) {
             let marketItem = await Marketplace.getMarketItem(marketItemsId[i])
             marketItems.push(marketItem)
@@ -42,42 +48,80 @@ const FootballPlayerCollection = () => {
         setMarketItems(marketItems)
     }
 
-    const changeSwitchValue = async () => {
-        setShowAllPlayer(!showAllPlayer)
-        if (!showAllPlayer) {
-            await getPlayers()
-        } else {
-            await getPlayersListed()
-        }
-    }
-
 
     const handleTabChange = (event, newValue) => {
-        setTabValue(newValue);
-    };
+        setTabValue(newValue)
+    }
 
-    function TabPanel(props) {
-        const { children, value, index, ...other } = props;
-
+    const TabPanel = ({children, value, index, ...other}) => {
         return (
-            <div
+            <Box
                 role="tabpanel"
                 hidden={value !== index}
-                id={`vertical-tabpanel-${index}`}
-                aria-labelledby={`vertical-tab-${index}`}
                 {...other}
+                sx={{
+                    width: '100%',
+                    marginLeft: '150px',
+                }}
             >
                 {value === index && (
-                    <Box sx={{ p: 3 }}>
+                    <Box sx={{
+                        p: 2,
+                    }}>
                         {children}
                     </Box>
                 )}
-            </div>
+            </Box>
         );
     }
 
+    const LoadingContent = (
+        <Box display="flex" justifyContent="center" width="100%" height="80vh" alignItems="center">
+            <img style={{width: 400, height: 200}} src={LoadingImage} alt=""/>
+        </Box>
+    )
+
+    const LayoutContent = forwardRef(({children}, ref) => (
+        <Box ref={ref}>
+            {children}
+        </Box>
+    ))
+
+    const renderPlayer = (filter = undefined, isSell = false) => {
+        return (
+            <Grid container>
+                {
+                    isFetchingData ?
+                        LoadingContent  :
+                        isSell ?
+                            playersForSale.map((player, idx) => (
+                                    <Grid item key={idx}>
+                                        <Slide direction="up" appear={true} in={true}>
+                                            <LayoutContent ref={ref}>
+                                                <Card player={player} isForSale={true}
+                                                      marketItem={marketItems[idx]} key={idx}/>
+                                            </LayoutContent>
+                                        </Slide>
+                                    </Grid>
+                                ))
+                            :
+                    players.filter(p => filter === undefined ? true : p.frame == filter).map((player, idx) => (
+                        <Grid item key={idx}>
+                            <Slide direction="up" appear={true} in={true}>
+                                <LayoutContent ref={ref}>
+                                    <Card player={!showAllPlayer && marketItems ? playersForSale : player}
+                                          marketItem={!showAllPlayer && marketItems ? marketItems[idx] : undefined}/>
+                                </LayoutContent>
+                            </Slide>
+                        </Grid>
+                    ))
+                }
+            </Grid>
+        )
+    }
+
     return (
-        <Box sx={{ width: '100%', display: 'flex', height: "100%" }}>
+        <Box sx={{width: '100%', display: 'flex', height: "100%"}}>
             <Tabs
                 orientation="vertical"
                 variant="fullWidth"
@@ -85,11 +129,11 @@ const FootballPlayerCollection = () => {
                 onChange={handleTabChange}
                 textColor="secondary"
                 indicatorColor="secondary"
-                sx={{ borderRight: 1, borderColor: 'divider', width: '150px', height: '100%' }}
+                sx={{borderRight: 1, position: 'fixed', borderColor: 'divider', width: '150px', height: '100%'}}
             >
                 {
-                    ['Mint', 'All', ...Frame.TierList.map(t => t.name).reverse()].map((c, i) => (
-                        <Tab value={i} key={i} label={c} />
+                    ['Mint', 'All', 'Listed', ...frames].map((c, i) => (
+                        <Tab value={i} key={i} label={c.name || c}/>
                     ))
                 }
             </Tabs>
@@ -97,45 +141,28 @@ const FootballPlayerCollection = () => {
                 <MintButton>Mint</MintButton>
             </TabPanel>
             <TabPanel value={tabValue} index={1}>
-                Item Two
+                {
+                    renderPlayer()
+                }
             </TabPanel>
             <TabPanel value={tabValue} index={2}>
-                Item Three
+                <Grid container>
+                    {
+                        renderPlayer(undefined, true)
+                    }
+                </Grid>
             </TabPanel>
+            {
+                frames.map((t, i) => (
+                    <TabPanel key={3 + i} value={tabValue} index={3 + i}>
+                        {
+                            renderPlayer(t.id)
+                        }
+                    </TabPanel>
+                ))
+            }
         </Box>
     )
 }
 
-
 export default FootballPlayerCollection
-
-/*
- <Box>
-                        <MintButton/>
-                        <Box className="switch-button accountInfo float-right" style={{clear: 'both'}}>
-                            <input className="switch-button-checkbox" onClick={() => changeSwitchValue()}
-                                   type="checkbox"/>
-                            <label className="switch-button-label" htmlFor=""><span
-                                className="switch-button-label-span">All player</span></label>
-                        </Box>
-                        <Box alignItems="center" className="white-color playerCards" style={{clear: 'both'}}>
-                            {
-                                (players && players.length > 0) ?
-                                    players.map(function (player, idx) {
-                                        return (
-                                            <Box key={idx}>
-                                                <Card player={!showAllPlayer && marketItems ? playersForSale : player}
-                                                      marketItem={!showAllPlayer && marketItems ? marketItems[idx] : undefined}/>
-                                            </Box>
-                                        )
-                                    })
-                                    :
-                                    <Stack alignItems="center" direction="column"
-                                           sx={{width: '200px', height: '200px'}}>
-                                        <img src={LoadingImage} alt=""/>
-                                        <Typography variant="h5">Loading...</Typography>
-                                    </Stack>
-                            }
-                        </Box>
-                    </Box>
- */

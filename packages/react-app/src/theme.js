@@ -55,11 +55,19 @@ export const theme = createTheme({
 			lineHeight: 1,
 		},
 		body1: {
-			fontSize: 12
+			fontSize: 12,
+			fontWeight: 400,
+			lineHeight: 1,
+		},
+		body2: {
+			fontSize: 12,
+			fontWeight: 700,
+			lineHeight: 1,
 		},
 		button: {
 			fontSize: 12,
-		}
+		},
+
 	}
 })
 

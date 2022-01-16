@@ -19,9 +19,6 @@ const App = () => {
 		<ThemeProvider theme={themeMode === 'dark' ? theme : lightTheme}>
 			<Box>
 				<Navbar toggleTheme={toggleThemeMode}/>
-				{
-					account && <AccountInfo/>
-				}
 				<Outlet/>
 				<Loader/>
 			</Box>

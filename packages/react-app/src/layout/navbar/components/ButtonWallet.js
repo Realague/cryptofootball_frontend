@@ -5,11 +5,11 @@ import GameContract from '../../../contractInteraction/GameContract'
 import FootballPlayerContract from '../../../contractInteraction/FootballPlayerContract'
 import MarketplaceContract from '../../../contractInteraction/MarketplaceContract'
 import {Button} from '@mui/material'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {login, updateAccount} from '../../../features/userSlice'
-import Contract from 'web3-eth-contract'
 import useWeb3Modal from '../../../hooks/useWeb3Modal'
 import {setReady} from '../../../features/gameSlice'
+import footballHeroesService from '../../../services/FootballPlayerService'
 
 const networkData =
     [{
@@ -28,6 +28,7 @@ const CHAIN_ID = 0x61
 const WalletButton = () => {
 	const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal()
 	const [rendered, setRendered] = useState('')
+	//const {isReady} = useSelector(state => state.game)
 	const dispatch = useDispatch()
 
 	function saveAccountInfo(GBPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId) {
@@ -41,41 +42,26 @@ const WalletButton = () => {
 		}))
 	}
 
-	async function readOnChainData(account) {
-		let contract = new Contract(abis.erc20, addresses.BUSDTestnet)
-		let BUSDBalance = await contract.methods.balanceOf(account).call()
-		BUSDBalance = Web3.utils.fromWei(BUSDBalance)
-		contract = new Contract(abis.erc20, addresses.GBTOKEN)
-		let GBBalance = await contract.methods.balanceOf(account).call()
-		GBBalance = Web3.utils.fromWei(GBBalance)
-		let GBPrice = await GameContract.getFootballTokenPrice()
-		let claimFee = await GameContract.getClaimFee(account)
-		let rewards = await GameContract.getRewards(account)
-		let playersId = await FootballPlayerContract.getFootballPlayerList(account)
+	async function readOnChainData() {
+		let BUSDBalance = Web3.utils.fromWei(await footballHeroesService.getBusdBalance())
+		let GBBalance = Web3.utils.fromWei(await footballHeroesService.getGbBalance())
+		let GBPrice = await footballHeroesService.getFootballTokenPrice()
+		let claimFee = await footballHeroesService.getClaimFee()
+		let rewards = await footballHeroesService.getRewards()
+		let playersId = await footballHeroesService.getFootballPlayerList()
 		saveAccountInfo(GBPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId)
 	}
 
 	async function fetchAccount() {
 		try {
-			if (!provider) {
-				return
-			}
-			if (GameContract.getContract()) {
-				return
-			}
 			const accounts = await provider.eth.getAccounts()
-			Contract.setProvider(provider, accounts[0])
-			GameContract.setProvider(provider, accounts[0])
-
-			FootballPlayerContract.setProvider(provider, accounts[0])
-			MarketplaceContract.setProvider(provider, accounts[0])
-
-			console.log('setting contracts')
 
 			// Subscribe to accounts change
 			provider.currentProvider.on('accountsChanged', (accounts) => {
+				dispatch(setReady(false))
+				footballHeroesService.init(provider, accounts[0])
 				dispatch(login(accounts[0]))
-				readOnChainData(accounts[0])
+				readOnChainData()
 				setRendered(accounts[0].substring(0, 6) + '...' + accounts[0].substring(36))
 			})
 
@@ -99,18 +85,16 @@ const WalletButton = () => {
 			}
 
 			setRendered(accounts[0].substring(0, 6) + '...' + accounts[0].substring(36))
+			footballHeroesService.init(provider, accounts[0])
 			dispatch(login(accounts[0]))
-			await readOnChainData(accounts[0])
 			dispatch(setReady(true))
+			await readOnChainData()
 		} catch (err) {
 			setRendered('')
-			logoutOfWeb3Modal()
+			//logoutOfWeb3Modal()
 			console.error('eee', err)
 		}
 	}
-
-	useEffect(() => {
-	}, [])
 
 	useEffect(() => {
 		if (provider !== undefined) {

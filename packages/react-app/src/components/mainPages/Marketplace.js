@@ -53,7 +53,6 @@ const Marketplace = () => {
 
 	return (
 		<Stack direction="column" justifyContent="center" alignItems="center">
-			<AccountInfo/>
 			<Grid container spacing={2}>
 				{
 					marketItems.map((marketItem, idx) => (

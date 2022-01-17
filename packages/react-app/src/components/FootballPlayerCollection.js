@@ -1,9 +1,7 @@
 import React, {createRef, forwardRef, useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
-import FootballPlayerContract from '../contractInteraction/FootballPlayerContract'
 import Card from './card/Card'
 import MintButton from './MintButton'
-import Marketplace from '../contractInteraction/MarketplaceContract'
 import LoadingImage from '../images/gifs/loading.gif'
 import {Box, Divider, Grid, Grow, MenuItem, Paper, Select, Slide, Stack, Tab, Tabs, Typography} from '@mui/material'
 import Frame from '../enums/Frame'
@@ -40,29 +38,28 @@ const FootballPlayerCollection = () => {
 			.finally(() => setIsFetchingData(false))
 	}, [])
 
-	const getPlayers = async () => {
-		let players = []
-		for (let playerId of playersId) {
-			players.push(await FootballPlayerContract.getFootballPlayer(playerId))
-		}
-		setPlayers(players)
-	}
+    const getPlayers = async () => {
+        let players = []
+        for (let playerId of playersId) {
+            players.push(await footballHeroesService.getFootballPlayer(playerId))
+        }
+        setPlayers(players)
+    }
 
-	const getPlayersListed = async () => {
-		let marketItemsId = await Marketplace.getListedPlayerOfAddress(account)
-		for (let i = 0; i !== marketItemsId.length; i++) {
-			let marketItem = await Marketplace.getMarketItem(marketItemsId[i])
-			marketItems.push(marketItem)
-			players.push(await FootballPlayerContract.getFootballPlayer(marketItem.tokenId))
-		}
-		setPlayersForSale(players)
-		setMarketItems(marketItems)
-	}
+    const getPlayersListed = async () => {
+        let marketItemsId = await footballHeroesService.getListedPlayerOfAddress()
+        for (let i = 0; i !== marketItemsId.length; i++) {
+            let marketItem = await footballHeroesService.getMarketItem(marketItemsId[i])
+            marketItems.push(marketItem)
+            players.push(await footballHeroesService.getFootballPlayer(marketItem.tokenId))
+        }
+        setPlayersForSale(players)
+        setMarketItems(marketItems)
+    }
 
-
-	const handleTabChange = (event, newValue) => {
-		setTabValue(newValue)
-	}
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue)
+    }
 
 	const TabPanel = ({children, value, index, ...other}) => {
 		return (

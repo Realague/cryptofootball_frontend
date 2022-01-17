@@ -1,13 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import GameContract from '../../contractInteraction/GameContract'
-import Marketplace from '../../contractInteraction/MarketplaceContract'
-import Loader from '../Loader'
-import Web3 from 'web3'
 import FootballPlayerContract from '../../contractInteraction/FootballPlayerContract'
-import {abis, addresses} from '@project/contracts'
-import Contract from 'web3-eth-contract'
-import {useSelector} from 'react-redux'
-import {Backdrop, Box, Chip, Divider, Fade, Modal, Slide, Stack, Typography} from '@mui/material'
+import { Box, Stack, Typography} from '@mui/material'
 import InformationModal from './modals/InformationModal'
 import Frame from "../../enums/Frame";
 import Position from "../../enums/Position";
@@ -15,6 +8,7 @@ import messi from "../../images/footballplayer/messi.jpeg";
 import {BsFillLightningChargeFill} from "react-icons/bs";
 import ExperienceProgressBar from "./components/ExperienceProgressBar";
 import StaminaProgressBar from "./components/StaminaProgressBar";
+import footballHeroesService from "../../services/FootballPlayerService";
 
 const Card = ({ player, marketItem }) => {
 	const [stamina, setStamina] = useState(0)
@@ -25,9 +19,7 @@ const Card = ({ player, marketItem }) => {
 	}, [])
 
 	const getPlayerStamina = async () => {
-		await new Promise(r => setTimeout(r, 250))
-		let stamina = await GameContract.getContract().methods.getCurrentStamina(player.id).call()
-		setStamina(stamina)
+		setStamina(await footballHeroesService.getCurrentStamina(player.id))
 	}
 
 	const renderCard = () => (
@@ -90,7 +82,7 @@ const Card = ({ player, marketItem }) => {
 					<Typography width="20px" variant="subtitle2">XP</Typography>
 					<ExperienceProgressBar
 						variant="determinate"
-						value={(player.xp / GameContract.getXpRequireToLvlUp(player.score))  * 100}
+						value={(player.xp / footballHeroesService.getXpRequireToLvlUp(player.score))  * 100}
 					/>
 				</Stack>
 				<Stack direction="row" width="80%" alignItems="center" justifyContent="space-between" spacing={1}>

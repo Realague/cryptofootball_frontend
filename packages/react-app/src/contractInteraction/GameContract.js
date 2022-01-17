@@ -48,8 +48,33 @@ async function getFootballTokenPrice() {
     return await GContract.methods.getFootballTokenPrice().call();
 }
 
+function getMaxGbToConsumeForLvlUp(gbPrice, gbBalance, xpPerDollar, score, xp) {
+    if (score === 100) {
+        return 0
+    }
+    let gbRequire = 0
+    let tmp = 0
+    do {
+        gbRequire += tmp
+        tmp = (getXpRequireToLvlUp(score) - xp) / xpPerDollar / gbPrice
+        score++
+        xp = 0
+    } while (gbRequire < gbBalance && score <= 100)
+    return gbRequire
+}
+
+function calculateNewScore(xpToAdd, currentXp, currentScore) {
+    let newScore = currentScore
+    while (xpToAdd > getXpRequireToLvlUp(newScore) - currentXp) {
+        xpToAdd -= (getXpRequireToLvlUp(newScore) - currentXp)
+        newScore++
+        currentXp = 0
+    }
+    return newScore
+}
+
 function getContract() {
     return GContract;
 }
 
-export default { getRewards, getClaimFee, getClaimCooldown, isLevelUpOpen, isTrainingOpen, isUpgradeFrameOpen, getRemainingClaimCooldown, getCurrentStamina, getXpRequireToLvlUp, setProvider, getFootballTokenPrice, getContract };
+export default { getRewards, getClaimFee, calculateNewScore, getClaimCooldown, isLevelUpOpen, getMaxGbToConsumeForLvlUp, isTrainingOpen, isUpgradeFrameOpen, getRemainingClaimCooldown, getCurrentStamina, getXpRequireToLvlUp, setProvider, getFootballTokenPrice, getContract };

@@ -1,70 +1,41 @@
-import React, {createRef, forwardRef, useState} from 'react'
+import React, {createRef, forwardRef, useEffect, useState} from 'react'
 import {
     Box,
     Divider,
-    easing,
-    Fade, FormControl,
+    Fade, Grid,
     Input,
     InputAdornment,
-    InputLabel,
     Modal,
-    Paper,
-    Slide,
+    Slide, Slider,
     Stack,
     Typography
 } from '@mui/material'
 import {darkModalNoFlex} from '../../../css/style'
 import Button from '@mui/material/Button'
 import {useForm} from "react-hook-form";
-import {useDispatch, useSelector} from "react-redux";
-import Web3 from "web3";
-import Contract from "web3-eth-contract";
-import {abis, addresses} from "@project/contracts";
-import FootballPlayerContract from "../../../contractInteraction/FootballPlayerContract";
-import Marketplace from "../../../contractInteraction/MarketplaceContract";
-import {setTransaction} from "../../../features/gameSlice";
-import GameContract from "../../../contractInteraction/GameContract";
-import MarketplaceContract from "../../../contractInteraction/MarketplaceContract";
+import {useSelector} from "react-redux";
+import footballHeroesService from "../../../services/FootballPlayerService";
 
 
 const InformationModal = ({open, onClose, frame, player, marketItem}) => {
-    const {account, GBBalance} = useSelector(state => state.user)
+    const {account, GBBalance, GBPrice} = useSelector(state => state.user)
     const [action, setAction] = useState(undefined)
+    const [sliderValue, setSliderValue] = useState(0)
+    const [maxGBToConsume, setMaxGBToConsume] = useState(0)
+    const xpPerDollar = 50;
     const ref = createRef()
     const informationRef = createRef()
     const [informationShown, setInformationShown] = useState(true)
     const sellForm = useForm({mode: 'onChange'})
-    const dispatch = useDispatch()
+
+    useEffect(() => {
+        setMaxGBToConsume(footballHeroesService.getMaxGbToConsumeForLvlUp(+GBPrice, +GBBalance, +xpPerDollar, +player.score, +player.xp))
+    }, [])
 
     const chooseAction = (value) => {
         setAction(action === value ? undefined : value)
         if (value === undefined) {
         }
-    }
-
-    const cancelListing = () => {
-        dispatch(setTransaction({transaction: Marketplace.getContract().methods.cancelListing(marketItem.itemId).send({from: account})}))
-    }
-
-    const trainPlayer = (trainingGroundId) => {
-        dispatch(setTransaction({transaction: GameContract.getContract().methods.trainingGround(trainingGroundId, player.id).send({from: account})}))
-    }
-
-    const buyPlayer = async () => {
-        //TODO check price in wei
-        if (Web3.utils.toWei(GBBalance, 'ether') < marketItem.price) {
-            return
-        }
-
-        let GBToken = new Contract(abis.erc20, addresses.GBTOKEN)
-        let GBAllowance = await GBToken.methods.allowance(account, addresses.Marketplace).call()
-
-        if (parseInt(GBAllowance) < marketItem.price) {
-            let transaction = GBToken.methods.approve(addresses.Marketplace, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({from: account})
-            dispatch(setTransaction({transaction: transaction}))
-            await transaction
-        }
-        dispatch(setTransaction({transaction: MarketplaceContract.getContract().methods.buyPlayer(marketItem.itemId, marketItem.price).send({from: account})}))
     }
 
     const InformationContent = (
@@ -86,41 +57,16 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
             <Button hidden={marketItem === undefined || marketItem.seller !== account}
                     onClick={() => chooseAction('sell')} fullWidth color="secondary" variant="contained"
                     my={4}>Change price</Button>
-            <Button hidden={marketItem === undefined || marketItem.seller !== account} onClick={cancelListing} fullWidth
+            <Button hidden={marketItem === undefined || marketItem.seller !== account} onClick={() => footballHeroesService.cancelListing(marketItem.itemId)} fullWidth
                     color="secondary" variant="contained"
                     my={4}>Cancel listing</Button>
-            <Button hidden={marketItem === undefined || marketItem.seller === account} onClick={buyPlayer} fullWidth
+            <Button hidden={marketItem === undefined || marketItem.seller === account} onClick={() => footballHeroesService.buyPlayer(marketItem)} fullWidth
                     color="secondary" variant="contained"
                     my={4}>Buy</Button>
             <Divider flexItem color="primary"/>
             <Button onClick={() => onClose()} fullWidth color="error" variant="outlined" my={4}>Close</Button>
         </Stack>
     )
-
-    const listFootballPlayer = async (price) => {
-        console.log(price)
-        if (!price || parseInt(price) <= 0) {
-            return
-        }
-        price = Web3.utils.toWei(price, 'ether')
-        let BUSDTestnet = new Contract(abis.erc20, addresses.BUSDTestnet)
-        if (!await FootballPlayerContract.isApprovedForAll(account)) {
-            let transaction = FootballPlayerContract.getContract().methods.setApprovalForAll(addresses.Marketplace, true).send({from: account})
-            dispatch(setTransaction({transaction: transaction}))
-            await transaction
-        }
-        let busdAllowance = await BUSDTestnet.methods.allowance(account, addresses.Marketplace).call()
-        if (parseInt(Web3.utils.fromWei(busdAllowance)) < parseInt(await Marketplace.getListingFees())) {
-            let transaction = BUSDTestnet.methods.approve(addresses.Marketplace, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({from: account})
-            dispatch(setTransaction({transaction: transaction}))
-            await transaction
-        }
-        dispatch(setTransaction({transaction: Marketplace.getContract().methods.listPlayer(player.id, price).send({from: account})}))
-    }
-    const changePrice = (price) => {
-        price = Web3.utils.toWei(price, 'ether')
-        dispatch(setTransaction({transaction: Marketplace.getContract().methods.changePrice(marketItem.itemId, price).send({from: account})}))
-    }
 
     const LayoutContent = forwardRef(({children, name}, ref) => (
         <Stack ref={ref} display="flex" height={'100%'} spacing={2} flexDirection="column" alignItems="center"
@@ -134,8 +80,61 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
         </Stack>
     ))
 
+    const handleBlur = () => {
+        if (sliderValue < 1) {
+            setSliderValue(1)
+        } else if (sliderValue > maxGBToConsume) {
+            setSliderValue(maxGBToConsume)
+        }
+    }
+
+    const handleInputChange = (event) => {
+        setSliderValue(event.target.value === '' ? '' : Number(event.target.value))
+    }
+
+    const handleSliderChange = (event, newValue) => {
+        setSliderValue(newValue)
+    }
+
     const LevelUpContent = forwardRef(({children}, ref) => (
         <LayoutContent name="Level Up" ref={ref}>
+            <Typography id="input-slider" gutterBottom>
+                GB Token to use
+            </Typography>
+            <Grid container spacing={2} alignItems="center">
+                <Grid item xl>
+                    <Slider
+                        value={typeof sliderValue === 'number' ? sliderValue : 0}
+                        onChange={handleSliderChange}
+                        aria-labelledby="input-slider"
+                        max={maxGBToConsume}
+                        min={1}
+                    />
+                </Grid>
+                <Grid item>
+                    <Input
+                        value={sliderValue}
+                        size="small"
+                        onChange={handleInputChange}
+                        onBlur={handleBlur}
+                        inputProps={{
+                            step: 1,
+                            min: 1,
+                            max: maxGBToConsume,
+                            type: 'number',
+                            'aria-labelledby': 'input-slider',
+                        }}
+                    />
+                </Grid>
+            </Grid>
+            <Stack spacing={2} alignItems="center">
+                <Typography gutterBottom>
+                    xp gained: {sliderValue * xpPerDollar / GBPrice}
+                </Typography>
+                <Typography gutterBottom>
+                    lvl gained: {footballHeroesService.calculateNewScore(sliderValue * xpPerDollar / GBPrice, player.xp, player.score) - player.score}
+                </Typography>
+            </Stack>
             <Button fullWidth color="primary" variant="contained">Confirm</Button>
         </LayoutContent>
     ))
@@ -166,8 +165,8 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
                     fullWidth
                     color="primary"
                     variant="contained"
-                        onClick={() => {
-                        marketItem === undefined ? listFootballPlayer(sellForm.getValues().price) : changePrice(sellForm.getValues().price)
+                    onClick={() => {
+                        marketItem === undefined ? footballHeroesService.listFootballPlayer(sellForm.getValues().price, player.id) : footballHeroesService.changePrice(sellForm.getValues().price, marketItem.itemId)
                     }}
                 >
                     Confirm
@@ -175,7 +174,6 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
             </LayoutContent>
         )
     )
-
 
     return (
         <Modal
@@ -230,7 +228,6 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
                             ))
                         }
                     </Box>
-
                 </Stack>
             </Fade>
         </Modal>

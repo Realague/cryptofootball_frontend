@@ -5,10 +5,11 @@ import {useSelector} from 'react-redux'
 import ProjectLogo from '../../images/projectLogo.jpg'
 import WalletButton from './components/ButtonWallet'
 import Button from '@mui/material/Button'
-import {AppBar, Box, Stack, Toolbar} from '@mui/material'
+import {AppBar, Box, IconButton, Stack, Toolbar} from '@mui/material'
 import NavigationLink from './components/NavbarLink'
-import Loader from "../../components/Loader";
-import AccountInfo from "../../components/mainPages/AccountInfo";
+import Loader from '../../components/Loader'
+import AccountInfo from '../../components/mainPages/AccountInfo'
+import {ChevronLeft, Menu} from '@mui/icons-material'
 
 const Navbar = ({ toggleTheme }) => {
 	const {GBPrice, account} = useSelector(state => state.user)

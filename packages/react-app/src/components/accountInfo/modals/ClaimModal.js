@@ -1,7 +1,6 @@
 import React from 'react'
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import Button from "@mui/material/Button";
-import {Transition} from "react-transition-group";
 
 export const ClaimModal = ({ onClose, open, rewards, claimFee }) => {
 

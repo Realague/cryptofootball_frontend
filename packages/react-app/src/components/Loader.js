@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import Card from "./card/Card";
-import FootballPlayerContract from "../contractInteraction/FootballPlayerContract";
 import LoadingImage from "../images/gifs/loading.gif";
 import {CancelOutlined, CheckCircleOutlined} from '@mui/icons-material';
 import {Modal, Button, Stack, Typography} from '@mui/material';
 import {darkModal} from "../css/style";
 import {useSelector} from "react-redux";
+import footballHeroesService from "../services/FootballPlayerService";
 
 const Loader = () => {
     const [transactionState, setTransactionState] = useState('')
@@ -42,7 +42,7 @@ const Loader = () => {
     }
 
     const getPlayer = async (playerId) => {
-        setPlayer(await FootballPlayerContract.getFootballPlayer(playerId))
+        setPlayer(await footballHeroesService.getFootballPlayer(playerId))
         setTransactionState("mint")
     }
 
@@ -60,13 +60,13 @@ const Loader = () => {
                     {
                         'confirmation':
                             <>
-                                <img style={{width: 200, height: 200}} src={LoadingImage}
+                                <img style={{width: 350, height: 200}} src={LoadingImage}
                                      alt=""/>
                                 <Typography variant="h6">Waiting confirmation...</Typography>
                             </>,
                         'loading':
                             <>
-                                <img style={{width: 100, height: 100}} src={LoadingImage}
+                                <img style={{width: 350, height: 200}} src={LoadingImage}
                                      alt=""/>
                                 <Typography variant="h6">Loading...</Typography>
                             </>,

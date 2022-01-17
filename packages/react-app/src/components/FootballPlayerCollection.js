@@ -6,16 +6,15 @@ import LoadingImage from '../images/gifs/loading.gif'
 import {Box, Divider, Grid, Grow, MenuItem, Paper, Select, Slide, Stack, Tab, Tabs, Typography} from '@mui/material'
 import Frame from '../enums/Frame'
 import Button from '@mui/material/Button'
-import Loader from './Loader'
 import {ArrowDropDown, ArrowDropUp} from '@mui/icons-material'
 import Position from '../enums/Position'
 import {useTheme} from '@emotion/react'
-import { useDrag } from 'react-dnd'
 import DraggableBox from './draggableBox/DraggableBox'
 import {ItemTypes} from './Constants'
+import footballHeroesService from "../services/FootballPlayerService";
 
 const FootballPlayerCollection = () => {
-	const {account, playersId} = useSelector(state => state.user)
+	const {playersId} = useSelector(state => state.user)
 	const [showAllPlayer, setShowAllPlayer] = useState(true)
 	const [players, setPlayers] = useState([])
 	const [playersForSale, setPlayersForSale] = useState([])

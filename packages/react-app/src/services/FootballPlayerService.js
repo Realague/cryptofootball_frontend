@@ -234,7 +234,6 @@ class FootballHeroesService {
             await this.approveFootballPlayer(addresses.Marketplace)
         }
         let busdAllowance = await this.getBusdAllowance(addresses.Marketplace)
-        console.log(busdAllowance)
         if (parseInt(Web3.utils.fromWei(busdAllowance)) < parseInt(await this.getListingFees())) {
             await this.approveBusd(addresses.Marketplace)
         }

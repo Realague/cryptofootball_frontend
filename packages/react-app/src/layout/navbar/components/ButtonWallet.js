@@ -1,9 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {abis, addresses} from '@project/contracts'
 import Web3 from 'web3'
-import GameContract from '../../../contractInteraction/GameContract'
-import FootballPlayerContract from '../../../contractInteraction/FootballPlayerContract'
-import MarketplaceContract from '../../../contractInteraction/MarketplaceContract'
 import {Button} from '@mui/material'
 import {useDispatch, useSelector} from 'react-redux'
 import {login, updateAccount} from '../../../features/userSlice'
@@ -91,7 +87,7 @@ const WalletButton = () => {
 			await readOnChainData()
 		} catch (err) {
 			setRendered('')
-			//logoutOfWeb3Modal()
+			logoutOfWeb3Modal()
 			console.error('eee', err)
 		}
 	}

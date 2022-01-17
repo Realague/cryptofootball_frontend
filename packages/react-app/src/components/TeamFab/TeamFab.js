@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React from 'react'
 import {Box, Fab} from '@mui/material'
 import {Close, People} from '@mui/icons-material'
 import {styled} from '@mui/material/styles'

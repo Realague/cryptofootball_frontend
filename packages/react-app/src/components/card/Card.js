@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import FootballPlayerContract from '../../contractInteraction/FootballPlayerContract'
 import { Box, Stack, Typography} from '@mui/material'
 import InformationModal from './modals/InformationModal'
 import Frame from "../../enums/Frame";
@@ -76,7 +75,7 @@ const Card = ({ player, marketItem }) => {
 			</Box>
 			<Stack justifyContent="center" alignItems="center" spacing={0.25}>
 				<Typography variant="h6">
-					{FootballPlayerContract.getPlayersName(player)}
+					{footballHeroesService.getPlayersName(player)}
 				</Typography>
 				<Stack direction="row" width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
 					<Typography width="20px" variant="subtitle2">XP</Typography>

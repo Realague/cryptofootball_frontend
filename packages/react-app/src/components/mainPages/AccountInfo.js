@@ -31,7 +31,6 @@ const AccountInfo = () => {
 			const timer = setTimeout(() => {
 				setSeconds(seconds - 1)
 				secondsToTime(seconds)
-				console.log(seconds)
 			}, 1000)
 			return () => clearTimeout(timer)
 		}

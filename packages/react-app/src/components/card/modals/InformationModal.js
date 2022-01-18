@@ -105,7 +105,7 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
 			<Typography id="input-slider" gutterBottom>
                 GB Token to use
 			</Typography>
-			<Grid container spacing={2} columns={10} alignItems="center">
+			<Grid container spacing={2} columns={10} p={2} alignItems="center">
 				<Grid item xs={8}>
 					<Slider
 						value={sliderValue}

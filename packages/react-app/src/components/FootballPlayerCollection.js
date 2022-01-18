@@ -156,7 +156,6 @@ const FootballPlayerCollection = () => {
 											<LayoutContent ref={ref}>
 												<Card
 													player={player}
-													isForSale={true}
 													marketItem={marketItems[idx]}
 												/>
 											</LayoutContent>

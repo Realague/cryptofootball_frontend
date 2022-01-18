@@ -111,6 +111,9 @@ const MarketplacePage = () => {
 				alignItems="center"
 				justifyContent="flex-start"
 				width="150px"
+				sx={{
+					position: 'fixed'
+				}}
 			>
 				<FilterButton f={{name: 'Tier', id: -1}} disabled />
 				<Divider flexItem variant={'middle'}/>
@@ -127,7 +130,7 @@ const MarketplacePage = () => {
 							f={f} />))
 				}
 			</Stack>
-			<Stack p={1} spacing={2} sx={{ width: '100%' }}>
+			<Stack p={1} spacing={2} sx={{ width: '100%', marginLeft: '150px' }}>
 				<Stack
 					display="flex"
 					direction="row"

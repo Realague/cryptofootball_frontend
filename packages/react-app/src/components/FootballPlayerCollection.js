@@ -11,7 +11,8 @@ import Position from '../enums/Position'
 import {useTheme} from '@emotion/react'
 import DraggableBox from './draggableBox/DraggableBox'
 import {ItemTypes} from './Constants'
-import footballHeroesService from "../services/FootballPlayerService";
+import footballHeroesService from '../services/FootballPlayerService'
+import LayoutContent from './LayoutContent'
 
 const FootballPlayerCollection = () => {
 	const {playersId} = useSelector(state => state.user)
@@ -37,28 +38,28 @@ const FootballPlayerCollection = () => {
 			.finally(() => setIsFetchingData(false))
 	}, [])
 
-    const getPlayers = async () => {
-        let players = []
-        for (let playerId of playersId) {
-            players.push(await footballHeroesService.getFootballPlayer(playerId))
-        }
-        setPlayers(players)
-    }
+	const getPlayers = async () => {
+		let players = []
+		for (let playerId of playersId) {
+			players.push(await footballHeroesService.getFootballPlayer(playerId))
+		}
+		setPlayers(players)
+	}
 
-    const getPlayersListed = async () => {
-        let marketItemsId = await footballHeroesService.getListedPlayerOfAddress()
-        for (let i = 0; i !== marketItemsId.length; i++) {
-            let marketItem = await footballHeroesService.getMarketItem(marketItemsId[i])
-            marketItems.push(marketItem)
-            players.push(await footballHeroesService.getFootballPlayer(marketItem.tokenId))
-        }
-        setPlayersForSale(players)
-        setMarketItems(marketItems)
-    }
+	const getPlayersListed = async () => {
+		let marketItemsId = await footballHeroesService.getListedPlayerOfAddress()
+		for (let i = 0; i !== marketItemsId.length; i++) {
+			let marketItem = await footballHeroesService.getMarketItem(marketItemsId[i])
+			marketItems.push(marketItem)
+			players.push(await footballHeroesService.getFootballPlayer(marketItem.tokenId))
+		}
+		setPlayersForSale(players)
+		setMarketItems(marketItems)
+	}
 
-    const handleTabChange = (event, newValue) => {
-        setTabValue(newValue)
-    }
+	const handleTabChange = (event, newValue) => {
+		setTabValue(newValue)
+	}
 
 	const TabPanel = ({children, value, index, ...other}) => {
 		return (
@@ -87,12 +88,6 @@ const FootballPlayerCollection = () => {
 			<img style={{width: 400, height: 200}} src={LoadingImage} alt=""/>
 		</Box>
 	)
-
-	const LayoutContent = forwardRef(({children}, ref) => (
-		<Box ref={ref}>
-			{children}
-		</Box>
-	))
 
 	const renderPlayer = (
 		filter = undefined,

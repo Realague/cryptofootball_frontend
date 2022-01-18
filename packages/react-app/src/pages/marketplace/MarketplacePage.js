@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import Web3 from 'web3'
 import Card from '../../components/card/Card'
-import {Box, Button, Divider, Grid, MenuItem, Select, Stack, Typography} from '@mui/material'
+import {Box, Button, Divider, Grid, MenuItem, Select, Slide, Stack, Typography} from '@mui/material'
 import {useSelector} from 'react-redux'
 import footballHeroesService from '../../services/FootballPlayerService'
 import Frame from '../../enums/Frame'
 import {useTheme} from '@emotion/react'
 import Position from '../../enums/Position'
 import {ArrowDropDown, ArrowDropUp} from '@mui/icons-material'
+import LayoutContent from '../../components/LayoutContent'
 
 const MarketplacePage = () => {
 	const {account, GBBalance} = useSelector(state => state.user)
@@ -50,17 +51,21 @@ const MarketplacePage = () => {
 			})
 			.map((marketItem, idx) => (
 				<Grid item m={2} p={2} display="flex" flexDirection="column" alignItems="center" width="240px" key={idx}>
-					<Card player={marketItem.player} marketItem={marketItem.marketItem}/>
-					<Button
-						disabled={
-							Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price
+					<Slide direction="up" appear={true} in={true}>
+						<LayoutContent>
+							<Card player={marketItem.player} marketItem={marketItem.marketItem}/>
+							<Button
+								disabled={
+									Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price
 						|| marketItem.marketItem.seller === account
-						}
-						variant="contained" color="primary"
-						onClick={() => footballHeroesService.buyPlayer(marketItem.marketItem)}
-					>
-						{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB
-					</Button>
+								}
+								variant="contained" color="primary"
+								onClick={() => footballHeroesService.buyPlayer(marketItem.marketItem)}
+							>
+								{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB
+							</Button>
+						</LayoutContent>
+					</Slide>
 				</Grid>
 			))
 	}
@@ -122,7 +127,7 @@ const MarketplacePage = () => {
 							f={f} />))
 				}
 			</Stack>
-			<Stack p={1} spacing={2}>
+			<Stack p={1} spacing={2} sx={{ width: '100%' }}>
 				<Stack
 					display="flex"
 					direction="row"

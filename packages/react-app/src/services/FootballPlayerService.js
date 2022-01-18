@@ -260,10 +260,26 @@ class FootballHeroesService {
         }
 
         let GBAllowance = await this.getGbAllowance(addresses.Marketplace)
-        if (parseInt(GBAllowance) < marketItem.price) {
+        if (parseInt(Web3.utils.fromWei(GBAllowance)) < marketItem.price) {
             await footballHeroesService.approveGb(addresses.Marketplace)
         }
         store.dispatch(setTransaction({transaction: this.marketplaceContract.methods.buyPlayer(marketItem.itemId, marketItem.price).send()}))
+    }
+
+    async payToLevelUp(playerId, amount) {
+        let GBAllowance = await this.getGbAllowance(addresses.Game)
+        if (parseInt(Web3.utils.fromWei(GBAllowance)) < amount * store.getState().user.GBPrice) {
+            await footballHeroesService.approveGb(addresses.Game)
+        }
+        store.dispatch(setTransaction({transaction: this.gameContract.methods.payToLevelUp(playerId, amount).send()}))
+    }
+
+    async upgradeFrame(playerId, playerToBurn) {
+        let BusdAllowance = await this.getBusdAllowance(addresses.Game)
+        if (parseInt(Web3.utils.fromWei(BusdAllowance)) < 30) {
+            await footballHeroesService.approveBusd(addresses.Game)
+        }
+        store.dispatch(setTransaction({transaction: this.gameContract.methods.upgradeFrame(playerId, playerToBurn).send()}))
     }
 }
 

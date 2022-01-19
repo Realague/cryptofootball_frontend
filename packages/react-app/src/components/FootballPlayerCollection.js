@@ -226,12 +226,12 @@ const FootballPlayerCollection = () => {
 				value={tabValue}
 				onChange={handleTabChange}
 				textColor="secondary"
-				hidden={isMobile && !showLeftFilter}
 				indicatorColor="secondary"
 				scrollButtons={false}
 				sx={{
 					borderRight: 1,
 					position: 'fixed',
+					marginLeft: isMobile ? showLeftFilter ? '0px' : '-150px' : '0px',
 					borderColor: 'divider',
 					width: '150px',
 					height: '80%',

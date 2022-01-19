@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
-import { Divider, Stack } from '@mui/material'
+import { Divider, Stack, useMediaQuery } from '@mui/material'
 import footballHeroesService from '../../services/FootballPlayerService'
 import Frame from '../../enums/Frame'
 import Position from '../../enums/Position'
 import MarketplaceContent from './components/MarketplaceContent'
 import FilterButton from './components/FilterButton'
+import { useTheme } from '@emotion/react'
 
 const MarketplacePage = () => {
 	const [marketItems, setMarketItems] = useState([])
@@ -15,6 +16,11 @@ const MarketplacePage = () => {
 		positions: Position.Positions.map(p => p.id),
 	})
 	const [lowestHighestPrice, setLowestHighestPrice] = useState(undefined)
+
+	// Mobile
+	const theme = useTheme()
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+	const [showLeftFilter, setShowLeftFilter] = useState(false)
 
 	useEffect(() => {
 		getMarketItems()
@@ -51,7 +57,8 @@ const MarketplacePage = () => {
 				justifyContent="flex-start"
 				width="150px"
 				sx={{
-					position: 'fixed'
+					position: 'fixed',
+					marginLeft: isMobile ? showLeftFilter ? '0px' : '-150px' : '0px',
 				}}
 			>
 				<FilterButton filters={filters} setFilters={(v) => setFilters(v)} f={{ name: 'Tier', id: -1 }} disabled />
@@ -80,7 +87,13 @@ const MarketplacePage = () => {
 							f={f} />))
 				}
 			</Stack>
-			<MarketplaceContent filters={filters} marketItems={marketItems} lowestHighestPrice={lowestHighestPrice}/>
+			<MarketplaceContent
+				setShowLeftFilter={setShowLeftFilter}
+				showLeftFilter={showLeftFilter}
+				filters={filters}
+				marketItems={marketItems}
+				lowestHighestPrice={lowestHighestPrice}
+			/>
 		</Stack>
 	)
 }

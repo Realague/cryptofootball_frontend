@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Divider, Grid, Slide, Stack } from '@mui/material'
+import { Box, Button, Divider, Grid, Slide, Stack, useMediaQuery } from '@mui/material'
 import Web3 from 'web3'
 import LayoutContent from '../../../components/LayoutContent'
 import Card from '../../../components/card/Card'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import { useSelector } from 'react-redux'
 import FilterRow from './FilterRow'
+import { useTheme } from '@emotion/react'
 
-const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice }) => {
+const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, setShowLeftFilter, showLeftFilter }) => {
 	const { account, GBBalance } = useSelector(state => state.user)
 	const [sortOption, setSortOption] = useState('score')
 	const [sortDirection, setSortDirection] = useState('desc')
 	const [priceRange, setPriceRange] = useState(undefined)
+
+	const theme = useTheme()
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
 	useEffect(() => {
 		if (priceRange === undefined && lowestHighestPrice !== undefined) {
@@ -37,10 +41,18 @@ const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice }) => {
 				}
 			})
 			.map((marketItem, idx) => (
-				<Grid item m={2} p={2} display="flex" flexDirection="column" alignItems="center" width="240px" key={idx}>
+				<Grid
+					item
+					m={isMobile ? 0 : 2}
+					p={isMobile ? 0 : 2}
+					display="flex"
+					flexDirection="column"
+					alignItems="center"
+					key={idx}
+				>
 					<Slide direction="up" appear={true} in={true}>
 						<LayoutContent>
-							<Card player={marketItem.player} marketItem={marketItem.marketItem}/>
+							<Card mobile={isMobile} player={marketItem.player} marketItem={marketItem.marketItem}/>
 							<Button
 								disabled={
 									Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price
@@ -58,7 +70,14 @@ const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice }) => {
 	}
 
 	return ( (marketItems && lowestHighestPrice) ?
-		<Stack p={1} spacing={2} sx={{ width: '100%', marginLeft: '150px' }}>
+		<Stack
+			p={1}
+			width="100%"
+			spacing={2}
+			sx={{
+				marginLeft:  isMobile ? showLeftFilter ?  '150px' : '0px' : '150px',
+				overflow: 'scroll',
+			}}>
 			<FilterRow
 				sortOption={sortOption}
 				setSortOption={setSortOption}
@@ -67,9 +86,11 @@ const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice }) => {
 				lowestHighestPrice={lowestHighestPrice}
 				priceRange={priceRange}
 				setPriceRange={setPriceRange}
+				setShowLeftFilter={setShowLeftFilter}
+				showLeftFilter={showLeftFilter}
 			/>
 			<Divider variant="middle" flexItem/>
-			<Grid container spacing={2} p={1}>
+			<Grid container justifyContent="space-around" display="flex" spacing={isMobile ? 0 : 2} p={1}>
 				{ renderPlayers() }
 			</Grid>
 		</Stack>

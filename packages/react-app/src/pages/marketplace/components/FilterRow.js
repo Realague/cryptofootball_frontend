@@ -1,6 +1,7 @@
 import React from 'react'
-import { Box, Button, MenuItem, Select, Slider, Stack, Typography } from '@mui/material'
+import { Box, Button, MenuItem, Select, Slider, Stack, Typography, useMediaQuery } from '@mui/material'
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
+import { useTheme } from '@emotion/react'
 
 const FilterRow = ({
 	sortOption,
@@ -9,8 +10,12 @@ const FilterRow = ({
 	setSortDirection,
 	priceRange,
 	setPriceRange,
-	lowestHighestPrice
+	lowestHighestPrice,
+	setShowLeftFilter,
+	showLeftFilter,
 }) => {
+	const theme = useTheme()
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
 	return (
 		<Stack
@@ -23,6 +28,16 @@ const FilterRow = ({
 				height: '30px',
 			}}
 		>
+			{
+				isMobile &&
+                <Button
+                	variant="contained"
+                	color="secondary"
+                	onClick={() => setShowLeftFilter(!showLeftFilter)}
+                >
+                	{showLeftFilter ? 'Close' : 'Open'}
+                </Button>
+			}
 			<Typography variant="subtitle1">Sort:</Typography>
 			<Select
 				value={sortOption}
@@ -47,10 +62,10 @@ const FilterRow = ({
 				}}
 				variant="outlined"
 				color="secondary"
-				endIcon={sortDirection === 'desc' ? <ArrowDropDown /> : <ArrowDropUp/>}
+				endIcon={sortDirection === 'desc' ? <ArrowDropDown/> : <ArrowDropUp/>}
 				onClick={() => setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')}
 			>
-				{ sortDirection }
+				{sortDirection}
 			</Button>
 			<Box width="150px" p={2} paddingTop={3}>
 				{
@@ -72,7 +87,9 @@ const FilterRow = ({
 
                     	getAriaLabel={() => 'Price range'}
                     	value={priceRange}
-                    	onChange={(e, value) => {setPriceRange(value)} }
+                    	onChange={(e, value) => {
+                    		setPriceRange(value)
+                    	}}
                     	valueLabelDisplay="auto"
 
                     />

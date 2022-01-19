@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 export
 
@@ -29,6 +29,7 @@ export const gameSlice = createSlice({
 			state.team.players = state.team.players.filter(p => p.id !== action.payload)
 		},
 		setTransaction: (state, action) => {
+			console.log('action', action)
 			state.transaction = action.payload
 		},
 		setIsDraggingPlayer: (state, action) => {

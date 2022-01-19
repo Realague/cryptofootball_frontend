@@ -1,5 +1,16 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "storageAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -47,6 +58,43 @@
       }
     ],
     "name": "LevelUp",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rewards",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "won",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "opponentGoal",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "teamGoal",
+        "type": "uint256"
+      }
+    ],
+    "name": "MatchResult",
     "type": "event"
   },
   {
@@ -125,10 +173,547 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "imageId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Position",
+            "name": "position",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Rarity",
+            "name": "score",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct OpponentPlayer",
+        "name": "goalKeeper",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "imageId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Position",
+            "name": "position",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Rarity",
+            "name": "score",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct OpponentPlayer[]",
+        "name": "defenders",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "imageId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Position",
+            "name": "position",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Rarity",
+            "name": "score",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct OpponentPlayer[]",
+        "name": "midfielders",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "imageId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Position",
+            "name": "position",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Rarity",
+            "name": "score",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct OpponentPlayer[]",
+        "name": "attackers",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "averageScore",
+        "type": "uint256"
+      }
+    ],
+    "name": "addOpponentTeam",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "claimReward",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "deleteOpponentTeam",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getClaimCooldown",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getClaimFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getClaimFeeDecreaseRatePerDay",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getClaimFeePercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "getComposition",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "attackerNb",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "midfielderNb",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "defenderNb",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Composition",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCompositions",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "attackerNb",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "midfielderNb",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "defenderNb",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Composition[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCurrentMatchAvailable",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "playerId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCurrentStamina",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getFootballTokenPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "getOpponentPlayer",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "imageId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Position",
+            "name": "position",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Rarity",
+            "name": "score",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct OpponentPlayer",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "getOpponentTeam",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "goalKeeper",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "attackers",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "midfielders",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "defenders",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewards",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "averageScore",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct AiFootballTeam",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getOpponentTeams",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPlayerTeam",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "composition",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "goalKeeper",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "attackers",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "midfielders",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "defenders",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "currentMatchAvailable",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lastMatchPlayed",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct FootballTeam",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRemainingClaimCooldown",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTrainingGrounds",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "difficulty",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "baseWinrate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewards",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpGain",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct TrainingGround[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isMatchOpen",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "levelUpOpen",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -147,6 +732,39 @@
     "name": "payToLevelUp",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "opponentTeamId",
+        "type": "uint256"
+      }
+    ],
+    "name": "playMatch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "refreshOpponents",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "refreshOpponentsFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -198,12 +816,68 @@
   {
     "inputs": [
       {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "attackerNb",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "midfielderNb",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "defenderNb",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Composition[]",
+        "name": "_compositions",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setCompositions",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bool",
         "name": "_levelUpOpen",
         "type": "bool"
       }
     ],
     "name": "setLevelUpOpen",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "isOpen",
+        "type": "bool"
+      }
+    ],
+    "name": "setMatchOpen",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_opponentsNb",
+        "type": "uint256"
+      }
+    ],
+    "name": "setOpponentsNb",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -230,6 +904,56 @@
       }
     ],
     "name": "setPlayerContract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "composition",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "goalKeeper",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "attackers",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "midfielders",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "defenders",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "currentMatchAvailable",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lastMatchPlayed",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct FootballTeam",
+        "name": "footballTeam",
+        "type": "tuple"
+      }
+    ],
+    "name": "setPlayerTeam",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -384,6 +1108,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "trainingOpen",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -415,219 +1152,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      }
-    ],
-    "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "storageAddress",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "inputs": [],
-    "name": "getClaimCooldown",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getClaimFee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getClaimFeeDecreaseRatePerDay",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getClaimFeePercentage",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "playerId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getCurrentStamina",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getFootballTokenPrice",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getRemainingClaimCooldown",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getRewards",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getTrainingGrounds",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "id",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "difficulty",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "baseWinrate",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rewards",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "xpGain",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct TrainingGround[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "levelUpOpen",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "trainingOpen",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "upgradeFrameOpen",
     "outputs": [
@@ -638,6 +1162,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

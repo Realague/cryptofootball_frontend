@@ -1,6 +1,5 @@
 import React from 'react'
 import {Box, IconButton, Stack, Typography} from '@mui/material'
-import messi from '../../../images/footballplayer/messi.jpeg'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import Position from '../../../enums/Position'
 import {useTheme} from '@emotion/react'
@@ -25,7 +24,7 @@ const PlayerListItem = ({ player }) => {
 			backgroundColor: theme.palette.background.light,
 		}} direction="row" spacing={2} p={1}>
 			<img
-				src={messi}
+				src={`/footballplayer/${player.position}-${player.rarity}-${player.imageId}.png`}
 				style={{
 					height: '70x',
 					width: '60px',

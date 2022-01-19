@@ -62,7 +62,7 @@ const Card = ({ player, marketItem, mobile = false }) => {
 			</Stack>
 			<Box display="flex" justifyContent="center">
 				<img
-					src={messi}
+					src={`/footballplayer/${player.position}-${player.rarity}-${player.imageId}.png`}
 					style={{
 						height: mobile ? '76px' : '126px',
 						width: mobile ? '76px' : '126px',

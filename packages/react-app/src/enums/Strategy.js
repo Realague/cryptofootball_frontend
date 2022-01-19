@@ -2,11 +2,11 @@ import Position from "./Position";
 
 class Strategy {
 
-    static four_four_one = new Strategy(0, '4 - 4 - 1', {
+    static four_four_one = new Strategy(0, '4 - 4 - 2', {
         [Position.Attacker.id]: 4,
         [Position.Midfielder.id]: 4,
         [Position.Defender.id]: 4   ,
-        [Position.GoalKeeper.id]: 1,
+        [Position.GoalKeeper.id]: 2,
     })
     static Strategies = [Strategy.four_four_one]
 

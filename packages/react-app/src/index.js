@@ -16,7 +16,7 @@ import CollectionPage from './pages/collection/CollectionPage.js'
 
 const AuthenticatedRoute = ({ render }) => {
 	const { account } = useSelector(state => state.user)
-	const { isReady } = useSelector(state => state.game)
+	const { isReady } = useSelector(state => state.settings)
 
 	if (account === undefined || !isReady) {
 		return (

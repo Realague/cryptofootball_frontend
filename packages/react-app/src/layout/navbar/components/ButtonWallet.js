@@ -4,7 +4,7 @@ import {Button} from '@mui/material'
 import {useDispatch, useSelector} from 'react-redux'
 import {login, updateAccount} from '../../../features/userSlice'
 import useWeb3Modal from '../../../hooks/useWeb3Modal'
-import {setReady} from '../../../features/gameSlice'
+import {setReady} from '../../../features/settingsSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
 
 const networkData =

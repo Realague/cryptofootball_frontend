@@ -1,12 +1,20 @@
 import React from 'react'
-import {Box, Stack, Typography} from '@mui/material'
+import {Box, IconButton, Stack, Typography} from '@mui/material'
 import messi from '../../../images/footballplayer/messi.jpeg'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import Position from '../../../enums/Position'
 import {useTheme} from '@emotion/react'
+import {Remove} from '@mui/icons-material'
+import {useDispatch} from 'react-redux'
+import {removePlayerFromTeamById} from '../../../features/gameSlice'
 
 const PlayerListItem = ({ player }) => {
 	const theme = useTheme()
+	const dispatch = useDispatch()
+
+	const removePlayer = (playerId) => {
+		dispatch(removePlayerFromTeamById(playerId))
+	}
 
 	return (
 		<Stack sx={{
@@ -51,6 +59,9 @@ const PlayerListItem = ({ player }) => {
 				>
 					{player.score}
 				</Typography>
+				<IconButton onClick={() => removePlayer(player.id)}>
+					<Remove />
+				</IconButton>
 			</Stack>
 		</Stack>
 	)

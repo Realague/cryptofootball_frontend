@@ -12,6 +12,7 @@ import TeamDrawer from './layout/teamDrawer/TeamDrawer'
 import {DndProvider} from 'react-dnd'
 import {HTML5Backend} from 'react-dnd-html5-backend'
 import {setTeamDrawerState} from './features/gameSlice'
+import { SnackbarProvider } from 'notistack'
 
 export const drawerTeamWidth = 500
 
@@ -49,22 +50,24 @@ const App = () => {
 	return (
 		<ThemeProvider theme={themeMode === 'dark' ? theme : lightTheme}>
 			<DndProvider backend={HTML5Backend}>
-				<Main open={teamDrawerOpen}>
-					<Navbar toggleTheme={toggleThemeMode}/>
-					<Outlet/>
-					{
-						account &&
+				<SnackbarProvider maxSnack={3}>
+					<Main open={teamDrawerOpen}>
+						<Navbar toggleTheme={toggleThemeMode}/>
+						<Outlet/>
+						{
+							account &&
 							<TeamFab
 								open={teamDrawerOpen}
 								onClick={() => changeOpenTeamDrawerState(!teamDrawerOpen)}
 							/>
-					}
-				</Main>
-				<TeamDrawer
-					open={teamDrawerOpen}
-					changeState={() => changeOpenTeamDrawerState(!teamDrawerOpen)}
-				/>
-				<Loader/>
+						}
+					</Main>
+					<TeamDrawer
+						open={teamDrawerOpen}
+						changeState={() => changeOpenTeamDrawerState(!teamDrawerOpen)}
+					/>
+					<Loader/>
+				</SnackbarProvider>
 			</DndProvider>
 		</ThemeProvider>
 	)

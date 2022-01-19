@@ -1,6 +1,7 @@
 import {combineReducers, configureStore, getDefaultMiddleware} from '@reduxjs/toolkit'
 import userReducer from './features/userSlice'
 import gameReducer from './features/gameSlice'
+import settingsReducer from './features/settingsSlice'
 import {
 	persistReducer,
 	FLUSH,
@@ -19,12 +20,13 @@ const persistConfig = {
 	key: 'root',
 	storage,
 	stateReconciler: autoMergeLevel2,
-	blacklist: ['game'],
+	blacklist: ['settings'],
 }
 
 const reducers = combineReducers({
 	user: userReducer,
 	game: gameReducer,
+	settings: settingsReducer,
 })
 
 const _persistedReducer = persistReducer(persistConfig, reducers)
@@ -42,10 +44,10 @@ export const store = configureStore({
 				REGISTER
 			],
 			ignoredActionPaths: [
-					'payload.transaction',
+				'payload.transaction',
 			],
 			ignoredPaths: [
-					'game.transaction',
+				'game.transaction',
 			],
 		},
 	}),

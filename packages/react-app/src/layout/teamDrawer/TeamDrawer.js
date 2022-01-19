@@ -25,6 +25,7 @@ import Button from '@mui/material/Button'
 import {addPlayerToTeam, resetTeam, setStrategy} from '../../features/gameSlice'
 import PlayerListItem from './components/PlayerListItem'
 import Position from '../../enums/Position'
+import {useSnackbar} from 'notistack'
 
 const DrawerHeader = styled('div')(({theme}) => ({
 	display: 'flex',
@@ -39,24 +40,23 @@ const TeamDrawer = ({open, changeState}) => {
 	const {isDraggingPlayer, team} = useSelector(state => state.game)
 	const theme = useTheme()
 	const dispatch = useDispatch()
+	const { enqueueSnackbar } = useSnackbar()
 
 	const onPlayerDropped = (player) => {
-		console.log('dropped', player, team)
-
 		const usedStrategy = Strategy.Strategies.find(s => s.id === team.strategy)
 
 		if (usedStrategy.composition[player.position] <= team.players.filter(p => p.position === player.position).length) {
-			console.log('too many player on the same position')
+			enqueueSnackbar('Too many players on this position', { variant: 'error' })
 			return
 		}
 
 		if (team.players.filter(p => p.id === player.id).length) {
-			console.log('cannot use the same user more than once')
+			enqueueSnackbar('Cannot use the same user more than once', { variant: 'error' })
 			return
 		}
 
-		console.log(usedStrategy)
 		dispatch(addPlayerToTeam(player))
+		enqueueSnackbar('Player added !', { variant: 'success' })
 
 	}
 

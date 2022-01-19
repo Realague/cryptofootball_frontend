@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Web3 from 'web3'
 import Card from '../../components/card/Card'
-import {Box, Button, Divider, Grid, MenuItem, Select, Slide, Stack, Typography} from '@mui/material'
+import {Box, Button, Divider, Grid, MenuItem, Select, Slide, Slider, Stack, Typography} from '@mui/material'
 import {useSelector} from 'react-redux'
 import footballHeroesService from '../../services/FootballPlayerService'
 import Frame from '../../enums/Frame'
@@ -18,8 +18,10 @@ const MarketplacePage = () => {
 	const [sortDirection, setSortDirection] = useState('desc')
 	const [filters, setFilters] = useState({
 		frames: frames.map(f => f.id),
-		positions: Position.Positions.map(p => p.id)
+		positions: Position.Positions.map(p => p.id),
+		priceRange: undefined,
 	})
+	const [priceRangeSave, setPriceRangeSave] = useState(undefined)
 	const theme = useTheme()
 
 	useEffect(() => {
@@ -29,19 +31,37 @@ const MarketplacePage = () => {
 	const getMarketItems = async () => {
 		let marketItemsId = await footballHeroesService.getPlayerForSaleFiltered([0, 1, 2, 3, 4], 0, 100, 0, '100000000000000000000000', false)
 		let marketItems = []
+		const lowestHighestPrices = [undefined, undefined]
 		for (let i = 0; i !== marketItemsId.length; i++) {
 			let marketItem = await footballHeroesService.getMarketItem(marketItemsId[i])
-			marketItems.push({
+			const data = {
 				player: await footballHeroesService.getFootballPlayer(marketItem.tokenId),
 				marketItem: marketItem
-			})
+			}
+			const price = +Web3.utils.fromWei(marketItem.price, 'ether')
+			if (lowestHighestPrices[0] === undefined || lowestHighestPrices[0] > price) {
+				lowestHighestPrices[0] = price
+			}
+			if (lowestHighestPrices[1] === undefined || lowestHighestPrices[1] < price) {
+				lowestHighestPrices[1] = price
+			}
+			marketItems.push(data)
 		}
+		setPriceRangeSave(lowestHighestPrices)
+		setFilters(prev => ({...prev, priceRange: lowestHighestPrices}))
 		setMarketItems(marketItems)
 	}
 
 	const renderPlayers = () => {
 		return marketItems
-			.filter(i => (filters.frames.includes(+i.player.frame) && filters.positions.includes(+i.player.position)))
+			.filter(i =>
+				(
+					filters.frames.includes(+i.player.frame)
+					&& filters.positions.includes(+i.player.position)
+					&& +Web3.utils.fromWei(i.marketItem.price, 'ether') >= filters.priceRange[0]
+					&& +Web3.utils.fromWei(i.marketItem.price, 'ether') <= filters.priceRange[1]
+				)
+			)
 			.sort((a, b) => {
 				if (sortDirection === 'desc') {
 					return parseFloat(b.player[sortOption]) - parseFloat(a.player[sortOption])
@@ -170,6 +190,35 @@ const MarketplacePage = () => {
 					>
 						{ sortDirection }
 					</Button>
+					<Box width="150px" p={2} paddingTop={3}>
+						{
+							filters.priceRange !== undefined && priceRangeSave !== undefined &&
+							<Slider
+								color="secondary"
+								min={priceRangeSave[0]}
+								max={priceRangeSave[1]}
+								marks={[
+									{
+										value: filters.priceRange[0],
+										label: `${filters.priceRange[0]} $GB`
+									},
+									{
+										value: filters.priceRange[1],
+										label: `${filters.priceRange[1]} $GB`
+									}
+								]}
+
+								getAriaLabel={() => 'Price range'}
+								value={filters.priceRange}
+								onChange={(e, value) => {setFilters(prev => (
+									{ ...prev, priceRange: value}
+								))} }
+								valueLabelDisplay="auto"
+
+							/>
+						}
+					</Box>
+
 				</Stack>
 				<Divider variant="middle" flexItem/>
 				<Grid container spacing={2} p={1}>

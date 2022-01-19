@@ -1,6 +1,6 @@
 import React from 'react'
-import {Box, Stack} from '@mui/material'
-import FootballPlayerCollection from "../../components/FootballPlayerCollection";
+import { Stack } from '@mui/material'
+import FootballPlayerCollection from '../../components/FootballPlayerCollection'
 
 const CollectionPage = () => {
 	return (

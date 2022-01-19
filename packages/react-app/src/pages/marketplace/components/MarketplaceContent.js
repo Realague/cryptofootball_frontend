@@ -8,29 +8,35 @@ import { useSelector } from 'react-redux'
 import FilterRow from './FilterRow'
 import { useTheme } from '@emotion/react'
 
-const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, setShowLeftFilter, showLeftFilter }) => {
+const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, lowestHighestScore, setShowLeftFilter, showLeftFilter }) => {
 	const { account, GBBalance } = useSelector(state => state.user)
 	const [sortOption, setSortOption] = useState('score')
 	const [sortDirection, setSortDirection] = useState('desc')
 	const [priceRange, setPriceRange] = useState(undefined)
+	const [scoreRange, setScoreRange] = useState(undefined)
 
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
 	useEffect(() => {
-		if (priceRange === undefined && lowestHighestPrice !== undefined) {
+		if (!priceRange && lowestHighestPrice) {
 			setPriceRange(lowestHighestPrice)
 		}
-	}, [lowestHighestPrice])
+		if (!scoreRange && lowestHighestScore) {
+			setScoreRange(lowestHighestScore)
+		}
+	}, [lowestHighestPrice, lowestHighestScore])
 
 	const renderPlayers = () => {
-		return priceRange !== undefined && marketItems
+		return priceRange && scoreRange && marketItems
 			.filter(i =>
 				(
 					filters.frames.includes(+i.player.frame)
                     && filters.positions.includes(+i.player.position)
                     && +Web3.utils.fromWei(i.marketItem.price, 'ether') >= priceRange[0]
                     && +Web3.utils.fromWei(i.marketItem.price, 'ether') <= priceRange[1]
+					&& i.player.score >= scoreRange[0]
+					&& i.player.score <= scoreRange[1]
 				)
 			)
 			.sort((a, b) => {
@@ -69,7 +75,7 @@ const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, setShowL
 			))
 	}
 
-	return ( (marketItems && lowestHighestPrice) ?
+	return ( (marketItems && lowestHighestPrice && lowestHighestScore) ?
 		<Stack
 			p={1}
 			width="100%"
@@ -86,6 +92,9 @@ const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, setShowL
 				lowestHighestPrice={lowestHighestPrice}
 				priceRange={priceRange}
 				setPriceRange={setPriceRange}
+				lowestHighestScore={lowestHighestScore}
+				scoreRange={scoreRange}
+				setScoreRange={setScoreRange}
 				setShowLeftFilter={setShowLeftFilter}
 				showLeftFilter={showLeftFilter}
 			/>

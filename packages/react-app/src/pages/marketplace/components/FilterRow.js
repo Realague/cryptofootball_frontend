@@ -11,6 +11,9 @@ const FilterRow = ({
 	priceRange,
 	setPriceRange,
 	lowestHighestPrice,
+	scoreRange,
+	setScoreRange,
+	lowestHighestScore,
 	setShowLeftFilter,
 	showLeftFilter,
 }) => {
@@ -92,6 +95,33 @@ const FilterRow = ({
                     	}}
                     	valueLabelDisplay="auto"
 
+                    />
+				}
+			</Box>
+			<Box width="150px" p={2} paddingTop={3}>
+				{
+					scoreRange !== undefined &&
+                    <Slider
+                    	color="secondary"
+                    	min={lowestHighestScore[0]}
+                    	max={lowestHighestScore[1]}
+                    	marks={[
+                    		{
+                    			value: scoreRange[0],
+                    			label: `${scoreRange[0]} $GB`
+                    		},
+                    		{
+                    			value: scoreRange[1],
+                    			label: `${scoreRange[1]} $GB`
+                    		}
+                    	]}
+
+                    	getAriaLabel={() => 'Price range'}
+                    	value={scoreRange}
+                    	onChange={(e, value) => {
+                    		setScoreRange(value)
+                    	}}
+                    	valueLabelDisplay="auto"
                     />
 				}
 			</Box>

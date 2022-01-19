@@ -76,7 +76,7 @@ const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, setShowL
 			spacing={2}
 			sx={{
 				marginLeft:  isMobile ? showLeftFilter ?  '150px' : '0px' : '150px',
-				overflow: 'scroll',
+				overflow: isMobile ? 'scroll' : 'hidden',
 			}}>
 			<FilterRow
 				sortOption={sortOption}

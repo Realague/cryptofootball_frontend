@@ -1,6 +1,14 @@
 class Frame {
-    static None = new Frame(0, 'None')
-    static Bronze = new Frame(1, 'Bronze')
+    static None = new Frame(0, 'None', {
+        light: '#818181',
+        main: '#818181',
+        dark: '#818181',
+    })
+    static Bronze = new Frame(1, 'Bronze', {
+        light: '#a05318',
+        main: '#864514',
+        dark: '#5a2e0d',
+    })
     static Silver = new Frame(2, 'Silver')
     static Gold = new Frame(3, 'Gold')
     static Diamond = new Frame(4, 'Diamond')

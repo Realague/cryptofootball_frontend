@@ -66,6 +66,7 @@ const Card = ({ player, marketItem, mobile = false }) => {
 						height: mobile ? '76px' : '126px',
 						width: mobile ? '76px' : '126px',
 						boxShadow: '0px 0px 5px #d0ad34',
+						background: 'radial-gradient(at 50% 0, black, transparent 70%),linear-gradient(0deg, black, transparent 50%) bottom',
 						border: '1px solid #d0ad34',
 						objectFit: 'cover',
 						outline: 'none',

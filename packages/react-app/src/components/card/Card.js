@@ -7,6 +7,7 @@ import { BsFillLightningChargeFill } from 'react-icons/bs'
 import ExperienceProgressBar from './components/ExperienceProgressBar'
 import StaminaProgressBar from './components/StaminaProgressBar'
 import footballHeroesService from '../../services/FootballPlayerService'
+import theme from '../../theme'
 
 const Card = ({ player, marketItem, mobile = false }) => {
 	const [stamina, setStamina] = useState(0)
@@ -65,9 +66,9 @@ const Card = ({ player, marketItem, mobile = false }) => {
 					style={{
 						height: mobile ? '76px' : '126px',
 						width: mobile ? '76px' : '126px',
-						boxShadow: '0px 0px 5px #d0ad34',
+						boxShadow: `0px 0px 5px #d0ad34, inset 0px 0px 50px ${Frame.TierList[player.frame].color.main}`,
 						background: 'radial-gradient(at 50% 0, black, transparent 70%),linear-gradient(0deg, black, transparent 50%) bottom',
-						border: '1px solid #d0ad34',
+						border: `1px solid ${Frame.TierList[player.frame].color.light}`,
 						objectFit: 'cover',
 						outline: 'none',
 					}}

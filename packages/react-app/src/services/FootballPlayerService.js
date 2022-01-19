@@ -7,21 +7,21 @@ import {store} from "../store";
 class FootballHeroesService {
 
     names = [[
-        ["MENDI", "NAVAS"],
-        ["COURTOIS", "DE G E A", "ALISSON"],
-        ["LORRIS", "KHAN"],
+        ["MENDY", "NAVAS"],
+        ["COURTOIS", "DE GEA", "ALISSON"],
+        ["LLORIS", "KAHN"],
         ["NEUER", "BUFFON", "CASILLAS"]
     ], [["MARQUINHOS", "ALABA", "VARANE", "HERNANDEZ"],
-        ["SILVA", "AKAMI", "PEPE", "PIQUE", "BONUCCI"],
-        ["RAMOS", "MARCELO", "VAN DIJIK", "ALVES", "HULLMES", "LAHM"],
+        ["SILVA", "HAKAMI", "PEPE", "PIQUE", "BONUCCI"],
+        ["RAMOS", "MARCELO", "VAN DIJK", "ALVES", "HUMMELS", "LAHM"],
         ["CARLOS", "CAFU", "MALDINI", "PUYOL"]
-    ], [["MAHREZ", "POKBA", "KOKE", "CASEMIRO", "FRED"],
+    ], [["MAHREZ", "POGBA", "KOKE", "CASEMIRO", "FRED"],
         ["DE BRUYNE", "FERNANDES", "VERRATTI", "DI MARIA", "JORGINHO", "GERRARD"],
-        ["MODIRC", "MULLER", "KANTE", "ERIKSEN", "XAVI"],
-        ["ZIDANE", "PELE", "INIESTA", "MARADONA", "RONALDINHO", "PIERLO"]
+        ["MODRIC", "MULLER", "KANTE", "ERIKSEN", "XAVI"],
+        ["ZIDANE", "PELE", "INIESTA", "MARADONA", "RONALDINHO", "PIRLO"]
     ], [["LUKAKU", "HAZARD", "WERNER", "CAVANI", "ICARDI", "JESUS", "GIROUD", "HULK"],
         ["SALAH", "KANE", "DZEKO", "VARDY", "ROBINHO", "ADRIANO"],
-        ["NEYMAR", "MBAPPE", "LEWANDOWSKI", "BENZEMA", "HAANLAND", "IBRAHIMOVIC"],
+        ["NEYMAR", "MBAPPE", "LEWANDOWSKI", "BENZEMA", "HAALAND", "IBRAHIMOVIC"],
         ["MESSI", "RONALDO", "DROGBA", "HENRY", "RAUL"]
     ]]
 
@@ -280,6 +280,49 @@ class FootballHeroesService {
             await footballHeroesService.approveBusd(addresses.Game)
         }
         store.dispatch(setTransaction({transaction: this.gameContract.methods.upgradeFrame(playerId, playerToBurn).send()}))
+    }
+
+    async getCompositionList() {
+        return await this.gameContract.methods.getCompositions.call()
+    }
+
+    async getComposition() {
+        return await this.gameContract.methods.getComposition.call()
+    }
+
+    async getOpponentFootballTeam(id) {
+        return await this.gameContract.methods.getOpponentTeam(id).call()
+    }
+
+    async getOpponentFootballTeams() {
+        return await this.gameContract.methods.getOpponentTeams().call()
+    }
+
+    async refreshOpponentTeams() {
+        let GBAllowance = await this.getGbAllowance(addresses.Game)
+        let amount = await this.gameContract.methods.refreshOpponentsFee.call()
+        if (parseInt(Web3.utils.fromWei(GBAllowance)) < amount * store.getState().user.GBPrice) {
+            await footballHeroesService.approveGb(addresses.Game)
+        }
+        await this.gameContract.methods.refreshOpponents().send()
+    }
+
+    async setPlayerTeam(composition, goalkeeper, defenders, midfielders, attackers) {
+        store.dispatch(setTransaction({
+            transaction: this.gameContract.methods.setPlayerTeam({
+                composition: composition,
+                goalkeeper: goalkeeper,
+                defenders: defenders,
+                midfielders: midfielders,
+                attackers: attackers,
+                currentMatchAvailable: 0,
+                lastMatchPlayed: 0
+            }).send()
+        }))
+    }
+
+    async playMatch(opponentTeamId) {
+        store.dispatch(setTransaction({transaction: this.gameContract.methods.playMatch(opponentTeamId).send()}))
     }
 }
 

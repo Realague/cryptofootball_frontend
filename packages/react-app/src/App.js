@@ -1,23 +1,21 @@
-import React, {useContext, useEffect, useState} from 'react'
-import {Box} from '@mui/material'
+import React, { useContext, useEffect, useState } from 'react'
+import { Box, useMediaQuery } from '@mui/material'
 import Navbar from './layout/navbar/Navbar'
-import {Outlet} from 'react-router-dom'
-import {ThemeProvider} from '@emotion/react'
+import { Outlet } from 'react-router-dom'
+import { ThemeProvider } from '@emotion/react'
 import { theme, lightTheme } from './theme'
 import Loader from './components/Loader'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { styled } from '@mui/material/styles'
 import TeamFab from './components/TeamFab/TeamFab'
 import TeamDrawer from './layout/teamDrawer/TeamDrawer'
-import {DndProvider} from 'react-dnd'
-import {HTML5Backend} from 'react-dnd-html5-backend'
-import {setTeamDrawerState} from './features/gameSlice'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { setTeamDrawerState } from './features/gameSlice'
 import { SnackbarProvider } from 'notistack'
 
-export const drawerTeamWidth = 500
-
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-	({ theme, open }) => ({
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerTeamWidth' })(
+	({ theme, open, drawerTeamWidth }) => ({
 		flexGrow: 1,
 		transition: theme.transitions.create('margin', {
 			easing: theme.transitions.easing.sharp,
@@ -38,6 +36,9 @@ const App = () => {
 	const { account } = useSelector(state => state.user)
 	const teamDrawerOpen = useSelector(state => state.game.teamDrawerOpen)
 	const dispatch = useDispatch()
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
+	const drawerTeamWidth = isMobile ? 200 : 500
 
 	const changeOpenTeamDrawerState = (value) => {
 		dispatch(setTeamDrawerState(value))
@@ -51,7 +52,7 @@ const App = () => {
 		<ThemeProvider theme={themeMode === 'dark' ? theme : lightTheme}>
 			<DndProvider backend={HTML5Backend}>
 				<SnackbarProvider maxSnack={3}>
-					<Main open={teamDrawerOpen}>
+					<Main drawerTeamWidth={drawerTeamWidth} open={teamDrawerOpen}>
 						<Navbar toggleTheme={toggleThemeMode}/>
 						<Outlet/>
 						{

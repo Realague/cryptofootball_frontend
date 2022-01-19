@@ -1,12 +1,12 @@
 import React from 'react'
-import {Box, Fab} from '@mui/material'
-import {Close, People} from '@mui/icons-material'
-import {styled} from '@mui/material/styles'
-import {drawerTeamWidth} from '../../App'
-import {useSelector} from 'react-redux'
+import { Box, Fab, useMediaQuery } from '@mui/material'
+import { Close, People } from '@mui/icons-material'
+import { styled } from '@mui/material/styles'
+import { useSelector } from 'react-redux'
+import { useTheme } from '@emotion/react'
 
 const FabStyled = styled(Box, { shouldForwardProp: (prop) => prop !== 'open' })(
-	({ theme, open }) => ({
+	({ theme, open, drawerTeamWidth }) => ({
 		margin: 0,
 		top: 'auto',
 		right: 20,
@@ -29,9 +29,13 @@ const FabStyled = styled(Box, { shouldForwardProp: (prop) => prop !== 'open' })(
 
 const TeamFab = ({ onClick, open }) => {
 	const isDraggingPlayer = useSelector(state => state.game.isDraggingPlayer)
+	const theme = useTheme()
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
+	const drawerTeamWidth = isMobile ? 200 : 500
 
 	return (
-		<FabStyled open={open}>
+		<FabStyled drawerTeamWidth={drawerTeamWidth} open={open}>
 			<Fab
 				variant={open ? 'circular' : 'extended'}
 				onClick={() => onClick()}

@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react'
-import { Box, Stack, Typography} from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Box, Stack, Typography } from '@mui/material'
 import InformationModal from './modals/InformationModal'
-import Frame from "../../enums/Frame";
-import Position from "../../enums/Position";
-import messi from "../../images/footballplayer/messi.jpeg";
-import {BsFillLightningChargeFill} from "react-icons/bs";
-import ExperienceProgressBar from "./components/ExperienceProgressBar";
-import StaminaProgressBar from "./components/StaminaProgressBar";
-import footballHeroesService from "../../services/FootballPlayerService";
+import Frame from '../../enums/Frame'
+import Position from '../../enums/Position'
+import messi from '../../images/footballplayer/messi.jpeg'
+import { BsFillLightningChargeFill } from 'react-icons/bs'
+import ExperienceProgressBar from './components/ExperienceProgressBar'
+import StaminaProgressBar from './components/StaminaProgressBar'
+import footballHeroesService from '../../services/FootballPlayerService'
 
-const Card = ({ player, marketItem }) => {
+const Card = ({ player, marketItem, mobile = false }) => {
 	const [stamina, setStamina] = useState(0)
 	const [openedModal, setOpenedModal] = useState(undefined)
 
@@ -24,17 +24,17 @@ const Card = ({ player, marketItem }) => {
 	const renderCard = () => (
 		<Stack
 			onClick={() => setOpenedModal('information')}
-			width="250px"
-			height="350px"
+			width={mobile ? '160px' : '250px'}
+			height={mobile ? '270px' : '350px'}
 			sx={{
 				backgroundImage: `url(${Frame.frameIdToString(player.frame)})`,
-				backgroundSize: "auto 100%",
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: "center",
+				backgroundSize: 'auto 95%',
+				backgroundRepeat: 'no-repeat',
+				backgroundPosition: 'center',
 			}}
 			padding={6}
-			paddingTop="70px"
-			>
+			paddingTop={mobile ? '50px' : '70px'}
+		>
 			<Stack
 				direction="row"
 				justifyContent="space-between"
@@ -64,10 +64,10 @@ const Card = ({ player, marketItem }) => {
 				<img
 					src={messi}
 					style={{
-						height: "126px",
-						width: "126px",
+						height: mobile ? '76px' : '126px',
+						width: mobile ? '76px' : '126px',
 						boxShadow: '0px 0px 5px #d0ad34',
-						border: "1px solid #d0ad34",
+						border: '1px solid #d0ad34',
 						objectFit: 'cover',
 						outline: 'none',
 					}}
@@ -77,16 +77,17 @@ const Card = ({ player, marketItem }) => {
 				<Typography variant="h6">
 					{footballHeroesService.getPlayersName(player)}
 				</Typography>
-				<Stack direction="row" width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
-					<Typography width="20px" variant="subtitle2">XP</Typography>
+				<Stack direction={mobile ? 'column' : 'row'} width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
+					<Typography hidden={mobile} width="20px" variant="subtitle2">XP</Typography>
 					<ExperienceProgressBar
 						variant="determinate"
 						value={(player.xp / footballHeroesService.getXpRequireToLvlUp(player.score))  * 100}
 					/>
 				</Stack>
-				<Stack direction="row" width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
+				<Stack direction={mobile ? 'column' : 'row'} width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
 					<BsFillLightningChargeFill
-						style={{color: 'yellow', width: "20px"}}/>
+						hidden={mobile}
+						style={{ color: 'yellow', width: '20px' }}/>
 					<StaminaProgressBar
 						variant="determinate"
 						value={+stamina}
@@ -97,9 +98,12 @@ const Card = ({ player, marketItem }) => {
 	)
 
 	return (
-		<Stack direction="column" alignItems="center" width="100%">
+		<Stack sx={{
+			display: 'flex',
+		}} direction="column" alignItems="center" width={'100%'}>
 			{renderCard()}
 			<InformationModal
+				mobile={mobile}
 				onClose={() => setOpenedModal(undefined)}
 				open={openedModal === 'information'}
 				frame={renderCard}

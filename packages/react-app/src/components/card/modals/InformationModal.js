@@ -18,7 +18,7 @@ import {useSelector} from 'react-redux'
 import footballHeroesService from '../../../services/FootballPlayerService'
 
 
-const InformationModal = ({open, onClose, frame, player, marketItem}) => {
+const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) => {
     const {account, GBBalance, GBPrice} = useSelector(state => state.user)
     const [action, setAction] = useState(undefined)
     const [maxGBToConsume, setMaxGBToConsume] = useState(0)
@@ -189,15 +189,19 @@ const InformationModal = ({open, onClose, frame, player, marketItem}) => {
             BackdropProps={{
                 timeout: 500,
             }}
-            width={'600px'}
+            width={mobile ? '95vw' : '600px'}
             height={'600px'}
         >
             <Fade in={open}>
                 <Stack sx={darkModalNoFlex} spacing={4} display="flex" direction="row" justifyContent="space-around"
                        alignItems="center">
-                    <Box width="240px">
-                        {frame()}
-                    </Box>
+                    {
+                        !mobile &&
+                        <Box width="240px">
+                            {frame()}
+                        </Box>
+                    }
+
                     <Box ref={informationRef} width="240px" height={'400px'} overflow={'hidden'}>
                         <Slide
                             in={action === undefined && informationShown}

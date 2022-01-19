@@ -19,7 +19,6 @@ export const darkModalNoFlex = {
 	top: '50%',
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
-	width: 600,
 	bgcolor: 'background.paper',
 	border: '1px solid #9b7e00',
 	boxShadow: '0 0 10px #d0ad34',

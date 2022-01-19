@@ -1,21 +1,36 @@
-import React, {createRef, forwardRef, useEffect, useState} from 'react'
-import {useSelector} from 'react-redux'
+import React, { createRef, forwardRef, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import Card from './card/Card'
 import MintButton from './MintButton'
 import LoadingImage from '../images/gifs/loading.gif'
-import {Box, Divider, Grid, Grow, MenuItem, Paper, Select, Slide, Stack, Tab, Tabs, Typography} from '@mui/material'
+import {
+	Box,
+	Divider,
+	Grid,
+	Grow,
+	MenuItem,
+	Paper,
+	Select,
+	Slide,
+	Stack,
+	Tab,
+	Tabs,
+	Typography,
+	useMediaQuery
+} from '@mui/material'
 import Frame from '../enums/Frame'
 import Button from '@mui/material/Button'
-import {ArrowDropDown, ArrowDropUp} from '@mui/icons-material'
+import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
 import Position from '../enums/Position'
-import {useTheme} from '@emotion/react'
+import { useTheme } from '@emotion/react'
 import DraggableBox from './draggableBox/DraggableBox'
-import {ItemTypes} from './Constants'
+import { ItemTypes } from './Constants'
 import footballHeroesService from '../services/FootballPlayerService'
 import LayoutContent from './LayoutContent'
+import { theme } from '../theme'
 
 const FootballPlayerCollection = () => {
-	const {playersId} = useSelector(state => state.user)
+	const { playersId } = useSelector(state => state.user)
 	const [showAllPlayer, setShowAllPlayer] = useState(true)
 	const [players, setPlayers] = useState([])
 	const [playersForSale, setPlayersForSale] = useState([])
@@ -27,6 +42,8 @@ const FootballPlayerCollection = () => {
 	const [sortDirection, setSortDirection] = useState('desc')
 	const ref = createRef()
 	const theme = useTheme()
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+	const [showLeftFilter, setShowLeftFilter] = useState(false)
 
 	const handleSortChange = (event) => {
 		setSortOption(event.target.value)
@@ -61,7 +78,7 @@ const FootballPlayerCollection = () => {
 		setTabValue(newValue)
 	}
 
-	const TabPanel = ({children, value, index, ...other}) => {
+	const TabPanel = ({ children, value, index, ...other }) => {
 		return (
 			<Box
 				role="tabpanel"
@@ -69,7 +86,7 @@ const FootballPlayerCollection = () => {
 				{...other}
 				sx={{
 					width: '100%',
-					marginLeft: '150px',
+					marginLeft: (isMobile && showLeftFilter) ? '150px' : isMobile ? '0px' : '150px',
 				}}
 			>
 				{value === index && (
@@ -85,7 +102,7 @@ const FootballPlayerCollection = () => {
 
 	const LoadingContent = (
 		<Box display="flex" justifyContent="center" width="100%" height="80vh" alignItems="center">
-			<img style={{width: 400, height: 200}} src={LoadingImage} alt=""/>
+			<img style={{ width: 400, height: 200 }} src={LoadingImage} alt=""/>
 		</Box>
 	)
 
@@ -98,7 +115,7 @@ const FootballPlayerCollection = () => {
 		return (
 			<>
 				{ !isSell &&
-                    <Stack direction="column" spacing={2}>
+                    <Stack direction="column" spacing={isMobile ? 1 : 2}>
                     	<Stack
                     		display="flex"
                     		direction="row"
@@ -108,6 +125,16 @@ const FootballPlayerCollection = () => {
                     			height: '30px',
                     		}}
                     	>
+                    		{
+                    			isMobile &&
+									<Button
+										variant="contained"
+										color="secondary"
+										onClick={() => setShowLeftFilter(!showLeftFilter)}
+									>
+										{ showLeftFilter ? 'Close' : 'Open' }
+									</Button>
+                    		}
                     		<Typography variant="subtitle1">Sort:</Typography>
                     		<Select
                     			value={sortOption}
@@ -138,9 +165,14 @@ const FootballPlayerCollection = () => {
                     	</Stack>
                     	<Divider flexItem color="primary"/>
                     </Stack>
-
 				}
-				<Grid container pt={2}>
+				<Grid
+					container
+					pt={isMobile ? 1 : 2}
+					spacing={0}
+					display={'flex'}
+					justifyContent={isMobile ? showLeftFilter ? 'center' : 'space-around' : ''}
+				>
 					{
 						isFetchingData ?
 							LoadingContent  :
@@ -148,8 +180,10 @@ const FootballPlayerCollection = () => {
 								playersForSale.map((player, idx) => (
 									<Grid item key={idx}>
 										<Slide direction="up" appear={true} in={true}>
-											<LayoutContent ref={ref}>
+											<LayoutContent
+												ref={ref}>
 												<Card
+													mobile={isMobile}
 													player={player}
 													marketItem={marketItems[idx]}
 												/>
@@ -167,6 +201,7 @@ const FootballPlayerCollection = () => {
 												<Slide direction="up" appear={true} in={true}>
 													<LayoutContent ref={ref}>
 														<Card
+															mobile={isMobile}
 															player={!showAllPlayer && marketItems ? playersForSale : player}
 															marketItem={!showAllPlayer && marketItems ? marketItems[idx] : undefined}
 														/>
@@ -184,13 +219,14 @@ const FootballPlayerCollection = () => {
 	}
 
 	return (
-		<Box sx={{width: '100%', display: 'flex', height: '100%'}}>
+		<Box sx={{ width: '100%', display: 'flex', height: '100%' }}>
 			<Tabs
 				orientation="vertical"
 				variant="scrollable"
 				value={tabValue}
 				onChange={handleTabChange}
 				textColor="secondary"
+				hidden={isMobile && !showLeftFilter}
 				indicatorColor="secondary"
 				scrollButtons={false}
 				sx={{
@@ -205,8 +241,8 @@ const FootballPlayerCollection = () => {
 				{
 					[
 						'Mint', 'All', 'Listed',
-						{ name: 'Tier', disabled: true} , ...frames,
-						{ name: 'Position', disabled: true} , ...Position.Positions
+						{ name: 'Tier', disabled: true } , ...frames,
+						{ name: 'Position', disabled: true } , ...Position.Positions
 					].map((c, i) => (
 						c === 'Mint' ?
 							<Box key={i} p={2} display="flex" alignItems="center" justifyContent="center">

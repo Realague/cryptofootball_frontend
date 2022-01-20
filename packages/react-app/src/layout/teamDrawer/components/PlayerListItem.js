@@ -25,7 +25,7 @@ const PlayerListItem = ({ player }) => {
 			alignItems: 'center',
 			justifyContent: 'space-between',
 			backgroundColor: theme.palette.background.light,
-			background: `linear-gradient(0.25turn, ${Frame.TierList[player.frame].color.dark}, 30%, ${theme.palette.background.light})`
+			background: `linear-gradient(0.25turn, ${Frame.TierList[player.frame].color.dark}, 30%, ${theme.palette.background.paper})`
 		}} direction="row" spacing={2} p={1}>
 			<Stack direction={isMobile ? 'column' : 'row'} spacing={2} alignItems="center">
 				<img

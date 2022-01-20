@@ -20,7 +20,7 @@ import {
 } from '@mui/material'
 import Frame from '../enums/Frame'
 import Button from '@mui/material/Button'
-import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
+import { ArrowDropDown, ArrowDropUp, FilterAlt, FilterAltOff } from '@mui/icons-material'
 import Position from '../enums/Position'
 import { useTheme } from '@emotion/react'
 import DraggableBox from './draggableBox/DraggableBox'
@@ -132,7 +132,10 @@ const FootballPlayerCollection = () => {
 										color="secondary"
 										onClick={() => setShowLeftFilter(!showLeftFilter)}
 									>
-										{ showLeftFilter ? 'Close' : 'Open' }
+										{
+											showLeftFilter ? <FilterAltOff/> : <FilterAlt/>
+
+										}
 									</Button>
                     		}
                     		<Typography variant="subtitle1">Sort:</Typography>

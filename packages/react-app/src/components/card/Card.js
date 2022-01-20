@@ -38,6 +38,7 @@ const Card = ({ player, marketItem, mobile = false }) => {
 			<Stack
 				direction="row"
 				justifyContent="space-between"
+				alignItems="center"
 			>
 				<Typography
 					variant="subtitle1"

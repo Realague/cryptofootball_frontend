@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Divider, Grid, Slide, Stack, Typography } from '@mui/material'
 import Strategy from '../../../enums/Strategy'
 import Button from '@mui/material/Button'
@@ -14,10 +14,26 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 	const { team } = useSelector(state => state.game)
 	const dispatch = useDispatch()
 	const theme = useTheme()
+	const [compositions, setCompositions] = useState([])
 
 	useEffect(() => {
-		footballHeroesService.getCompositionList().then(r => console.log(r))
+		fetchData().finally(() => setCompositions(Strategy.Strategies))
 	}, [])
+
+	const fetchData = async () => {
+		if (Strategy.Strategies.length === 0) {
+			const response = await footballHeroesService.getCompositionList()
+			response.forEach(compo => {
+				Strategy.Strategies.push(new Strategy(Strategy.Strategies.length,
+					`${compo.attackerNb} - ${compo.midfielderNb} - ${compo.defenderNb}`, {
+						[Position.Attacker.id]: compo.attackerNb,
+						[Position.Midfielder.id]: compo.midfielderNb,
+						[Position.Defender.id]: compo.defenderNb,
+						[Position.GoalKeeper.id]: 1,
+					}))
+			})
+		}
+	}
 
 	const selectStrategy = async (strategy) => {
 		dispatch(setStrategy(strategy.id))
@@ -26,6 +42,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 	const resetStrategy = () => {
 		dispatch(resetTeam())
 	}
+
 
 	return (
 		<Box sx={{
@@ -44,7 +61,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 						</Typography>
 						<Grid container spacing={2} p={2}>
 							{
-								Strategy.Strategies.map(s => (
+								compositions.map(s => (
 									<Grid key={s.id} item>
 										<Button
 											onClick={() => selectStrategy(s)}
@@ -70,23 +87,23 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 						</Button>
 						<Divider variant="middle" flexItem/>
 
-						<Stack spacing={2} sx={{
+						<Stack spacing={1} sx={{
 							overflowY: 'scroll',
 							width: '100%',
 							height: '80vh',
 						}}>
 							{
-								Object.keys(Strategy.Strategies[team.strategy].composition).map(k => {
+								compositions[team.strategy] !== undefined && Object.keys(compositions[team.strategy].composition).map(role => {
 									return (
-										<>
-											<Stack direction="row" spacing={2} alignItems="center">
-												<Typography variant="subtitle2">{Position.Positions[k].name}</Typography>
+										<React.Fragment key={role}>
+											<Stack key={role} direction="row" spacing={2} alignItems="center">
+												<Typography variant="subtitle2">{Position.Positions[role].name}</Typography>
 												<Typography variant="subtitle2">
-													{team.players.filter(p => p.position === k).length} / {Strategy.Strategies[team.strategy].composition[k]}
+													{team.players.filter(p => p.position === role).length} / {Strategy.Strategies[team.strategy].composition[role]}
 												</Typography>
 											</Stack>
 											{
-												team.players.filter(p => p.position === k).map(p => {
+												team.players.filter(p => p.position === role).map(p => {
 													return lastPlayerDropped.id === p.id ?
 														<Slide appear in key={p.id} direction="right">
 															<LayoutContent>
@@ -97,7 +114,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 														<PlayerListItem key={p.id} player={p}/>
 												})
 											}
-										</>
+										</React.Fragment>
 									)
 								})
 							}

@@ -154,7 +154,6 @@ class FootballHeroesService {
     }
 
     getCurrentStamina(playerId) {
-        return 0;
         return this.gameContract.methods.getCurrentStamina(playerId).call();
     }
 

@@ -8,10 +8,12 @@ import PlayerListItem from './PlayerListItem'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetTeam, setStrategy } from '../../../features/gameSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
+import { useTheme } from '@emotion/react'
 
 const DrawerContent = ({ lastPlayerDropped }) => {
 	const { team } = useSelector(state => state.game)
 	const dispatch = useDispatch()
+	const theme = useTheme()
 
 	useEffect(() => {
 		footballHeroesService.getCompositionList().then(r => console.log(r))
@@ -58,7 +60,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 
 					</Stack>
 					: // strategy selected
-					<Stack alignItems="center" sx={{ width: '100%' }} spacing={2}>
+					<Stack alignItems="center" sx={{ width: '100%', backgroundColor: theme.palette.background.valueOf() }} spacing={2}>
 						<Button
 							onClick={() => resetStrategy()}
 							variant="contained"
@@ -68,33 +70,38 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 						</Button>
 						<Divider variant="middle" flexItem/>
 
-						{
-							Object.keys(Strategy.Strategies[team.strategy].composition).map(k => {
-								return (
-									<Stack key={k} spacing={2} width="100%">
-										<Stack direction="row" spacing={2} alignItems="center">
-											<Typography variant="subtitle2">{Position.Positions[k].name}</Typography>
-											<Typography variant="subtitle2">
-												{team.players.filter(p => p.position === k).length} / {Strategy.Strategies[team.strategy].composition[k]}
-											</Typography>
-										</Stack>
-										{
-											team.players.filter(p => p.position === k).map(p => {
-												return lastPlayerDropped.id === p.id ?
-													<Slide appear in key={p.id} direction="right">
-														<LayoutContent>
-															<PlayerListItem player={p}/>
-														</LayoutContent>
-													</Slide>
-													:
-													<PlayerListItem player={p}/>
-											})
-										}
-									</Stack>
-								)
-							})
-						}
-
+						<Stack spacing={2} sx={{
+							overflowY: 'scroll',
+							width: '100%',
+							height: '80vh',
+						}}>
+							{
+								Object.keys(Strategy.Strategies[team.strategy].composition).map(k => {
+									return (
+										<>
+											<Stack direction="row" spacing={2} alignItems="center">
+												<Typography variant="subtitle2">{Position.Positions[k].name}</Typography>
+												<Typography variant="subtitle2">
+													{team.players.filter(p => p.position === k).length} / {Strategy.Strategies[team.strategy].composition[k]}
+												</Typography>
+											</Stack>
+											{
+												team.players.filter(p => p.position === k).map(p => {
+													return lastPlayerDropped.id === p.id ?
+														<Slide appear in key={p.id} direction="right">
+															<LayoutContent>
+																<PlayerListItem player={p}/>
+															</LayoutContent>
+														</Slide>
+														:
+														<PlayerListItem key={p.id} player={p}/>
+												})
+											}
+										</>
+									)
+								})
+							}
+						</Stack>
 					</Stack>
 
 			}

@@ -44,7 +44,6 @@ class FootballHeroesService {
         this.gameContract = new web3Contract(abis.game, addresses.Game, {
             from: address,
         })
-        console.log('set')
         this.marketplaceContract = new web3Contract(abis.marketplace, addresses.Marketplace, {
             from: address,
         })

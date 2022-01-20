@@ -1,8 +1,8 @@
 class Frame {
     static None = new Frame(0, 'None', {
-        light: '#4c4c4c',
-        main: '#818181',
-        dark: '#818181',
+        light: '#646464',
+        main: '#5d5d5d',
+        dark: '#3c3c3c',
     })
     static Bronze = new Frame(1, 'Bronze', {
         light: '#a05318',

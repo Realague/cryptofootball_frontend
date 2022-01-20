@@ -16,6 +16,7 @@ const MarketplacePage = () => {
 		positions: Position.Positions.map(p => p.id),
 	})
 	const [lowestHighestPrice, setLowestHighestPrice] = useState(undefined)
+	const [lowestHighestScore, setLowestHighestScore] = useState(undefined)
 
 	// Mobile
 	const theme = useTheme()
@@ -30,6 +31,7 @@ const MarketplacePage = () => {
 		let marketItemsId = await footballHeroesService.getPlayerForSaleFiltered([0, 1, 2, 3, 4], 0, 100, 0, '100000000000000000000000', false)
 		let marketItems = []
 		const lowestHighestPrices = [undefined, undefined]
+		const lowestHighestScores = [undefined, undefined]
 		for (let i = 0; i !== marketItemsId.length; i++) {
 			let marketItem = await footballHeroesService.getMarketItem(marketItemsId[i])
 			const data = {
@@ -37,15 +39,23 @@ const MarketplacePage = () => {
 				marketItem: marketItem
 			}
 			const price = +Web3.utils.fromWei(marketItem.price, 'ether')
-			if (lowestHighestPrices[0] === undefined || lowestHighestPrices[0] > price) {
+			if (!lowestHighestPrices[0] || lowestHighestPrices[0] > price) {
 				lowestHighestPrices[0] = price
 			}
-			if (lowestHighestPrices[1] === undefined || lowestHighestPrices[1] < price) {
+			if (!lowestHighestPrices[1] || lowestHighestPrices[1] < price) {
 				lowestHighestPrices[1] = price
+			}
+			const score = +data.player.score
+			if (!lowestHighestScores[0] || lowestHighestScores[0] > score) {
+				lowestHighestScores[0] = score
+			}
+			if (!lowestHighestScores[1] || lowestHighestScores[1] < score) {
+				lowestHighestScores[1] = score
 			}
 			marketItems.push(data)
 		}
 		setLowestHighestPrice(lowestHighestPrices)
+		setLowestHighestScore(lowestHighestScores)
 		setMarketItems(marketItems)
 	}
 
@@ -93,6 +103,7 @@ const MarketplacePage = () => {
 				filters={filters}
 				marketItems={marketItems}
 				lowestHighestPrice={lowestHighestPrice}
+				lowestHighestScore={lowestHighestScore}
 			/>
 		</Stack>
 	)

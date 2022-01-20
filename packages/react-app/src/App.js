@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Box, useMediaQuery } from '@mui/material'
+import { Box, CircularProgress, useMediaQuery } from '@mui/material'
 import Navbar from './layout/navbar/Navbar'
 import { Outlet } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
@@ -33,6 +33,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && pr
 
 const App = () => {
 	const [themeMode, setThemeMode] = useState('dark')
+	const { isReady } = useSelector(state => state.settings)
 	const { account } = useSelector(state => state.user)
 	const teamDrawerOpen = useSelector(state => state.game.teamDrawerOpen)
 	const dispatch = useDispatch()
@@ -54,7 +55,12 @@ const App = () => {
 				<SnackbarProvider maxSnack={3}>
 					<Main drawerTeamWidth={drawerTeamWidth} open={teamDrawerOpen}>
 						<Navbar toggleTheme={toggleThemeMode}/>
-						<Outlet/>
+						{
+							isReady ?
+								<Outlet/>
+								:
+								<CircularProgress/>
+						}
 						{
 							account &&
 							<TeamFab
@@ -63,10 +69,13 @@ const App = () => {
 							/>
 						}
 					</Main>
-					<TeamDrawer
-						open={teamDrawerOpen}
-						changeState={() => changeOpenTeamDrawerState(!teamDrawerOpen)}
-					/>
+					{
+						isReady &&
+						<TeamDrawer
+							open={teamDrawerOpen}
+							changeState={() => changeOpenTeamDrawerState(!teamDrawerOpen)}
+						/>
+					}
 					<Loader/>
 				</SnackbarProvider>
 			</DndProvider>

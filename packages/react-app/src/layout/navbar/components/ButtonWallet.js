@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
-import {Button} from '@mui/material'
-import {useDispatch, useSelector} from 'react-redux'
-import {login, updateAccount} from '../../../features/userSlice'
+import { Button } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { login, updateAccount } from '../../../features/userSlice'
 import useWeb3Modal from '../../../hooks/useWeb3Modal'
-import {setReady} from '../../../features/settingsSlice'
+import { setReady } from '../../../features/settingsSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
 
 const networkData =
@@ -50,11 +50,11 @@ const WalletButton = () => {
 
 	async function fetchAccount() {
 		try {
+			dispatch(setReady(false))
 			const accounts = await provider.eth.getAccounts()
 
 			// Subscribe to accounts change
 			provider.currentProvider.on('accountsChanged', (accounts) => {
-				dispatch(setReady(false))
 				footballHeroesService.init(provider, accounts[0])
 				dispatch(login(accounts[0]))
 				readOnChainData()
@@ -63,7 +63,6 @@ const WalletButton = () => {
 
 			// Subscribe to chainId change
 			provider.currentProvider.on('chainChanged', (chainId) => {
-				console.log(chainId)
 				if (chainId !== networkData[0].chainId) {
 					window.ethereum.request({
 						method: 'wallet_addEthereumChain',
@@ -83,12 +82,13 @@ const WalletButton = () => {
 			setRendered(accounts[0].substring(0, 6) + '...' + accounts[0].substring(36))
 			footballHeroesService.init(provider, accounts[0])
 			dispatch(login(accounts[0]))
-			dispatch(setReady(true))
 			await readOnChainData()
 		} catch (err) {
 			setRendered('')
 			logoutOfWeb3Modal()
 			console.error('eee', err)
+		} finally {
+			dispatch(setReady(true))
 		}
 	}
 

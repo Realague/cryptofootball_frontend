@@ -44,6 +44,7 @@ class FootballHeroesService {
         this.gameContract = new web3Contract(abis.game, addresses.Game, {
             from: address,
         })
+        console.log('set')
         this.marketplaceContract = new web3Contract(abis.marketplace, addresses.Marketplace, {
             from: address,
         })
@@ -284,11 +285,11 @@ class FootballHeroesService {
     }
 
     async getCompositionList() {
-        return await this.gameContract.methods.getCompositions.call()
+        return await this.gameContract.methods.getCompositions().call()
     }
 
-    async getComposition() {
-        return await this.gameContract.methods.getComposition.call()
+    async getComposition(id) {
+        return await this.gameContract.methods.getComposition(id).call()
     }
 
     async getOpponentFootballTeam(id) {

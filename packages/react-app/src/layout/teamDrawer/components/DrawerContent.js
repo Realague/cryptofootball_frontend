@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Divider, Grid, Slide, Stack, Typography } from '@mui/material'
 import Strategy from '../../../enums/Strategy'
 import Button from '@mui/material/Button'
@@ -7,12 +7,17 @@ import LayoutContent from '../../../components/LayoutContent'
 import PlayerListItem from './PlayerListItem'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetTeam, setStrategy } from '../../../features/gameSlice'
+import footballHeroesService from '../../../services/FootballPlayerService'
 
 const DrawerContent = ({ lastPlayerDropped }) => {
 	const { team } = useSelector(state => state.game)
 	const dispatch = useDispatch()
 
-	const selectStrategy = (strategy) => {
+	useEffect(() => {
+		footballHeroesService.getCompositionList().then(r => console.log(r))
+	}, [])
+
+	const selectStrategy = async (strategy) => {
 		dispatch(setStrategy(strategy.id))
 	}
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CircularProgress, useMediaQuery } from '@mui/material'
 import Navbar from './layout/navbar/Navbar'
 import { Outlet } from 'react-router-dom'
@@ -11,8 +11,11 @@ import TeamFab from './components/TeamFab/TeamFab'
 import TeamDrawer from './layout/teamDrawer/TeamDrawer'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { setTeamDrawerState } from './features/gameSlice'
+import { setStrategy, setTeamDrawerState, setTeamPlayers } from './features/gameSlice'
 import { SnackbarProvider } from 'notistack'
+import Strategy from './enums/Strategy'
+import footballHeroesService from './services/FootballPlayerService'
+import Position from './enums/Position'
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerTeamWidth' })(
 	({ theme, open, drawerTeamWidth }) => ({
@@ -48,6 +51,28 @@ const App = () => {
 	const toggleThemeMode = () => {
 		setThemeMode(themeMode === 'dark' ? 'light' : 'dark')
 	}
+
+	const fetchData = async () => {
+		const playerTeam = await footballHeroesService.getPlayerTeam()
+		dispatch(setStrategy(+playerTeam.composition))
+		const playersId = [
+			...playerTeam.attackers.map(id => +id),
+			...playerTeam.defenders.map(id => +id),
+			...playerTeam.midfielders.map(id => +id),
+			+playerTeam.goalKeeper
+		]
+		const players = []
+		for (let id of playersId) {
+			players.push(await footballHeroesService.getFootballPlayer(id))
+		}
+		dispatch(setTeamPlayers(players))
+	}
+
+	useEffect(() => {
+		if (isReady) {
+			fetchData()
+		}
+	}, [isReady])
 
 	return (
 		<ThemeProvider theme={themeMode === 'dark' ? theme : lightTheme}>

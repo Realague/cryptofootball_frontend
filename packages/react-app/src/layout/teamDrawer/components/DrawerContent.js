@@ -33,19 +33,6 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 					}))
 			})
 		}
-		const playerTeam = await footballHeroesService.getPlayerTeam()
-		dispatch(setStrategy(+playerTeam.composition))
-		const playersId = [
-			...playerTeam.attackers.map(id => +id),
-			...playerTeam.defenders.map(id => +id),
-			...playerTeam.midfielders.map(id => +id),
-			+playerTeam.goalKeeper
-		]
-		const players = []
-		for (let id of playersId) {
-			players.push(await footballHeroesService.getFootballPlayer(id))
-		}
-		dispatch(setTeamPlayers(players))
 	}
 
 	const selectStrategy = async (strategy) => {

@@ -13,9 +13,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { setStrategy, setTeamDrawerState, setTeamPlayers } from './features/gameSlice'
 import { SnackbarProvider } from 'notistack'
-import Strategy from './enums/Strategy'
 import footballHeroesService from './services/FootballPlayerService'
-import Position from './enums/Position'
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerTeamWidth' })(
 	({ theme, open, drawerTeamWidth }) => ({
@@ -77,7 +75,13 @@ const App = () => {
 	return (
 		<ThemeProvider theme={themeMode === 'dark' ? theme : lightTheme}>
 			<DndProvider backend={HTML5Backend}>
-				<SnackbarProvider maxSnack={3}>
+				<SnackbarProvider
+					maxSnack={3}
+					anchorOrigin={{
+						vertical: 'bottom',
+						horizontal: 'center',
+					}}
+				>
 					<Main drawerTeamWidth={drawerTeamWidth} open={teamDrawerOpen}>
 						<Navbar toggleTheme={toggleThemeMode}/>
 						{

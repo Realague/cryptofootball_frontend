@@ -22,6 +22,11 @@ const TeamDrawer = ({ open, changeState }) => {
 	const drawerTeamWidth = isMobile ? 200 : 500
 
 	const onPlayerDropped = async (player) => {
+		if (team.strategy === undefined) {
+			enqueueSnackbar('You must choose a composition first', { variant: 'error' })
+			return
+		}
+
 		const usedStrategy = Strategy.Strategies.find(s => s.id === team.strategy)
 
 		if (usedStrategy.composition[player.position] <= team.players.filter(p => p.position === player.position).length) {

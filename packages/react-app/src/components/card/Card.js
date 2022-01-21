@@ -7,7 +7,6 @@ import { BsFillLightningChargeFill } from 'react-icons/bs'
 import ExperienceProgressBar from './components/ExperienceProgressBar'
 import StaminaProgressBar from './components/StaminaProgressBar'
 import footballHeroesService from '../../services/FootballPlayerService'
-import theme from '../../theme'
 
 const Card = ({ player, marketItem, mobile = false }) => {
 	const [stamina, setStamina] = useState(0)

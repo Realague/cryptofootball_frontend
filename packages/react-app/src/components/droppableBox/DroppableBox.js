@@ -1,9 +1,9 @@
 import React from 'react'
-import {useDrag, useDrop} from 'react-dnd'
-import {Box, Stack} from '@mui/material'
-import {useTheme} from '@emotion/react'
+import { useDrop } from 'react-dnd'
+import { Stack } from '@mui/material'
+import { useTheme } from '@emotion/react'
 
-const DroppableBox = ({type, children, onDrop}) => {
+const DroppableBox = ({ type, children, onDrop }) => {
 	const theme = useTheme()
 	const [{ isOver }, drop] = useDrop(
 		() => ({

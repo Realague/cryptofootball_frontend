@@ -1,10 +1,10 @@
-import React, {createRef, forwardRef, useEffect, useState} from 'react'
-import {useDrag} from 'react-dnd'
-import {Box} from '@mui/material'
-import {useDispatch, useSelector} from 'react-redux'
-import {setIsDraggingPlayer, setTeamDrawerState} from '../../features/gameSlice'
+import React, { useEffect } from 'react'
+import { useDrag } from 'react-dnd'
+import { Box } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { setIsDraggingPlayer, setTeamDrawerState } from '../../features/gameSlice'
 
-const DraggableBox = ({type, item, children}) => {
+const DraggableBox = ({ type, item, children }) => {
 	const dispatch = useDispatch()
 	const teamDrawerOpen = useSelector(state => state.game.teamDrawerOpen)
 

@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react'
-import {forwardRef} from 'react'
-import {Box} from '@mui/material'
+import React from 'react'
+import { forwardRef } from 'react'
+import { Box } from '@mui/material'
 
-const LayoutContent = forwardRef(({children}, ref) => (
+const LayoutContent = forwardRef(({ children }, ref) => (
 	<Box ref={ref}>
 		{children}
 	</Box>

@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 import '../../css/accountInfo.css'
-import {Button, Stack, Typography} from '@mui/material'
-import {ClaimModal} from '../accountInfo/modals/ClaimModal'
-import {useTheme} from '@emotion/react'
+import { Button, Stack, Typography } from '@mui/material'
+import { ClaimModal } from '../accountInfo/modals/ClaimModal'
+import { useTheme } from '@emotion/react'
 import TokenImage from '../../images/token.png'
 import BusdImage from '../../images/busd.png'
 import footballHeroesService from '../../services/FootballPlayerService'
@@ -18,7 +18,7 @@ const AccountInfo = () => {
 		rewards,
 	} = useSelector(state => state.user)
 	const [open, setOpen] = useState(false)
-	const [time, setTime] = useState({'h': 0, 'm': 0, 's': 0})
+	const [time, setTime] = useState({ 'h': 0, 'm': 0, 's': 0 })
 	const [amountToClaim, setAmountToClaim] = useState(0)
 	const [seconds, setSeconds] = useState(0)
 	const theme = useTheme()
@@ -104,7 +104,7 @@ const AccountInfo = () => {
                             Rewards:
 						</Typography>
 						<Typography variant="subtitle1">{parseFloat(rewards).toFixed(2)}</Typography>
-						<img style={{width: 20, height: 20}} src={TokenImage} alt="token"/>
+						<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
 					</Stack>
 					<Stack
 						direction="row"
@@ -128,13 +128,13 @@ const AccountInfo = () => {
 				<Stack direction="column">
 					<Stack direction="row" alignItems="center" spacing={1}>
 						<Typography variant="body1">{parseFloat(GBBalance).toFixed(2)}</Typography>
-						<img style={{width: 20, height: 20}} src={TokenImage} alt="token"/>
+						<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
 					</Stack>
 					<Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={1}>
 						<Typography variant="body1">
 							{parseFloat(BUSDBalance).toFixed(2)}
 						</Typography>
-						<img style={{width: 20, height: 20}} src={BusdImage} alt="busd"/>
+						<img style={{ width: 20, height: 20 }} src={BusdImage} alt="busd"/>
 					</Stack>
 				</Stack>
 			</Stack>

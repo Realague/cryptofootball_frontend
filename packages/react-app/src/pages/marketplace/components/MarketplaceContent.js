@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import FilterRow from './FilterRow'
 import { useTheme } from '@emotion/react'
 import LoadingImage from '../../../images/gifs/loading.gif'
+import TokenImage from '../../../images/token.png'
 
 const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, lowestHighestScore, setShowLeftFilter, showLeftFilter }) => {
 	const { account, GBBalance } = useSelector(state => state.user)
@@ -64,11 +65,12 @@ const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, lowestHi
 									Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price
                                     || marketItem.marketItem.seller === account
 								}
-								sx={{ width: '100px' }}
+								sx={{ width: '100px', alignItems: 'center', display: 'flex' }}
 								variant="contained" color="primary"
 								onClick={() => footballHeroesService.buyPlayer(marketItem.marketItem)}
 							>
-								{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB
+								{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')}
+								<img style={{ width: 15, height: 15, marginLeft: '5px' }} src={TokenImage} alt="token"/>
 							</Button>
 						</Stack>
 					</Slide>

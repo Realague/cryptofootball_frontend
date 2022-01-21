@@ -104,8 +104,7 @@ const AccountInfo = () => {
                             Rewards:
 						</Typography>
 						<Typography variant="subtitle1">{parseFloat(rewards).toFixed(2)}</Typography>
-						<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
-					</Stack>
+					@	</Stack>
 					<Stack
 						direction="row"
 						alignItems="center"

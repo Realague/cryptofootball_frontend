@@ -11,6 +11,7 @@ import { theme } from '../../theme'
 import { changeDrawerMobile } from '../../features/settingsSlice'
 import SwipeableFootDrawer from '../swipeableDrawer/swipeableDrawer'
 import { FaHamburger } from 'react-icons/all'
+import TokenImage from '../../images/token_black.png'
 
 const Navbar = ({ toggleTheme }) => {
 	const { GBPrice, account } = useSelector(state => state.user)
@@ -59,7 +60,8 @@ const Navbar = ({ toggleTheme }) => {
 				<Stack spacing={2} direction="row">
 					<WalletButton/>
 					<Button onClick={toggleTheme} variant="contained" color="secondary">
-                        GB: ${parseFloat(GBPrice).toFixed(2)}
+						<img style={{ width: 25, height: 25, marginRight: '5px' }} src={TokenImage} alt="token"/>
+						{parseFloat(GBPrice).toFixed(2)}
 					</Button>
 				</Stack>
 			</Toolbar>

@@ -8,6 +8,8 @@ import Header from './components/Header'
 import DraggingContent from './components/DraggingContent'
 import DrawerContent from './components/DrawerContent'
 import { useTheme } from '@emotion/react'
+import footballHeroesService from '../../services/FootballPlayerService'
+import Position from '../../enums/Position'
 
 const TeamDrawer = ({ open, changeState }) => {
 	const { isDraggingPlayer, team } = useSelector(state => state.game)
@@ -19,7 +21,7 @@ const TeamDrawer = ({ open, changeState }) => {
 
 	const drawerTeamWidth = isMobile ? 200 : 500
 
-	const onPlayerDropped = (player) => {
+	const onPlayerDropped = async (player) => {
 		const usedStrategy = Strategy.Strategies.find(s => s.id === team.strategy)
 
 		if (usedStrategy.composition[player.position] <= team.players.filter(p => p.position === player.position).length) {

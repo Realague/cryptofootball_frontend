@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { act } from '@testing-library/react'
 
 export
 
 const initialState = {
 	isDraggingPlayer: false,
 	teamDrawerOpen: false,
-	transaction: undefined,
 	team: {
 		strategy: undefined,
 		players: [],
@@ -22,15 +22,14 @@ export const gameSlice = createSlice({
 		resetTeam: (state, action ) => {
 			state.team = initialState.team
 		},
+		setTeam: (state, action) => {
+			state.team = action.payload
+		},
 		addPlayerToTeam: (state, action) => {
 			state.team.players = [...state.team.players, action.payload]
 		},
 		removePlayerFromTeamById: (state, action) => {
 			state.team.players = state.team.players.filter(p => p.id !== action.payload)
-		},
-		setTransaction: (state, action) => {
-			console.log('action', action)
-			state.transaction = action.payload
 		},
 		setIsDraggingPlayer: (state, action) => {
 			state.isDraggingPlayer = action.payload
@@ -42,13 +41,13 @@ export const gameSlice = createSlice({
 })
 
 export const {
-	setTransaction,
 	setIsDraggingPlayer,
 	setTeamDrawerState,
 	setStrategy,
 	resetTeam,
 	addPlayerToTeam,
 	removePlayerFromTeamById,
+	setTeam,
 } = gameSlice.actions
 
 export default gameSlice.reducer

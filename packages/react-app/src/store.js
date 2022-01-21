@@ -10,7 +10,7 @@ import {
 	PERSIST,
 	PURGE,
 	REGISTER,
-	persistStore,
+	persistStore, createTransform,
 } from 'reduxjs-toolkit-persist'
 
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
@@ -20,7 +20,7 @@ const persistConfig = {
 	key: 'root',
 	storage,
 	stateReconciler: autoMergeLevel2,
-	blacklist: ['settings'],
+	blacklist: ['settings', 'game'],
 }
 
 const reducers = combineReducers({
@@ -47,7 +47,7 @@ export const store = configureStore({
 				'payload.transaction',
 			],
 			ignoredPaths: [
-				'game.transaction',
+				'settings.transaction',
 			],
 		},
 	}),

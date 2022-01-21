@@ -1,7 +1,7 @@
 import web3Contract from 'web3-eth-contract'
 import {abis, addresses} from "@project/contracts";
 import Web3 from "web3";
-import {setTransaction} from "../features/gameSlice";
+import {setTransaction} from "../features/settingsSlice";
 import {store} from "../store";
 
 class FootballHeroesService {
@@ -290,6 +290,10 @@ class FootballHeroesService {
         return await this.gameContract.methods.getComposition(id).call()
     }
 
+    async getPlayerTeam() {
+        return await this.gameContract.methods.getPlayerTeam().call()
+    }
+
     async getOpponentFootballTeam(id) {
         return await this.gameContract.methods.getOpponentTeam(id).call()
     }
@@ -308,16 +312,25 @@ class FootballHeroesService {
     }
 
     async setPlayerTeam(composition, goalkeeper, defenders, midfielders, attackers) {
+        console.log({
+            composition: composition,
+            goalkeeper: goalkeeper,
+            defenders: defenders,
+            midfielders: midfielders,
+            attackers: attackers,
+            currentMatchAvailable: 0,
+            lastMatchPlayed: 0
+        })
         store.dispatch(setTransaction({
-            transaction: this.gameContract.methods.setPlayerTeam({
-                composition: composition,
-                goalkeeper: goalkeeper,
-                defenders: defenders,
-                midfielders: midfielders,
-                attackers: attackers,
-                currentMatchAvailable: 0,
-                lastMatchPlayed: 0
-            }).send()
+            transaction: this.gameContract.methods.setPlayerTeam([
+                composition,
+                goalkeeper,
+                attackers,
+                midfielders,
+                defenders,
+                0,
+                0
+            ]).send()
         }))
     }
 

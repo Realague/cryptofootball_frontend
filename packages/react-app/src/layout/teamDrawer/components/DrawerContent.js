@@ -6,7 +6,7 @@ import Position from '../../../enums/Position'
 import LayoutContent from '../../../components/LayoutContent'
 import PlayerListItem from './PlayerListItem'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetTeam, setStrategy } from '../../../features/gameSlice'
+import { resetTeam, setStrategy, setTeam } from '../../../features/gameSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
 
@@ -33,6 +33,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 					}))
 			})
 		}
+		const playerTeam = await footballHeroesService.getPlayerTeam()
 	}
 
 	const selectStrategy = async (strategy) => {
@@ -43,6 +44,40 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 		dispatch(resetTeam())
 	}
 
+	const saveTeam = async () => {
+		if (team.players.length !== 11) {
+			return
+		}
+		const composition = {
+			goalkeeper: undefined,
+			defenders: [],
+			midfielders: [],
+			attackers: [],
+		}
+		team.players.forEach(p => {
+			switch (+p.position) {
+			case Position.Attacker.id:
+				composition.attackers.push(+p.id)
+				break
+			case Position.Midfielder.id:
+				composition.midfielders.push(+p.id)
+				break
+			case Position.Defender.id:
+				composition.defenders.push(+p.id)
+				break
+			case Position.GoalKeeper.id:
+				composition.goalkeeper = +p.id
+				break
+			}
+		})
+		await footballHeroesService.setPlayerTeam(
+			+team.strategy,
+			+composition.goalkeeper,
+			composition.defenders,
+			composition.midfielders,
+			composition.attackers,
+		)
+	}
 
 	return (
 		<Box sx={{
@@ -78,13 +113,24 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 					</Stack>
 					: // strategy selected
 					<Stack alignItems="center" sx={{ width: '100%', backgroundColor: theme.palette.background.valueOf() }} spacing={2}>
-						<Button
-							onClick={() => resetStrategy()}
-							variant="contained"
-							color="secondary"
-						>
-                            Reset team
-						</Button>
+						<Stack direction="row" spacing={2} alignItems="center">
+							<Button
+								disabled={team.players.length !== 11}
+								onClick={() => saveTeam()}
+								variant="contained"
+								color="secondary"
+							>
+								Save team
+							</Button>
+							<Button
+								onClick={() => resetStrategy()}
+								variant="contained"
+								color="primary"
+							>
+								Reset team
+							</Button>
+						</Stack>
+
 						<Divider variant="middle" flexItem/>
 
 						<Stack spacing={1} sx={{

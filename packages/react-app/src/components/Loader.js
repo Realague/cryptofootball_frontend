@@ -13,7 +13,7 @@ const Loader = () => {
 	const [rewards, setRewards] = useState(0)
 	const [player, setPlayer] = useState(undefined)
 
-	const { transaction } = useSelector(state => state.game)
+	const { transaction } = useSelector(state => state.settings)
 	useEffect(() => {
 		if (transaction !== undefined && transaction.transaction.on && transactionState === '') {
 			callBack()

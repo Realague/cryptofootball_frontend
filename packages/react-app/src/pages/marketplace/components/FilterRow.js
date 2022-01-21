@@ -21,7 +21,7 @@ const FilterRow = ({
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
 	const renderRanges = (
-		<Stack direction="row" alignItems="center" spacing={4}>
+		<Stack direction="row" alignItems="center" spacing={8}>
 			<Box width="150px" p={1} >
 				{
 					priceRange !== undefined &&
@@ -50,7 +50,7 @@ const FilterRow = ({
 					/>
 				}
 			</Box>
-			<Box width="150px" p={1} >
+			<Box width="150px" p={1}>
 				{
 					scoreRange !== undefined &&
 					<Slider

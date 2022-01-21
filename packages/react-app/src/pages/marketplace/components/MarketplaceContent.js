@@ -7,6 +7,7 @@ import footballHeroesService from '../../../services/FootballPlayerService'
 import { useSelector } from 'react-redux'
 import FilterRow from './FilterRow'
 import { useTheme } from '@emotion/react'
+import LoadingImage from '../../../images/gifs/loading.gif'
 
 const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, lowestHighestScore, setShowLeftFilter, showLeftFilter }) => {
 	const { account, GBBalance } = useSelector(state => state.user)
@@ -57,23 +58,30 @@ const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, lowestHi
 					key={idx}
 				>
 					<Slide direction="up" appear={true} in={true}>
-						<LayoutContent>
+						<Stack direction="column" alignItems="center">
 							<Card mobile={isMobile} player={marketItem.player} marketItem={marketItem.marketItem}/>
 							<Button
 								disabled={
 									Web3.utils.toWei(GBBalance, 'ether') < marketItem.marketItem.price
                                     || marketItem.marketItem.seller === account
 								}
+								sx={{ width: '100px' }}
 								variant="contained" color="primary"
 								onClick={() => footballHeroesService.buyPlayer(marketItem.marketItem)}
 							>
 								{Web3.utils.fromWei(marketItem.marketItem.price, 'ether')} $GB
 							</Button>
-						</LayoutContent>
+						</Stack>
 					</Slide>
 				</Grid>
 			))
 	}
+
+	const LoadingContent = (
+		<Box display="flex" justifyContent="center" width="100%" height="80vh" alignItems="center">
+			<img style={{ width: 400, height: 200 }} src={LoadingImage} alt=""/>
+		</Box>
+	)
 
 	return ( (marketItems && lowestHighestPrice && lowestHighestScore) ?
 		<Stack
@@ -104,7 +112,7 @@ const MarketplaceContent = ({ filters, marketItems, lowestHighestPrice, lowestHi
 			</Grid>
 		</Stack>
 		:
-		<Box>Loading</Box>
+		LoadingContent
 	)
 }
 

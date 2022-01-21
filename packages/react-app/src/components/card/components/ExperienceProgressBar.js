@@ -14,7 +14,7 @@ const ExperienceProgressBar = styled(LinearProgress)(({ theme }) => {
 		},
 		[`& .${linearProgressClasses.bar}`]: {
 			borderRadius: 5,
-			background: `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.primary.light} 100%)`,
+			background: `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 60%)`,
 		},
 	})
 })

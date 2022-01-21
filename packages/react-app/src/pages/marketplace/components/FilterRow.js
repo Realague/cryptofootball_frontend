@@ -60,11 +60,11 @@ const FilterRow = ({
 						marks={[
 							{
 								value: scoreRange[0],
-								label: `${scoreRange[0]} $GB`
+								label: `${scoreRange[0]} Score`
 							},
 							{
 								value: scoreRange[1],
-								label: `${scoreRange[1]} $GB`
+								label: `${scoreRange[1]} Score`
 							}
 						]}
 

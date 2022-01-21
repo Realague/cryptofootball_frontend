@@ -14,9 +14,8 @@ const Loader = () => {
 	const [player, setPlayer] = useState(undefined)
 
 	const { transaction } = useSelector(state => state.game)
-	const { account } = useSelector(state => state.user)
 	useEffect(() => {
-		if (transaction !== undefined && transactionState === '') {
+		if (transaction !== undefined && transaction.transaction.on && transactionState === '') {
 			callBack()
 		}
 	}, [transaction])
@@ -24,7 +23,7 @@ const Loader = () => {
 	const callBack = async () => {
 		setTransactionState('confirmation')
 		setShowLoader(true)
-		transaction.transaction.on('transactionHash', function (hash) {
+		transaction.transaction.on('transactionHash', function () {
 			setTransactionState('loading')
 		}).on('receipt', function (receipt) {
 			if (receipt.events.TrainingDone) {
@@ -36,7 +35,7 @@ const Loader = () => {
 			} else {
 				setTransactionState('success')
 			}
-		}).on('error', function (error, receipt) {
+		}).on('error', function () {
 			setTransactionState('error')
 		})
 	}

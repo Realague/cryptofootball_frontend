@@ -1,4 +1,4 @@
-import {combineReducers, configureStore, getDefaultMiddleware} from '@reduxjs/toolkit'
+import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import userReducer from './features/userSlice'
 import gameReducer from './features/gameSlice'
 import settingsReducer from './features/settingsSlice'

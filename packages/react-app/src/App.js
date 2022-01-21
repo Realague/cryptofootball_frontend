@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Box, CircularProgress, useMediaQuery } from '@mui/material'
+import React, { useState } from 'react'
+import { CircularProgress, useMediaQuery } from '@mui/material'
 import Navbar from './layout/navbar/Navbar'
 import { Outlet } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'

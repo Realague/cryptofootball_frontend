@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
 import { Button } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { login, updateAccount } from '../../../features/userSlice'
 import useWeb3Modal from '../../../hooks/useWeb3Modal'
 import { setReady } from '../../../features/settingsSlice'

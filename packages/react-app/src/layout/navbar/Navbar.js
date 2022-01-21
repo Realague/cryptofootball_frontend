@@ -1,23 +1,18 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import useWeb3Modal from '../../hooks/useWeb3Modal'
 import { useDispatch, useSelector } from 'react-redux'
 import ProjectLogo from '../../images/projectLogo.jpg'
 import WalletButton from './components/ButtonWallet'
 import Button from '@mui/material/Button'
 import { AppBar, Box, IconButton, Stack, Toolbar, useMediaQuery } from '@mui/material'
 import NavigationLink from './components/NavbarLink'
-import Loader from '../../components/Loader'
 import AccountInfo from '../../components/mainPages/AccountInfo'
 import { theme } from '../../theme'
 import { changeDrawerMobile } from '../../features/settingsSlice'
 import SwipeableFootDrawer from '../swipeableDrawer/swipeableDrawer'
-import { SnackbarProvider } from 'notistack'
-import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { FaHamburger } from 'react-icons/all'
 
 const Navbar = ({ toggleTheme }) => {
-	const { drawerMobileOpen } = useSelector(state => state.settings)
 	const { GBPrice, account } = useSelector(state => state.user)
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const dispatch = useDispatch()

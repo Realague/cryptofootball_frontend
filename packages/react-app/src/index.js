@@ -1,17 +1,17 @@
 import './index.css'
 
-import React, {useEffect} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
 import App from './App'
-import {Provider, useSelector} from 'react-redux'
-import {ThemeProvider} from '@emotion/react'
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import { Provider, useSelector } from 'react-redux'
+import { ThemeProvider } from '@emotion/react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import MarketplacePage from './pages/marketplace/MarketplacePage'
-import {PersistGate} from 'redux-persist/lib/integration/react'
+import { PersistGate } from 'redux-persist/lib/integration/react'
 import theme from './theme'
-import {Box, CircularProgress, CssBaseline, Typography} from '@mui/material'
-import {persistor, store} from './store'
+import { Box, CircularProgress, CssBaseline, Typography } from '@mui/material'
+import { persistor, store } from './store'
 import CollectionPage from './pages/collection/CollectionPage.js'
 
 const AuthenticatedRoute = ({ render }) => {

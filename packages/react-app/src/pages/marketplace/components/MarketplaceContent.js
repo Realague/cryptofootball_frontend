@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button, Divider, Grid, Slide, Stack, useMediaQuery } from '@mui/material'
 import Web3 from 'web3'
-import LayoutContent from '../../../components/LayoutContent'
 import Card from '../../../components/card/Card'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import { useSelector } from 'react-redux'

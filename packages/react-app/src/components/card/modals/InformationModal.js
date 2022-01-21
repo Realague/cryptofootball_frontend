@@ -43,13 +43,13 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
                justifyContent="center" width="240px">
             <Typography variant="h6">Actions</Typography>
             <Divider flexItem color="primary"/>
-            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('level-up')} fullWidth color="primary"
+            <Button hidden={marketItem !== undefined} disabled={+player.score === 100} onClick={() => chooseAction('level-up')} fullWidth color="primary"
                     variant="contained">Level
                 Up</Button>
-            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('improve-frame')} fullWidth
+            <Button hidden={marketItem !== undefined} disabled={+player.frame === 4} onClick={() => chooseAction('improve-frame')} fullWidth
                     color="primary" variant="contained">Improve
                 Frame</Button>
-            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('train')} fullWidth color="primary"
+            <Button hidden={marketItem !== undefined} disabled={+player.stamina < 20} onClick={() => chooseAction('train')} fullWidth color="primary"
                     variant="contained">Train</Button>
             <Button hidden={marketItem !== undefined} onClick={() => chooseAction('sell')} fullWidth color="secondary"
                     variant="contained"
@@ -153,6 +153,9 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
 
     const TrainContent = forwardRef(({children}, ref) => (
         <LayoutContent name="Train" ref={ref}>
+            <Button color="secondary" variant="contained" onClick={() => footballHeroesService.trainPlayer(0, player.id)}>Easy (xp and rewards x1)</Button>
+            <Button color="secondary" variant="contained" onClick={() => footballHeroesService.trainPlayer(1, player.id)}>Medium (xp and rewards x1.5)</Button>
+            <Button color="secondary" variant="contained" onClick={() => footballHeroesService.trainPlayer(2, player.id)}>Hard (xp and rewards x2)</Button>
             <Button fullWidth color="primary" variant="contained">Confirm</Button>
         </LayoutContent>
     ))

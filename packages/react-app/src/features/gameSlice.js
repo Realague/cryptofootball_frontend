@@ -10,20 +10,24 @@ const initialState = {
 		strategy: undefined,
 		players: [],
 	},
+	collection: [],
 }
 
 export const gameSlice = createSlice({
 	name: 'game',
 	initialState,
 	reducers: {
+		setCollection: (state, action) => {
+			state.collection = action.payload
+		},
 		setStrategy: (state, action) => {
 			state.team.strategy = action.payload
 		},
 		resetTeam: (state, action ) => {
 			state.team = initialState.team
 		},
-		setTeam: (state, action) => {
-			state.team = action.payload
+		setTeamPlayers: (state, action) => {
+			state.team.players = action.payload
 		},
 		addPlayerToTeam: (state, action) => {
 			state.team.players = [...state.team.players, action.payload]
@@ -47,7 +51,8 @@ export const {
 	resetTeam,
 	addPlayerToTeam,
 	removePlayerFromTeamById,
-	setTeam,
+	setTeamPlayers,
+	setCollection,
 } = gameSlice.actions
 
 export default gameSlice.reducer

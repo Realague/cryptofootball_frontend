@@ -6,7 +6,7 @@ import Position from '../../../enums/Position'
 import LayoutContent from '../../../components/LayoutContent'
 import PlayerListItem from './PlayerListItem'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetTeam, setStrategy, setTeam } from '../../../features/gameSlice'
+import { resetTeam, setStrategy, setTeamPlayers } from '../../../features/gameSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
 
@@ -34,6 +34,18 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 			})
 		}
 		const playerTeam = await footballHeroesService.getPlayerTeam()
+		dispatch(setStrategy(+playerTeam.composition))
+		const playersId = [
+			...playerTeam.attackers.map(id => +id),
+			...playerTeam.defenders.map(id => +id),
+			...playerTeam.midfielders.map(id => +id),
+			+playerTeam.goalKeeper
+		]
+		const players = []
+		for (let id of playersId) {
+			players.push(await footballHeroesService.getFootballPlayer(id))
+		}
+		dispatch(setTeamPlayers(players))
 	}
 
 	const selectStrategy = async (strategy) => {
@@ -150,7 +162,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 											</Stack>
 											{
 												team.players.filter(p => p.position === role).map(p => {
-													return lastPlayerDropped.id === p.id ?
+													return (lastPlayerDropped !== undefined && lastPlayerDropped.id === p.id) ?
 														<Slide appear in key={p.id} direction="right">
 															<LayoutContent>
 																<PlayerListItem player={p}/>

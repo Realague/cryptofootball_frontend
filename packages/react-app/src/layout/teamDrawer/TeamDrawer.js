@@ -8,8 +8,6 @@ import Header from './components/Header'
 import DraggingContent from './components/DraggingContent'
 import DrawerContent from './components/DrawerContent'
 import { useTheme } from '@emotion/react'
-import footballHeroesService from '../../services/FootballPlayerService'
-import Position from '../../enums/Position'
 
 const TeamDrawer = ({ open, changeState }) => {
 	const { isDraggingPlayer, team } = useSelector(state => state.game)

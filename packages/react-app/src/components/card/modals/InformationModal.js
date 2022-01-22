@@ -186,10 +186,9 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
 
     const TrainContent = forwardRef(({children}, ref) => (
         <LayoutContent name="Train" ref={ref}>
-            <Button color="secondary" variant="contained" onClick={() => footballHeroesService.trainPlayer(0, player.id)}>Easy (xp and rewards x1)</Button>
-            <Button color="secondary" variant="contained" onClick={() => footballHeroesService.trainPlayer(1, player.id)}>Medium (xp and rewards x1.5)</Button>
-            <Button color="secondary" variant="contained" onClick={() => footballHeroesService.trainPlayer(2, player.id)}>Hard (xp and rewards x2)</Button>
-            <Button fullWidth color="primary" variant="contained">Confirm</Button>
+            <Button fullWidth color="primary" variant="contained" onClick={() => footballHeroesService.trainPlayer(0, player.id)}>Easy (xp and rewards x1)</Button>
+            <Button fullWidth color="primary" variant="contained" onClick={() => footballHeroesService.trainPlayer(1, player.id)}>Medium (xp and rewards x1.5)</Button>
+            <Button fullWidth color="primary" variant="contained" onClick={() => footballHeroesService.trainPlayer(2, player.id)}>Hard (xp and rewards x2)</Button>
         </LayoutContent>
     ))
 

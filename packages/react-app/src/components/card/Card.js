@@ -8,6 +8,7 @@ import ExperienceProgressBar from './components/ExperienceProgressBar'
 import StaminaProgressBar from './components/StaminaProgressBar'
 import footballHeroesService from '../../services/FootballPlayerService'
 import { useSelector } from 'react-redux'
+import { isMobile } from 'web3modal'
 
 const Card = ({ player, marketItem, mobile = false }) => {
 	const { team } = useSelector(state => state.game)
@@ -51,6 +52,20 @@ const Card = ({ player, marketItem, mobile = false }) => {
 				>
 					{Position.positionIdToString(player.position)}
 				</Typography>
+				{
+					!mobile && team.players.find(p => player.id == p.id) !== undefined &&
+					<Box
+						sx={{
+							display: 'flex',
+							width: '100%',
+							justifyContent: 'center',
+							paddingBottom: '40px',
+						}}
+						color="secondary"
+					>
+						<Chip sx={{ position: 'absolute' }} label="In Team" />
+					</Box>
+				}
 				<Typography
 					variant="h6"
 					display="flex"
@@ -98,7 +113,7 @@ const Card = ({ player, marketItem, mobile = false }) => {
 				</Stack>
 			</Stack>
 			{
-				team.players.find(p => player.id == p.id) !== undefined &&
+				mobile && team.players.find(p => player.id == p.id) !== undefined &&
 					<Box
 						sx={{
 							display: 'flex',

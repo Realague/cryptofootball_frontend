@@ -54,17 +54,7 @@ const Card = ({ player, marketItem, mobile = false }) => {
 				</Typography>
 				{
 					!mobile && team.players.find(p => player.id == p.id) !== undefined &&
-					<Box
-						sx={{
-							display: 'flex',
-							width: '100%',
-							justifyContent: 'center',
-							paddingBottom: '40px',
-						}}
-						color="secondary"
-					>
-						<Chip sx={{ position: 'absolute' }} label="In Team" />
-					</Box>
+						<Chip sx={{ position: 'absolute', marginLeft: '40px', marginBottom: '10px' }} label="In Team" />
 				}
 				<Typography
 					variant="h6"
@@ -135,6 +125,7 @@ const Card = ({ player, marketItem, mobile = false }) => {
 		}} direction="column" alignItems="center" width={'100%'}>
 			{renderCard()}
 			<InformationModal
+				isInTeam={team.players.find(p => player.id == p.id) !== undefined}
 				mobile={mobile}
 				onClose={() => setOpenedModal(undefined)}
 				open={openedModal === 'information'}

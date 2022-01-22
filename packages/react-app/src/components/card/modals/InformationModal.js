@@ -21,10 +21,13 @@ import Position from "../../../enums/Position";
 import {Done, Remove} from "@mui/icons-material";
 import {useTheme} from "@emotion/react";
 import PlayerListItem from "../../../layout/teamDrawer/components/PlayerListItem";
+import {addPlayerToTeam, removePlayerFromTeamById} from "../../../features/gameSlice";
+import Strategy from "../../../enums/Strategy";
 
 
-const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) => {
+const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, mobile}) => {
     const {account, GBBalance, GBPrice} = useSelector(state => state.user)
+    const {team} = useSelector(state => state.game)
     const [action, setAction] = useState(undefined)
     const [maxGBToConsume, setMaxGBToConsume] = useState(0)
     const xpPerDollar = 50
@@ -51,6 +54,35 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
                justifyContent="center" width="240px">
             <Typography variant="h6">Actions</Typography>
             <Divider flexItem color="primary"/>
+
+            {
+                isInTeam ?
+                    <Button hidden={marketItem !== undefined}
+                            onClick={() => dispatch(removePlayerFromTeamById(player.id))}
+                            fullWidth
+                            color="secondary"
+                            variant="outlined"
+                    >
+                        Remove from team
+                    </Button>
+                    :
+                <Button hidden={marketItem !== undefined}
+                        onClick={() => {
+                            dispatch(addPlayerToTeam(player))
+                        }}
+                        color="secondary"
+                        fullWidth
+                        disabled={
+                            team.players.length === 11 ||
+                            team.strategy === undefined ||
+                            Strategy.Strategies.find(s => s.id === team.strategy).composition[player.position] <= team.players.filter(p => p.position === player.position).length
+                        }
+                        variant="outlined"
+                >
+                   Add to team
+                </Button>
+            }
+
             <Button hidden={marketItem !== undefined} disabled={+player.score === 100} onClick={() => chooseAction('level-up')} fullWidth color="primary"
                     variant="contained">Level
                 Up</Button>

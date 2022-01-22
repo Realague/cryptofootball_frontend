@@ -3,19 +3,24 @@ import React, {createRef, forwardRef, useEffect, useState} from 'react'
 import {
     Box,
     Divider,
-    Fade, Grid,
+    Fade, Grid, IconButton,
     Input,
     InputAdornment,
     Modal,
     Slide, Slider,
     Stack,
-    Typography
+    Typography, useMediaQuery
 } from '@mui/material'
 import {darkModalNoFlex} from '../../../css/style'
 import Button from '@mui/material/Button'
 import {useForm} from 'react-hook-form'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import footballHeroesService from '../../../services/FootballPlayerService'
+import Frame from "../../../enums/Frame";
+import Position from "../../../enums/Position";
+import {Done, Remove} from "@mui/icons-material";
+import {useTheme} from "@emotion/react";
+import PlayerListItem from "../../../layout/teamDrawer/components/PlayerListItem";
 
 
 const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) => {
@@ -27,6 +32,9 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
     const informationRef = createRef()
     const [informationShown, setInformationShown] = useState(true)
     const sellForm = useForm({mode: 'onChange'})
+    const dispatch = useDispatch()
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
     useEffect(() => {
         setMaxGBToConsume(footballHeroesService.getMaxGbToConsumeForLvlUp(+GBPrice, +GBBalance, +xpPerDollar, +player.score, +player.xp))
@@ -70,9 +78,9 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
         </Stack>
     )
 
-    const LayoutContent = forwardRef(({children, name}, ref) => (
+    const LayoutContent = forwardRef(({children, name, width = "240px"}, ref) => (
         <Stack ref={ref} display="flex" height={'100%'} spacing={2} flexDirection="column" alignItems="center"
-               justifyContent="center" width="240px">
+               justifyContent="center" width={width}>
             <Typography variant="h6">{name}</Typography>
             <Divider flexItem color="primary"/>
             {children}
@@ -145,11 +153,36 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
         </LayoutContent>)
     })
 
-    const ImproveFrameContent = forwardRef(({children}, ref) => (
-        <LayoutContent name="Improve Frame" ref={ref}>
-            <Button fullWidth color="primary" variant="contained">Confirm</Button>
+    const ImproveFrameContent = forwardRef(({children}, ref) => {
+        const { collection } = useSelector(state => state.game)
+        const compatiblePlayer = collection.filter(p =>
+            p.imageId == player.imageId
+            && p.rarity == player.rarity
+            && p.frame == player.frame
+            && p.position == player.position
+            && p.id != player.id
+        )
+
+        return (
+        <LayoutContent name="Improve Frame" width="100%" ref={ref}>
+                <Stack spacing={1} height="200px" sx={{overflowY: 'scroll'}}>
+                    {
+                        compatiblePlayer.map(p =>(
+                    <PlayerListItem
+                        key={p.id}
+                        player={p}
+                        onClick={async () => {
+                            await footballHeroesService.upgradeFrame(player.id, p.id)
+                            chooseAction(undefined)
+                        }}
+                        icon={<Done/>}
+                    />
+                    ))
+                    }
+                </Stack>
+
         </LayoutContent>
-    ))
+    )})
 
     const TrainContent = forwardRef(({children}, ref) => (
         <LayoutContent name="Train" ref={ref}>
@@ -192,7 +225,7 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
             BackdropProps={{
                 timeout: 500,
             }}
-            width={mobile ? '95vw' : '600px'}
+            width={mobile ? '95vw' : '800px'}
             height={'600px'}
         >
             <Fade in={open}>
@@ -205,7 +238,7 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
                         </Box>
                     }
 
-                    <Box ref={informationRef} width="240px" height={'400px'} overflow={'hidden'}>
+                    <Box ref={informationRef} width={action === 'improve-frame' ? isMobile ? '240px' : '400px' : '240px'} height={'400px'} overflow={'hidden'}>
                         <Slide
                             in={action === undefined && informationShown}
                             onExited={() => {

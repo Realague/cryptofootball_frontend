@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 import { removePlayerFromTeamById } from '../../../features/gameSlice'
 import Frame from '../../../enums/Frame'
 
-const PlayerListItem = ({ player }) => {
+const PlayerListItem = ({ player, onClick, icon = <Remove /> }) => {
 	const theme = useTheme()
 	const dispatch = useDispatch()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -68,8 +68,8 @@ const PlayerListItem = ({ player }) => {
 					</Typography>
 				</Stack>
 
-				<IconButton onClick={() => removePlayer(player.id)}>
-					<Remove />
+				<IconButton onClick={() => onClick(player) || removePlayer(player.id)}>
+					{icon}
 				</IconButton>
 			</Stack>
 		</Stack>

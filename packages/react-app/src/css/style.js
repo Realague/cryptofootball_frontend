@@ -23,7 +23,7 @@ export const darkModalNoFlex = {
 	border: '1px solid #9b7e00',
 	boxShadow: '0 0 10px #d0ad34',
 	borderRadius: '5px',
-	p: 4,
+	p: 2,
 	outline: 'none',
 	overflow: 'hidden',
 }

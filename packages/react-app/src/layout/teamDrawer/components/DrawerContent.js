@@ -6,9 +6,10 @@ import Position from '../../../enums/Position'
 import LayoutContent from '../../../components/LayoutContent'
 import PlayerListItem from './PlayerListItem'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetTeam, setStrategy, setTeamPlayers } from '../../../features/gameSlice'
+import { removePlayerFromTeamById, resetTeam, setStrategy, setTeamPlayers } from '../../../features/gameSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
+import { Remove } from '@mui/icons-material'
 
 const DrawerContent = ({ lastPlayerDropped }) => {
 	const { team } = useSelector(state => state.game)
@@ -152,11 +153,17 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 													return (lastPlayerDropped !== undefined && lastPlayerDropped.id === p.id) ?
 														<Slide appear in key={p.id} direction="right">
 															<LayoutContent>
-																<PlayerListItem player={p}/>
+																<PlayerListItem
+																	player={p}
+																	icon={<Remove/>}
+																	onClick={() => dispatch(removePlayerFromTeamById(p.id))}/>
 															</LayoutContent>
 														</Slide>
 														:
-														<PlayerListItem key={p.id} player={p}/>
+														<PlayerListItem
+															icon={<Remove/>}
+															onClick={() => dispatch(removePlayerFromTeamById(p.id))}
+															key={p.id} player={p}/>
 												})
 											}
 										</React.Fragment>

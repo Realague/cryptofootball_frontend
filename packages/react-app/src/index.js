@@ -13,6 +13,7 @@ import theme from './theme'
 import { Box, CircularProgress, CssBaseline, Typography } from '@mui/material'
 import { persistor, store } from './store'
 import CollectionPage from './pages/collection/CollectionPage.js'
+import MatchPage from './pages/match/MatchPage'
 
 const AuthenticatedRoute = ({ render }) => {
 	const { account } = useSelector(state => state.user)
@@ -49,6 +50,7 @@ ReactDOM.render(
 						<Route path="/" element={<App/>}>
 							<Route path="/collection" element={<AuthenticatedRoute render={<CollectionPage/>}/>}/>
 							<Route path="/marketplace" element={<AuthenticatedRoute render={<MarketplacePage/>}/>}/>
+							<Route path="/match" element={<AuthenticatedRoute render={<MatchPage/>}/>}/>
 						</Route>
 					</Routes>
 				</BrowserRouter>

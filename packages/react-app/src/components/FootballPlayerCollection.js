@@ -1,10 +1,10 @@
 import React, { createRef, forwardRef, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Card from './card/Card'
 import MintButton from './MintButton'
 import LoadingImage from '../images/gifs/loading.gif'
 import {
-	Box,
+	Box, Chip,
 	Divider,
 	Grid,
 	Grow,
@@ -28,6 +28,7 @@ import { ItemTypes } from './Constants'
 import footballHeroesService from '../services/FootballPlayerService'
 import LayoutContent from './LayoutContent'
 import { theme } from '../theme'
+import { setCollection } from '../features/gameSlice'
 
 const FootballPlayerCollection = () => {
 	const { playersId } = useSelector(state => state.user)
@@ -44,12 +45,14 @@ const FootballPlayerCollection = () => {
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const [showLeftFilter, setShowLeftFilter] = useState(false)
+	const dispatch = useDispatch()
 
 	const handleSortChange = (event) => {
 		setSortOption(event.target.value)
 	}
 
 	useEffect(() => {
+		console.log('oui')
 		setIsFetchingData(true)
 		Promise.all([getPlayers(), getPlayersListed()])
 			.finally(() => setIsFetchingData(false))
@@ -60,6 +63,7 @@ const FootballPlayerCollection = () => {
 		for (let playerId of playersId) {
 			players.push(await footballHeroesService.getFootballPlayer(playerId))
 		}
+		dispatch(setCollection(players))
 		setPlayers(players)
 	}
 

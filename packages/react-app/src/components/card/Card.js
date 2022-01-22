@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Chip, Grid, Stack, Typography } from '@mui/material'
 import InformationModal from './modals/InformationModal'
 import Frame from '../../enums/Frame'
 import Position from '../../enums/Position'
@@ -7,8 +7,10 @@ import { BsFillLightningChargeFill } from 'react-icons/bs'
 import ExperienceProgressBar from './components/ExperienceProgressBar'
 import StaminaProgressBar from './components/StaminaProgressBar'
 import footballHeroesService from '../../services/FootballPlayerService'
+import { useSelector } from 'react-redux'
 
 const Card = ({ player, marketItem, mobile = false }) => {
+	const { team } = useSelector(state => state.game)
 	const [stamina, setStamina] = useState(0)
 	const [openedModal, setOpenedModal] = useState(undefined)
 
@@ -95,6 +97,20 @@ const Card = ({ player, marketItem, mobile = false }) => {
 					/>
 				</Stack>
 			</Stack>
+			{
+				team.players.find(p => player.id == p.id) !== undefined &&
+					<Box
+						sx={{
+							display: 'flex',
+							width: '100%',
+							justifyContent: 'center',
+							paddingTop: '5px',
+						}}
+						color="secondary"
+					>
+						<Chip sx={{ position: 'absolute' }} label="In Team" />
+					</Box>
+			}
 		</Stack>
 	)
 

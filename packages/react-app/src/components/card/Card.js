@@ -54,7 +54,7 @@ const Card = ({ player, marketItem, mobile = false }) => {
 				</Typography>
 				{
 					!mobile && team.players.find(p => player.id == p.id) !== undefined &&
-						<Chip sx={{ position: 'absolute', marginLeft: '40px', marginBottom: '10px' }} label="In Team" />
+						<Chip sx={{ position: 'absolute', marginLeft: '40px', marginBottom: '20px' }} label="In Team" />
 				}
 				<Typography
 					variant="h6"

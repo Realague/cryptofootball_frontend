@@ -78,10 +78,14 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
         </Stack>
     )
 
-    const LayoutContent = forwardRef(({children, name, width = "240px"}, ref) => (
+    const LayoutContent = forwardRef(({children, description, name, width = "240px"}, ref) => (
         <Stack ref={ref} display="flex" height={'100%'} spacing={2} flexDirection="column" alignItems="center"
                justifyContent="center" width={width}>
             <Typography variant="h6">{name}</Typography>
+            {
+                description !== undefined &&
+                <Typography variant="caption">{description}</Typography>
+            }
             <Divider flexItem color="primary"/>
             {children}
             <Divider flexItem color="primary"/>
@@ -164,7 +168,7 @@ const InformationModal = ({open, onClose, frame, player, marketItem, mobile}) =>
         )
 
         return (
-        <LayoutContent name="Improve Frame" width="100%" ref={ref}>
+        <LayoutContent description="Selected player will be deleted" name="Improve Frame" width="100%" ref={ref}>
                 <Stack spacing={1} height="200px" sx={{overflowY: 'scroll'}}>
                     {
                         compatiblePlayer.map(p =>(

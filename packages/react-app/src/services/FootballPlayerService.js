@@ -3,6 +3,7 @@ import {abis, addresses} from "@project/contracts";
 import Web3 from "web3";
 import {setTransaction} from "../features/settingsSlice";
 import {store} from "../store";
+import Position from "../enums/Position";
 
 class FootballHeroesService {
 
@@ -315,6 +316,51 @@ class FootballHeroesService {
 
     async getOpponentFootballTeams() {
         return await this.gameContract.methods.getOpponentTeams().call()
+    }
+
+    async convertPlayersIdToComposition(team) {
+        if (team.players.length !== 11) {
+            return undefined
+        }
+        const composition = {
+            goalkeeper: undefined,
+            defenders: [],
+            midfielders: [],
+            attackers: [],
+        }
+
+        for (const p of team.players) {
+            switch (+p.position) {
+                case Position.Attacker.id:
+                    composition.attackers.push({ ...(await this.getFootballPlayer(+p.id)) })
+                    break
+                case Position.Midfielder.id:
+                    composition.midfielders.push({ ...(await this.getFootballPlayer(+p.id)) })
+                    break
+                case Position.Defender.id:
+                    composition.defenders.push({ ...(await this.getFootballPlayer(+p.id)) })
+                    break
+                case Position.GoalKeeper.id:
+                    composition.goalkeeper = { ...(await this.getFootballPlayer(+p.id)) }
+                    break
+            }
+        }
+        return composition
+    }
+
+    async populateComposition(composition) {
+        const compo = {
+            goalkeeper: undefined,
+            defenders: [],
+            midfielders: [],
+            attackers: [],
+        }
+        console.log(composition)
+        for (const key of ['defenders', 'midfielders', 'attackers']) {
+            compo[key] = composition[key].map(async pId => await footballHeroesService.getFootballPlayer(pId))
+        }
+        compo.goalkeeper = await footballHeroesService.getFootballPlayer(composition.goalkeeper)
+        return compo
     }
 
     async refreshOpponentTeams() {

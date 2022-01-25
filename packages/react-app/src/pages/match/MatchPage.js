@@ -43,7 +43,7 @@ const MatchPage = () => {
 			for (const midfielderId of team.midfielders) {
 				teamData.midfielders.push(await footballHeroesService.getOpponentPlayer(midfielderId))
 			}
-			teamData.goalKeeper = team.goalKeeper
+			teamData.goalkeeper = await footballHeroesService.getOpponentPlayer(team.goalKeeper)
 			tempOpponents.push(teamData)
 		}
 		setOpponents(tempOpponents)

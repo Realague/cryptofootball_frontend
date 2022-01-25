@@ -318,6 +318,10 @@ class FootballHeroesService {
         return await this.gameContract.methods.getOpponentTeams().call()
     }
 
+    async getOpponentPlayer(id) {
+        return await this.gameContract.methods.getOpponentPlayer(id).call()
+    }
+
     async convertPlayersIdToComposition(team) {
         if (team.players.length !== 11) {
             return undefined

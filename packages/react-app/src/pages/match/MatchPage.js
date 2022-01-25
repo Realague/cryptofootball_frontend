@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Avatar, Grid, Popover, Stack, Typography } from '@mui/material'
-import FootballPlayerCollection from '../../components/FootballPlayerCollection'
 import Box from '@mui/material/Box'
 import { useSelector } from 'react-redux'
 import footballHeroesService from '../../services/FootballPlayerService'
 import Frame from '../../enums/Frame'
 import Card from '../../components/card/Card'
-import LayoutContent from '../../components/LayoutContent'
 
 const MatchPage = () => {
 	const { team } = useSelector(state => state.game)
@@ -37,13 +35,13 @@ const MatchPage = () => {
 				goalKeeper: undefined,
 			}
 			for (const defenderId of team.defenders) {
-				teamData.defenders.push(await footballHeroesService.getFootballPlayer(defenderId))
+				teamData.defenders.push(await footballHeroesService.getOpponentPlayer(defenderId))
 			}
 			for (const attackerId of team.attackers) {
-				teamData.attackers.push(await footballHeroesService.getFootballPlayer(attackerId))
+				teamData.attackers.push(await footballHeroesService.getOpponentPlayer(attackerId))
 			}
 			for (const midfielderId of team.midfielders) {
-				teamData.midfielders.push(await footballHeroesService.getFootballPlayer(midfielderId))
+				teamData.midfielders.push(await footballHeroesService.getOpponentPlayer(midfielderId))
 			}
 			teamData.goalKeeper = team.goalKeeper
 			tempOpponents.push(teamData)

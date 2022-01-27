@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Grid, Popover, Stack, Typography } from '@mui/material'
+import { Avatar, Grid, Popover, Stack, Typography, useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import { useSelector } from 'react-redux'
 import footballHeroesService from '../../services/FootballPlayerService'
 import Frame from '../../enums/Frame'
 import Card from '../../components/card/Card'
+import TabOpponent, { TabPanel } from './components/TabOpponent'
+import TabsUnstyled from '@mui/base/TabsUnstyled'
+import PlayerIcon from './components/PlayerIcon'
+import { useTheme } from '@emotion/react'
 
 const MatchPage = () => {
 	const { team } = useSelector(state => state.game)
 	const [opponents, setOpponents] = useState([])
 	const [myComposition, setMyComposition] = useState(undefined)
 	const [selectedOpponent, setSelectedOpponent] = useState(undefined)
+	const theme = useTheme()
+	const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
 
 	useEffect(() => {
 		fetchOpponents()
@@ -29,10 +36,12 @@ const MatchPage = () => {
 		for (const id of teamsId) {
 			const team = await footballHeroesService.getOpponentFootballTeam(id)
 			const teamData = {
+				id,
 				defenders: [],
 				attackers: [],
 				midfielders: [],
-				goalKeeper: undefined,
+				goalkeeper: undefined,
+				score : team.averageScore,
 			}
 			for (const defenderId of team.defenders) {
 				teamData.defenders.push(await footballHeroesService.getOpponentPlayer(defenderId))
@@ -48,6 +57,12 @@ const MatchPage = () => {
 		}
 		setOpponents(tempOpponents)
 	}
+
+	useEffect(() => {
+		if (opponents.length > 0 && selectedOpponent === undefined) {
+			selectOpponent(opponents[0])
+		}
+	}, [opponents])
 
 	if (team.strategy === undefined || team.players.length === 0) {
 		return (
@@ -78,90 +93,34 @@ const MatchPage = () => {
 		)
 	}
 
-	const MapPlayerIcon = ({ player }) => {
-		const [anchorEl, setAnchorEl] = useState(null)
-
-		const handlePopoverOpen = (event) => {
-			setAnchorEl(event.currentTarget)
-		}
-
-		const handlePopoverClose = () => {
-			setAnchorEl(null)
-		}
-
-		const open = Boolean(anchorEl)
-
-		return <>
-			<Avatar
-				onMouseEnter={handlePopoverOpen}
-				onMouseLeave={handlePopoverClose}
-				src={`/footballplayer/${player.position}-${player.rarity}-${player.imageId}.png`}
-				style={{
-					boxShadow: `0px 0px 5px ${Frame.TierList[player.frame].color.dark}, inset 0px 0px 50px ${Frame.TierList[player.frame].color.main}`,
-					background: 'radial-gradient(at 50% 0, black, transparent 70%),linear-gradient(0deg, black, transparent 50%) bottom',
-					border: `1px solid ${Frame.TierList[player.frame].color.light}`,
-					objectFit: 'cover',
-					outline: 'none',
-				}}
-			/>
-			<Popover
-				id="mouse-over-popover"
-				sx={{
-					pointerEvents: 'none',
-				}}
-				open={open}
-				anchorEl={anchorEl}
-				anchorOrigin={{
-					vertical: 'bottom',
-					horizontal: 'left',
-				}}
-				transformOrigin={{
-					vertical: 'top',
-					horizontal: 'left',
-				}}
-				onClose={handlePopoverClose}
-				disableRestoreFocus
-			>
-				<Card
-					mobile={false}
-					player={player}
-				/>
-			</Popover>
-		</>
-	}
-
 	const RenderTeam = ({ composition, reversed = false }) => {
 		return (
 			<Stack direction={reversed ? 'row-reverse' : 'row'} width="50%">
 				<MapPositionContainer>
 					{
 						composition.goalkeeper !== undefined &&
-						<MapPlayerIcon player={composition.goalkeeper}/>
+						<PlayerIcon isNpc={reversed} player={composition.goalkeeper}/>
 					}
 				</MapPositionContainer>
-				<MapPositionContainer>
-					{
-						composition.defenders.map(p => <MapPlayerIcon key={p.id} player={p}/>)
-					}
-				</MapPositionContainer>
-				<MapPositionContainer>
-					{
-						composition.midfielders.map(p => <MapPlayerIcon key={p.id} player={p}/>)
-					}
-				</MapPositionContainer>
-				<MapPositionContainer>
-					{
-						composition.attackers.map(p => <MapPlayerIcon key={p.id} player={p}/>)
-					}
-				</MapPositionContainer>
+				{
+					['defenders', 'midfielders', 'attackers'].map((position, i) => (
+						<MapPositionContainer key={i}>
+							{
+								composition[position].map((p, indexPlayer) => (
+									<PlayerIcon isNpc={reversed} key={reversed ? i + indexPlayer + 30 : p.id} player={p}/>)
+								)
+							}
+						</MapPositionContainer>
+					))
+				}
 			</Stack>
 		)
 	}
 
 	return (
-		<Stack justifyContent="center" alignItems="center" width="100%" height="500px" p={2} spacing={2}>
-			<Stack direction="row" width="100%" height="100%">
-				<Grid container width="60%" sx={{
+		<Stack justifyContent="center" alignItems="center" width="100%" height="500px" p={2}>
+			<Stack direction="row" width={isMobile ? '90%' : '100%' } height="100%" justifyContent={isMobile ? 'center' : ''}>
+				<Grid hidden={isMobile} container width="60%" sx={{
 					background: 'url("/stadium.png")',
 					backgroundSize: '100% 100%',
 					backgroundRepeat: 'no-repeat',
@@ -176,23 +135,27 @@ const MatchPage = () => {
  					}
 
 				</Grid>
-				<Stack width="40%" justifyContent="flex-start" alignItems="center">
+				<Stack width={isMobile ? '100%': '40%'} justifyContent="flex-start" alignItems="center" spacing={2}>
 					<Typography variant="h5" color="secondary">Opponents</Typography>
 					<Stack>
-						{
-							opponents.map((o, i) => (
-								<Stack key={i}>
-									<Typography onClick={() => selectOpponent(o)}>
-										Clique ici bg
-									</Typography>
-								</Stack>
-							))
-						}
+						<TabOpponent opponents={opponents} selectOpponent={selectOpponent}/>
 					</Stack>
 				</Stack>
 			</Stack>
 		</Stack>
 	)
 }
+
+/*
+	{
+								opponents.map((o, i) => (
+								<Stack key={i}>
+										<Typography onClick={() => selectOpponent(o)}>
+											Clique ici bg
+										</Typography>
+									</Stack>
+								))
+							}
+ */
 
 export default MatchPage

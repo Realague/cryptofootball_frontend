@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useSelector } from 'react-redux'
 import '../../css/accountInfo.css'
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, Divider, Stack, Typography } from '@mui/material'
 import { ClaimModal } from '../accountInfo/modals/ClaimModal'
 import { useTheme } from '@emotion/react'
 import TokenImage from '../../images/token.png'
@@ -125,17 +125,33 @@ const AccountInfo = () => {
 							: ''
 					}
 				</Stack>
-				<Stack direction="column">
-					<Stack direction="row" alignItems="center" spacing={1}>
-						<Typography variant="body1">{parseFloat(GBBalance).toFixed(2)}</Typography>
-						<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
+				<Stack
+					direction="row" sx={{
+						backgroundColor: theme.palette.background.default,
+						borderRadius: '5px',
+					}}
+					justifyContent="space-around"
+					alignItems="center"
+					p={0.5}
+					px={2}
+					spacing={2}
+					m={0.5}
+				>
+					<Typography color="secondary" variant="subtitle1">Wallet</Typography>
+					<Divider orientation="vertical"/>
+					<Stack>
+						<Stack direction="row" alignItems="center" spacing={1}>
+							<Typography variant="body1">{parseFloat(GBBalance).toFixed(2)}</Typography>
+							<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
+						</Stack>
+						<Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={1}>
+							<Typography variant="body1">
+								{parseFloat(BUSDBalance).toFixed(2)}
+							</Typography>
+							<img style={{ width: 20, height: 20 }} src={BusdImage} alt="busd"/>
+						</Stack>
 					</Stack>
-					<Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={1}>
-						<Typography variant="body1">
-							{parseFloat(BUSDBalance).toFixed(2)}
-						</Typography>
-						<img style={{ width: 20, height: 20 }} src={BusdImage} alt="busd"/>
-					</Stack>
+
 				</Stack>
 			</Stack>
 			<ClaimModal claimFee={claimFee} rewards={amountToClaim} open={open} onClose={() => setOpen(false)}/>

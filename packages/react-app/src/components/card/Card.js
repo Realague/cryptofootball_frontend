@@ -8,15 +8,16 @@ import ExperienceProgressBar from './components/ExperienceProgressBar'
 import StaminaProgressBar from './components/StaminaProgressBar'
 import footballHeroesService from '../../services/FootballPlayerService'
 import { useSelector } from 'react-redux'
-import { isMobile } from 'web3modal'
 
-const Card = ({ player, marketItem, mobile = false }) => {
+const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 	const { team } = useSelector(state => state.game)
 	const [stamina, setStamina] = useState(0)
 	const [openedModal, setOpenedModal] = useState(undefined)
 
 	useEffect(() => {
-		getPlayerStamina()
+		if (!isNpc) {
+			getPlayerStamina()
+		}
 	}, [])
 
 	const getPlayerStamina = async () => {
@@ -61,7 +62,8 @@ const Card = ({ player, marketItem, mobile = false }) => {
 					display="flex"
 					justifyContent="center"
 					sx={{
-						textShadow: '0 0 10px yellow'
+						textShadow: '0 0 10px yellow',
+						paddingBottom: isNpc ? '45px' : '',
 					}}
 				>
 					{player.score}
@@ -85,14 +87,14 @@ const Card = ({ player, marketItem, mobile = false }) => {
 				<Typography variant="h6">
 					{footballHeroesService.getPlayersName(player)}
 				</Typography>
-				<Stack direction={mobile ? 'column' : 'row'} width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
+				<Stack hidden={isNpc} direction={mobile ? 'column' : 'row'} width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
 					<Typography hidden={mobile} width="20px" variant="subtitle2">XP</Typography>
 					<ExperienceProgressBar
 						variant="determinate"
 						value={(player.xp / footballHeroesService.getXpRequireToLvlUp(player.score))  * 100}
 					/>
 				</Stack>
-				<Stack direction={mobile ? 'column' : 'row'} width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
+				<Stack hidden={isNpc} direction={mobile ? 'column' : 'row'} width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
 					<BsFillLightningChargeFill
 						hidden={mobile}
 						style={{ color: 'yellow', width: '20px' }}/>

@@ -25,6 +25,7 @@
     "@emotion/styled": "^11.6.0",
     "@mui/base": "^5.0.0-alpha.66",
     "@mui/icons-material": "^5.2.5",
+    "@mui/lab": "^5.0.0-alpha.66",
     "@mui/material": "^5.2.8",
     "@ngrx/store": "^13.0.1",
     "@reduxjs/toolkit": "^1.7.1",

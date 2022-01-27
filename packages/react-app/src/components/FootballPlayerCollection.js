@@ -1,12 +1,13 @@
 import React, { createRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Card from './card/Card'
 import MintButton from './MintButton'
 import LoadingImage from '../images/gifs/loading.gif'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
 	Box,
 	Divider,
-	Grid,
+	Grid, Icon,
 	MenuItem,
 	Select,
 	Slide,
@@ -18,12 +19,13 @@ import {
 } from '@mui/material'
 import Frame from '../enums/Frame'
 import Button from '@mui/material/Button'
-import { ArrowDropDown, ArrowDropUp, FilterAlt, FilterAltOff } from '@mui/icons-material'
+import { ArrowDropDown, ArrowDropUp, FilterAlt, FilterAltOff, Refresh } from '@mui/icons-material'
 import Position from '../enums/Position'
 import { useTheme } from '@emotion/react'
 import DraggableBox from './draggableBox/DraggableBox'
 import { ItemTypes } from './Constants'
 import LayoutContent from './LayoutContent'
+import { fetchData } from '../features/gameSlice'
 
 const FootballPlayerCollection = () => {
 	const { collection, marketItems, playersForSale, fetching } = useSelector(state => state.game)
@@ -36,6 +38,7 @@ const FootballPlayerCollection = () => {
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const [showLeftFilter, setShowLeftFilter] = useState(false)
+	const dispatch = useDispatch()
 
 	const handleSortChange = (event) => {
 		setSortOption(event.target.value)
@@ -132,6 +135,18 @@ const FootballPlayerCollection = () => {
                     		>
                     			{ sortDirection }
                     		</Button>
+                    		<LoadingButton
+                    			sx={{
+                    				height: '30px',
+                    				width: '70px',
+                    			}}
+                    			loading={fetching}
+                    			variant="contained"
+                    			color="secondary"
+                    			onClick={() => dispatch(fetchData())}
+                    		>
+                    			<Refresh/>
+                    		</LoadingButton>
                     	</Stack>
                     	<Divider flexItem color="primary"/>
                     </Stack>

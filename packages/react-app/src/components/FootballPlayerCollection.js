@@ -1,15 +1,13 @@
-import React, { createRef, forwardRef, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { createRef, useState } from 'react'
+import { useSelector } from 'react-redux'
 import Card from './card/Card'
 import MintButton from './MintButton'
 import LoadingImage from '../images/gifs/loading.gif'
 import {
-	Box, Chip,
+	Box,
 	Divider,
 	Grid,
-	Grow,
 	MenuItem,
-	Paper,
 	Select,
 	Slide,
 	Stack,
@@ -25,19 +23,12 @@ import Position from '../enums/Position'
 import { useTheme } from '@emotion/react'
 import DraggableBox from './draggableBox/DraggableBox'
 import { ItemTypes } from './Constants'
-import footballHeroesService from '../services/FootballPlayerService'
 import LayoutContent from './LayoutContent'
-import { theme } from '../theme'
-import { setCollection } from '../features/gameSlice'
 
 const FootballPlayerCollection = () => {
-	const { playersId } = useSelector(state => state.user)
+	const { collection, marketItems, playersForSale, fetching } = useSelector(state => state.game)
 	const [showAllPlayer, setShowAllPlayer] = useState(true)
-	const [players, setPlayers] = useState([])
-	const [playersForSale, setPlayersForSale] = useState([])
-	const [marketItems, setMarketItems] = useState([])
 	const [tabValue, setTabValue] = useState(1)
-	const [isFetchingData, setIsFetchingData] = useState(false)
 	const frames = Frame.TierList.slice().reverse()
 	const [sortOption, setSortOption] = useState('score')
 	const [sortDirection, setSortDirection] = useState('desc')
@@ -45,37 +36,9 @@ const FootballPlayerCollection = () => {
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const [showLeftFilter, setShowLeftFilter] = useState(false)
-	const dispatch = useDispatch()
 
 	const handleSortChange = (event) => {
 		setSortOption(event.target.value)
-	}
-
-	useEffect(() => {
-		console.log('oui')
-		setIsFetchingData(true)
-		Promise.all([getPlayers(), getPlayersListed()])
-			.finally(() => setIsFetchingData(false))
-	}, [])
-
-	const getPlayers = async () => {
-		let players = []
-		for (let playerId of playersId) {
-			players.push(await footballHeroesService.getFootballPlayer(playerId))
-		}
-		dispatch(setCollection(players))
-		setPlayers(players)
-	}
-
-	const getPlayersListed = async () => {
-		let marketItemsId = await footballHeroesService.getListedPlayerOfAddress()
-		for (let i = 0; i !== marketItemsId.length; i++) {
-			let marketItem = await footballHeroesService.getMarketItem(marketItemsId[i])
-			marketItems.push(marketItem)
-			players.push(await footballHeroesService.getFootballPlayer(marketItem.tokenId))
-		}
-		setPlayersForSale(players)
-		setMarketItems(marketItems)
 	}
 
 	const handleTabChange = (event, newValue) => {
@@ -181,7 +144,7 @@ const FootballPlayerCollection = () => {
 					justifyContent={isMobile ? showLeftFilter ? 'center' : 'space-around' : ''}
 				>
 					{
-						isFetchingData ?
+						fetching ?
 							LoadingContent  :
 							isSell ?
 								playersForSale.map((player, idx) => (
@@ -199,7 +162,7 @@ const FootballPlayerCollection = () => {
 									</Grid>
 								))
 								:
-								players
+								collection
 									.filter(p => filter === undefined ? true : p[filterProperty] == filter)
 									.sort(sortMethod)
 									.map((player, idx) => (

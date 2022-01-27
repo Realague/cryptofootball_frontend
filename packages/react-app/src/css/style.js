@@ -11,7 +11,7 @@ export const darkModal = {
 	display: 'flex',
 	flexDirection: 'column',
 	justifyContent: 'center',
-	alignItems: 'center'
+	alignItems: 'center',
 }
 
 export const darkModalNoFlex = {

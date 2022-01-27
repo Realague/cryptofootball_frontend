@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { CircularProgress, useMediaQuery } from '@mui/material'
 import Navbar from './layout/navbar/Navbar'
 import { Outlet } from 'react-router-dom'
@@ -11,9 +11,28 @@ import TeamFab from './components/TeamFab/TeamFab'
 import TeamDrawer from './layout/teamDrawer/TeamDrawer'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { setStrategy, setTeamDrawerState, setTeamPlayers } from './features/gameSlice'
+import { fetchData, fireConffeti, setTeamDrawerState } from './features/gameSlice'
 import { SnackbarProvider } from 'notistack'
-import footballHeroesService from './services/FootballPlayerService'
+import ReactCanvasConfetti from 'react-canvas-confetti'
+
+
+function randomInRange(min, max) {
+	return Math.random() * (max - min) + min
+}
+
+function getAnimationSettings(originXA, originXB) {
+	return {
+		startVelocity: 30,
+		spread: 360,
+		ticks: 60,
+		zIndex: 0,
+		particleCount: 150,
+		origin: {
+			x: randomInRange(originXA, originXB),
+			y: Math.random() - 0.2
+		}
+	}
+}
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerTeamWidth' })(
 	({ theme, open, drawerTeamWidth }) => ({
@@ -36,7 +55,7 @@ const App = () => {
 	const [themeMode, setThemeMode] = useState('dark')
 	const { isReady } = useSelector(state => state.settings)
 	const { account } = useSelector(state => state.user)
-	const teamDrawerOpen = useSelector(state => state.game.teamDrawerOpen)
+	const { teamDrawerOpen, confetti } = useSelector(state => state.game)
 	const dispatch = useDispatch()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -50,25 +69,9 @@ const App = () => {
 		setThemeMode(themeMode === 'dark' ? 'light' : 'dark')
 	}
 
-	const fetchData = async () => {
-		const playerTeam = await footballHeroesService.getPlayerTeam()
-		dispatch(setStrategy(+playerTeam.composition))
-		const playersId = [
-			...playerTeam.attackers.map(id => +id),
-			...playerTeam.defenders.map(id => +id),
-			...playerTeam.midfielders.map(id => +id),
-			+playerTeam.goalKeeper
-		]
-		const players = []
-		for (let id of playersId) {
-			players.push(await footballHeroesService.getFootballPlayer(id))
-		}
-		dispatch(setTeamPlayers(players))
-	}
-
 	useEffect(() => {
 		if (isReady) {
-			fetchData()
+			dispatch(fetchData())
 		}
 	}, [isReady])
 
@@ -82,6 +85,19 @@ const App = () => {
 						horizontal: 'center',
 					}}
 				>
+					<ReactCanvasConfetti
+						style={{
+							position: 'fixed',
+							pointerEvents: 'none',
+							width: '100%',
+							height: '100%',
+							zIndex: 999999,
+							top: 0,
+							left: 0
+						}}
+						fire={confetti.fire}
+						reset={confetti.reset}
+					/>
 					<Main drawerTeamWidth={drawerTeamWidth} open={teamDrawerOpen}>
 						<Navbar toggleTheme={toggleThemeMode}/>
 						{

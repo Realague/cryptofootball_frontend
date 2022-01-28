@@ -56,13 +56,16 @@ const MatchPage = () => {
 			tempOpponents.push(teamData)
 		}
 		setOpponents(tempOpponents)
+		if (tempOpponents.length > 0 && selectedOpponent === undefined) {
+			const composition = { }
+			for (const key of ['defenders', 'midfielders', 'attackers']) {
+				composition[key] = tempOpponents[0][key].map(c => ({ ...c }))
+			}
+			composition.goalkeeper = tempOpponents[0].goalkeeper
+			setSelectedOpponent(composition)
+		}
 	}
 
-	useEffect(() => {
-		if (opponents.length > 0 && selectedOpponent === undefined) {
-			selectOpponent(opponents[0])
-		}
-	}, [opponents])
 
 	if (team.strategy === undefined || team.players.length === 0) {
 		return (

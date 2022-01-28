@@ -11,9 +11,10 @@ import TeamFab from './components/TeamFab/TeamFab'
 import TeamDrawer from './layout/teamDrawer/TeamDrawer'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { fetchData, fireConffeti, setTeamDrawerState } from './features/gameSlice'
+import { fetchData, fireConffeti } from './features/gameSlice'
 import { SnackbarProvider } from 'notistack'
 import ReactCanvasConfetti from 'react-canvas-confetti'
+import { setTeamDrawerState } from './features/settingsSlice'
 
 
 function randomInRange(min, max) {
@@ -55,7 +56,8 @@ const App = () => {
 	const [themeMode, setThemeMode] = useState('dark')
 	const { isReady } = useSelector(state => state.settings)
 	const { account } = useSelector(state => state.user)
-	const { teamDrawerOpen, confetti } = useSelector(state => state.game)
+	const { confetti } = useSelector(state => state.game)
+	const { teamDrawerOpen } = useSelector(state => state.settings)
 	const dispatch = useDispatch()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 

@@ -2,11 +2,11 @@ import React, { useEffect } from 'react'
 import { useDrag } from 'react-dnd'
 import { Box } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { setIsDraggingPlayer, setTeamDrawerState } from '../../features/gameSlice'
+import { setIsDraggingPlayer, setTeamDrawerState } from '../../features/settingsSlice'
 
 const DraggableBox = ({ type, item, children }) => {
 	const dispatch = useDispatch()
-	const teamDrawerOpen = useSelector(state => state.game.teamDrawerOpen)
+	const teamDrawerOpen = useSelector(state => state.settings.teamDrawerOpen)
 
 	const [{ opacity, isDragging }, dragRef] = useDrag(
 		() => ({

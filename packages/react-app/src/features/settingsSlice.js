@@ -6,6 +6,8 @@ const initialState = {
 	isReady: false,
 	drawerMobileOpen: false,
 	transaction: undefined,
+	isDraggingPlayer: false,
+	teamDrawerOpen: false,
 }
 
 export const settingsSlice = createSlice({
@@ -21,13 +23,21 @@ export const settingsSlice = createSlice({
 		setTransaction: (state, action) => {
 			state.transaction = action.payload
 		},
+		setIsDraggingPlayer: (state, action) => {
+			state.isDraggingPlayer = action.payload
+		},
+		setTeamDrawerState: (state, action) => {
+			state.teamDrawerOpen = action.payload
+		}
 	},
 })
 
 export const {
 	setTransaction,
 	setReady,
-	changeDrawerMobile
+	changeDrawerMobile,
+	setIsDraggingPlayer,
+	setTeamDrawerState,
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

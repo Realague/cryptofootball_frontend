@@ -10,7 +10,8 @@ import DrawerContent from './components/DrawerContent'
 import { useTheme } from '@emotion/react'
 
 const TeamDrawer = ({ open, changeState }) => {
-	const { isDraggingPlayer, team } = useSelector(state => state.game)
+	const { team } = useSelector(state => state.game)
+	const { isDraggingPlayer } = useSelector(state => state.settings)
 	const dispatch = useDispatch()
 	const { enqueueSnackbar } = useSnackbar()
 	const [lastPlayerDropped, setLastPlayerDropped] = useState(undefined)

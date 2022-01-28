@@ -15,7 +15,8 @@ export const fetchData = createAsyncThunk('game/fetchData', async () => {
 		players.push(await footballHeroesService.getFootballPlayer(id))
 	}
 	let tempPlayers = []
-	for (let playerId of ids) {
+	const collectionIds = await footballHeroesService.getFootballPlayerList()
+	for (let playerId of collectionIds.map(i => +i)) {
 		tempPlayers.push(await footballHeroesService.getFootballPlayer(playerId))
 	}
 	const tempMarketItems = []
@@ -38,8 +39,6 @@ export const fetchData = createAsyncThunk('game/fetchData', async () => {
 })
 
 const initialState = {
-	isDraggingPlayer: false,
-	teamDrawerOpen: false,
 	team: {
 		strategy: undefined,
 		players: [],
@@ -88,12 +87,6 @@ export const gameSlice = createSlice({
 		removePlayerFromTeamById: (state, action) => {
 			state.team.players = state.team.players.filter(p => p.id !== action.payload)
 		},
-		setIsDraggingPlayer: (state, action) => {
-			state.isDraggingPlayer = action.payload
-		},
-		setTeamDrawerState: (state, action) => {
-			state.teamDrawerOpen = action.payload
-		}
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchData.fulfilled, (state, action) => {
@@ -106,8 +99,6 @@ export const gameSlice = createSlice({
 })
 
 export const {
-	setIsDraggingPlayer,
-	setTeamDrawerState,
 	setStrategy,
 	resetTeam,
 	addPlayerToTeam,

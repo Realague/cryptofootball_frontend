@@ -189,6 +189,8 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
         </LayoutContent>)
     })
 
+    console.log(player)
+
     const ImproveFrameContent = forwardRef(({children}, ref) => {
         const { collection } = useSelector(state => state.game)
         const compatiblePlayer = collection.filter(p =>
@@ -222,9 +224,37 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
 
     const TrainContent = forwardRef(({children}, ref) => (
         <LayoutContent name="Train" ref={ref}>
-            <Button fullWidth color="primary" variant="contained" onClick={() => footballHeroesService.trainPlayer(0, player.id)}>Easy (xp and rewards x1)</Button>
-            <Button fullWidth color="primary" variant="contained" onClick={() => footballHeroesService.trainPlayer(1, player.id)}>Medium (xp and rewards x1.5)</Button>
-            <Button fullWidth color="primary" variant="contained" onClick={() => footballHeroesService.trainPlayer(2, player.id)}>Hard (xp and rewards x2)</Button>
+            {
+                +player.currentStamina < 20 ?
+                    <Typography variant="subtitle1" color="error" textAlign="center">This player doesn't have enough stamina to train.</Typography>
+                    :
+                    <>
+                        <Button
+                            fullWidth
+                            color="primary"
+                            variant="contained"
+                            onClick={() => footballHeroesService.trainPlayer(0, player.id)}
+                        >
+                            Easy (xp and rewards x1)
+                        </Button>
+                        <Button
+                            fullWidth
+                            color="primary"
+                            variant="contained"
+                            onClick={() => footballHeroesService.trainPlayer(1, player.id)}
+                        >
+                            Medium (xp and rewards x1.5)
+                        </Button>
+                        <Button
+                            fullWidth
+                            color="primary"
+                            variant="contained"
+                            onClick={() => footballHeroesService.trainPlayer(2, player.id)}
+                        >
+                            Hard (xp and rewards x2)
+                        </Button>
+                    </>
+            }
         </LayoutContent>
     ))
 

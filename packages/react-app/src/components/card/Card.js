@@ -100,7 +100,7 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 						style={{ color: 'yellow', width: '20px' }}/>
 					<StaminaProgressBar
 						variant="determinate"
-						value={+stamina}
+						value={+player.currentStamina}
 					/>
 				</Stack>
 			</Stack>

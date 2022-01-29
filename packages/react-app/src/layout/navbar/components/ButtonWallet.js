@@ -27,9 +27,10 @@ const WalletButton = () => {
 	//const {isReady} = useSelector(state => state.game)
 	const dispatch = useDispatch()
 
-	function saveAccountInfo(GBPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId) {
+	function saveAccountInfo(GBPrice, GBExactPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId) {
 		dispatch(updateAccount({
 			GBPrice: GBPrice,
+			GBExactPrice: GBExactPrice,
 			rewards: rewards,
 			claimFee: claimFee,
 			GBBalance: GBBalance,
@@ -41,11 +42,12 @@ const WalletButton = () => {
 	async function readOnChainData() {
 		let BUSDBalance = Web3.utils.fromWei(await footballHeroesService.getBusdBalance())
 		let GBBalance = Web3.utils.fromWei(await footballHeroesService.getGbBalance())
+		let GBExactPrice = Web3.utils.fromWei(await footballHeroesService.getGBExactPrice())
 		let GBPrice = await footballHeroesService.getFootballTokenPrice()
 		let claimFee = await footballHeroesService.getClaimFee()
 		let rewards = await footballHeroesService.getRewards()
 		let playersId = await footballHeroesService.getFootballPlayerList()
-		saveAccountInfo(GBPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId)
+		saveAccountInfo(GBPrice, GBExactPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId)
 	}
 
 	async function fetchAccount() {

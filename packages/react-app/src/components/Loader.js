@@ -18,7 +18,7 @@ const Loader = () => {
 	const { transaction } = useSelector(state => state.settings)
 
 	useEffect(() => {
-		if (transaction !== undefined && transaction.transaction.on && transactionState === '') {
+		if (transaction !== undefined && transaction.transaction.on) {
 			callBack()
 		}
 	}, [transaction])
@@ -38,8 +38,8 @@ const Loader = () => {
 				if (receipt.events.TrainingDone.returnValues.won === true) {
 					dispatch(fireConffeti())
 				}
-			} else if (receipt.events[6]) {
-				getPlayer(parseInt(receipt.events[6].raw.topics[2], 16))
+			} else if (receipt.events.NewPlayer) {
+				getPlayer(receipt.events.NewPlayer.returnValues.playerId)
 			} else {
 				setTransactionState('success')
 			}

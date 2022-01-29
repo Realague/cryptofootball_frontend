@@ -14,16 +14,16 @@ import { FaHamburger } from 'react-icons/all'
 import TokenImage from '../../images/token_black.png'
 
 const Navbar = ({ toggleTheme }) => {
-	const { GBPrice, account } = useSelector(state => state.user)
+	const { GBExactPrice, account } = useSelector(state => state.user)
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const dispatch = useDispatch()
 
 	const menu = [
-		{ name: 'Home', path: '' },
+		//{ name: 'Home', path: '' },
 		{ name: 'Collection', path: 'collection' },
 		{ name: 'Match', path: 'match' },
 		{ name: 'Marketplace', path: 'marketplace' },
-		{ name: 'Claim Tokens', path: 'claims' },
+		//{ name: 'Claim Tokens', path: 'claims' },
 	]
 
 	return (
@@ -45,7 +45,7 @@ const Navbar = ({ toggleTheme }) => {
 						<FaHamburger/>
 					</IconButton>
 					}
-					<img src={ProjectLogo} style={{ height: 42, width: 42, marginRight: 15, borderRadius: '50%' }}/>
+					<img src={ProjectLogo} style={{ height: 42, width: 42, marginRight: 15, borderRadius: '50%' }} alt=""/>
 					{
 						!isMobile &&
 						menu.map(i => (
@@ -61,7 +61,7 @@ const Navbar = ({ toggleTheme }) => {
 					<WalletButton/>
 					<Button onClick={toggleTheme} variant="contained" color="secondary">
 						<img style={{ width: 25, height: 25, marginRight: '5px' }} src={TokenImage} alt="token"/>
-						{parseFloat(GBPrice).toFixed(2)}
+						{parseFloat(GBExactPrice).toFixed(2)}
 					</Button>
 				</Stack>
 			</Toolbar>

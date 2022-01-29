@@ -3,7 +3,7 @@ import React, {createRef, forwardRef, useEffect, useState} from 'react'
 import {
     Box,
     Divider,
-    Fade, Grid, IconButton,
+    Fade, Grid,
     Input,
     InputAdornment,
     Modal,
@@ -16,9 +16,7 @@ import Button from '@mui/material/Button'
 import {useForm} from 'react-hook-form'
 import {useDispatch, useSelector} from 'react-redux'
 import footballHeroesService from '../../../services/FootballPlayerService'
-import Frame from "../../../enums/Frame";
-import Position from "../../../enums/Position";
-import {Done, Remove} from "@mui/icons-material";
+import {Done} from "@mui/icons-material";
 import {useTheme} from "@emotion/react";
 import PlayerListItem from "../../../layout/teamDrawer/components/PlayerListItem";
 import {addPlayerToTeam, removePlayerFromTeamById} from "../../../features/gameSlice";

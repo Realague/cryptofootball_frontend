@@ -68,13 +68,9 @@ const AccountInfo = () => {
 			setAmountToClaim(realAmount)
 			setOpen(true)
 		} else {
-			//claimRewards();
+			footballHeroesService.claimRewards()
 		}
 	}
-
-	/*const claimRewards = () => {
-        setState({transaction: GameContract.getContract().methods.claimReward().send({from: props.account})});
-    }*/
 
 	return (
 		<>
@@ -110,8 +106,9 @@ const AccountInfo = () => {
 						direction="row"
 						alignItems="center"
 						spacing={1}
+						hidden={+claimFee === 0}
 					>
-						<Typography variant="subtitle2">
+						<Typography variant="subtitle2" >
                             Claim fee:
 						</Typography>
 						<Typography variant="subtitle1">

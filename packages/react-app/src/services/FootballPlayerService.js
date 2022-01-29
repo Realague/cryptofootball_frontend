@@ -134,12 +134,20 @@ class FootballHeroesService {
         return await this.gameContract.methods.getClaimCooldown().call();
     }
 
+    claimRewards() {
+        store.dispatch({transaction: this.gameContract.methods.claimReward().send()});
+    }
+
     async getRewards() {
         return await this.gameContract.methods.getRewards().call();
     }
 
     async isLevelUpOpen() {
         return await this.gameContract.methods.levelUpOpen().call();
+    }
+
+    async getGBExactPrice() {
+        return await this.footballPlayersContract.methods.getExactPrice().call()
     }
 
     async isTrainingOpen() {
@@ -208,9 +216,7 @@ class FootballHeroesService {
     }
 
     async getListingFees() {
-        //TODO replace
-        //return await MarketplaceContract.methods.listingFees().call();
-        return 5;
+        return await this.marketplaceContract.methods.listingFees().call();
     }
 
     async mint() {
@@ -281,7 +287,6 @@ class FootballHeroesService {
     }
 
     async upgradeFrame(playerId, playerToBurn) {
-
         let BusdAllowance = await this.getBusdAllowance(addresses.Game)
         if (parseInt(Web3.utils.fromWei(BusdAllowance)) < 30) {
             await this.approveBusd(addresses.Game)

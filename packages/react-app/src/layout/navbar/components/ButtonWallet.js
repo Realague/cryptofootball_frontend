@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { login, updateAccount } from '../../../features/userSlice'
 import useWeb3Modal from '../../../hooks/useWeb3Modal'
-import { setReady } from '../../../features/settingsSlice'
+import {setContractState, setReady} from '../../../features/settingsSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
 
 const networkData =
@@ -50,6 +50,23 @@ const WalletButton = () => {
 		saveAccountInfo(GBPrice, GBExactPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId)
 	}
 
+	async function getContractState() {
+		let isMarketplaceOpen = await footballHeroesService.isMarketplaceOpen()
+		let isMintOpen = await footballHeroesService.isMintOpen()
+		let isUpgradeFrameOpen = await footballHeroesService.isUpgradeFrameOpen()
+		let isLevelUpOpen = await footballHeroesService.isLevelUpOpen()
+		let isTrainingOpen = await footballHeroesService.isTrainingOpen()
+		let isMatchOpen = await footballHeroesService.isFootballMatchOpen()
+		dispatch(setContractState({
+			isMarketplaceOpen: isMarketplaceOpen,
+			isMintOpen: isMintOpen,
+			isLevelUpOpen: isLevelUpOpen,
+			isTrainingOpen: isTrainingOpen,
+			isMatchOpen: isMatchOpen,
+			isUpgradeFrameOpen: isUpgradeFrameOpen
+		}))
+	}
+
 	async function fetchAccount() {
 		try {
 			dispatch(setReady(false))
@@ -85,6 +102,7 @@ const WalletButton = () => {
 			footballHeroesService.init(provider, accounts[0])
 			dispatch(login(accounts[0]))
 			await readOnChainData()
+			await getContractState()
 		} catch (err) {
 			setRendered('')
 			logoutOfWeb3Modal()

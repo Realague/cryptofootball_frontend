@@ -25,6 +25,7 @@ import Strategy from "../../../enums/Strategy";
 
 const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, mobile}) => {
     const {account, GBBalance, GBPrice} = useSelector(state => state.user)
+    const {isMarketplaceOpen, isMintOpen, isLevelUpOpen, isTrainingOpen, isMatchOpen, isUpgradeFrameOpen} = useSelector(state => state.settings)
     const {team} = useSelector(state => state.game)
     const [action, setAction] = useState(undefined)
     const [maxGBToConsume, setMaxGBToConsume] = useState(0)
@@ -81,15 +82,15 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                 </Button>
             }
 
-            <Button hidden={marketItem !== undefined} disabled={+player.score === 100} onClick={() => chooseAction('level-up')} fullWidth color="primary"
+            <Button hidden={marketItem !== undefined} disabled={+player.score === 100 || !isLevelUpOpen} onClick={() => chooseAction('level-up')} fullWidth color="primary"
                     variant="contained">Level
                 Up</Button>
-            <Button hidden={marketItem !== undefined} disabled={+player.frame === 4} onClick={() => chooseAction('improve-frame')} fullWidth
+            <Button hidden={marketItem !== undefined} disabled={+player.frame === 4 || !isUpgradeFrameOpen} onClick={() => chooseAction('improve-frame')} fullWidth
                     color="primary" variant="contained">Improve
                 Frame</Button>
-            <Button hidden={marketItem !== undefined} disabled={+player.stamina < 20} onClick={() => chooseAction('train')} fullWidth color="primary"
+            <Button hidden={marketItem !== undefined} disabled={+player.stamina < 20 || !isTrainingOpen} onClick={() => chooseAction('train')} fullWidth color="primary"
                     variant="contained">Train</Button>
-            <Button hidden={marketItem !== undefined} onClick={() => chooseAction('sell')} fullWidth color="secondary"
+            <Button hidden={marketItem !== undefined} disabled={!isMarketplaceOpen} onClick={() => chooseAction('sell')} fullWidth color="secondary"
                     variant="contained"
                     my={4}>Sell</Button>
             <Button hidden={marketItem === undefined || marketItem.seller !== account}

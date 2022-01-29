@@ -114,10 +114,6 @@ class FootballHeroesService {
         return await this.footballPlayersContract.methods.mintFees().call();
     }
 
-    async isMintOpen() {
-        return await this.footballPlayersContract.methods.mintOpen().call();
-    }
-
     async marketplaceIsApproved() {
         return this.footballPlayersContract.methods.isApprovedForAll(this.address, addresses.Marketplace).call();
     }
@@ -131,35 +127,47 @@ class FootballHeroesService {
     }
 
     async getClaimCooldown() {
-        return await this.gameContract.methods.getClaimCooldown().call();
+        return await this.gameContract.methods.getClaimCooldown().call()
     }
 
     claimRewards() {
-        store.dispatch({transaction: this.gameContract.methods.claimReward().send()});
+        store.dispatch({transaction: this.gameContract.methods.claimReward().send()})
     }
 
     async getRewards() {
-        return await this.gameContract.methods.getRewards().call();
-    }
-
-    async isLevelUpOpen() {
-        return await this.gameContract.methods.levelUpOpen().call();
+        return await this.gameContract.methods.getRewards().call()
     }
 
     async getGBExactPrice() {
         return await this.footballPlayersContract.methods.getExactPrice().call()
     }
 
+    async isLevelUpOpen() {
+        return await this.footballPlayersContract.methods.levelUpOpen().call()
+    }
+
+    async isMintOpen() {
+        return await this.footballPlayersContract.methods.mintOpen().call()
+    }
+
+    async isMarketplaceOpen() {
+        return await this.marketplaceContract.methods.marketplaceOpen().call()
+    }
+
     async isTrainingOpen() {
-        return await this.gameContract.methods.trainingOpen().call();
+        return await this.gameContract.methods.trainingOpen().call()
+    }
+
+    async isFootballMatchOpen() {
+        return await this.gameContract.methods.isMatchOpen().call()
+    }
+
+    async isUpgradeFrameOpen() {
+        return await this.footballPlayersContract.methods.upgradeFrameOpen().call()
     }
 
     async footballPlayerIsApproved(consumer) {
         return await this.footballPlayersContract.methods.isApprovedForAll(this.address, consumer).call()
-    }
-
-    async isUpgradeFrameOpen() {
-        return await this.gameContract.methods.upgradeFrameOpen().call();
     }
 
     async getRemainingClaimCooldown() {

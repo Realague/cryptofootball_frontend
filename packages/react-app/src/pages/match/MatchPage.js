@@ -12,6 +12,7 @@ import { useTheme } from '@emotion/react'
 
 const MatchPage = () => {
 	const { team } = useSelector(state => state.game)
+	const { teamDrawerOpen } = useSelector(state => state.settings)
 	const [opponents, setOpponents] = useState([])
 	const [myComposition, setMyComposition] = useState(undefined)
 	const [selectedOpponent, setSelectedOpponent] = useState(undefined)
@@ -123,7 +124,7 @@ const MatchPage = () => {
 	return (
 		<Stack justifyContent="center" alignItems="center" width="100%" height="500px" p={2}>
 			<Stack direction="row" width={isMobile ? '90%' : '100%' } height="100%" justifyContent={isMobile ? 'center' : ''}>
-				<Grid hidden={isMobile} container width="60%" sx={{
+				<Grid height={teamDrawerOpen ? '70%' : '100%'} hidden={isMobile} container width="60%" sx={{
 					background: 'url("/stadium.png")',
 					backgroundSize: '100% 100%',
 					backgroundRepeat: 'no-repeat',

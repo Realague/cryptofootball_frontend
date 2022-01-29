@@ -22,9 +22,11 @@ const AccountInfo = () => {
 	const [amountToClaim, setAmountToClaim] = useState(0)
 	const [seconds, setSeconds] = useState(0)
 	const theme = useTheme()
+	const [hasStarted, setHasStarted] = useState(false)
 
 	useEffect(() => {
-		if (account !== '' && seconds === 0) {
+		if (seconds === 0 && !hasStarted) {
+			setHasStarted(true)
 			setRewardTimer()
 		}
 		if (seconds > 0) {
@@ -37,8 +39,8 @@ const AccountInfo = () => {
 	}, [seconds])
 
 	const setRewardTimer = async () => {
-		let timer = Math.floor(await footballHeroesService.getRemainingClaimCooldown() / 1000)
-		setSeconds(timer)
+		let seconds = Math.floor(await footballHeroesService.getRemainingClaimCooldown() / 1000)
+		setSeconds(seconds)
 	}
 
 	const secondsToTime = (secs) => {
@@ -116,7 +118,7 @@ const AccountInfo = () => {
 						</Typography>
 					</Stack>
 					{seconds > 0 ?
-						<Typography>Next claim in {`${time.h}h${time.m}m${time.s}s`}</Typography>
+						<Typography hidden={seconds === 0}>Next claim in {`${time.h}h${time.m}m${time.s}s`}</Typography>
 						: rewards !== '0' ?
 							<Button variant="contained" onClick={checkClaimRewards}>Claim</Button>
 							: ''

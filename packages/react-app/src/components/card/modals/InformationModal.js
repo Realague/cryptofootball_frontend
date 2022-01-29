@@ -187,8 +187,6 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
         </LayoutContent>)
     })
 
-    console.log(player)
-
     const ImproveFrameContent = forwardRef(({children}, ref) => {
         const { collection } = useSelector(state => state.game)
         const compatiblePlayer = collection.filter(p =>

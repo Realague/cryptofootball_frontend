@@ -31,7 +31,6 @@ const Loader = () => {
 		}).on('receipt', function (receipt) {
 			console.log('recepeit', receipt)
 			if (receipt.events.TrainingDone) {
-				console.log(receipt.events.TrainingDone)
 				setTransactionState('trainingDone')
 				setRewards(receipt.events.TrainingDone.returnValues)
 				dispatch(fetchData())
@@ -40,6 +39,13 @@ const Loader = () => {
 				}
 			} else if (receipt.events.NewPlayer) {
 				getPlayer(receipt.events.NewPlayer.returnValues.playerId)
+				dispatch(fireConffeti())
+				dispatch(fetchData())
+			}  else if (receipt.events.LevelUp) {
+				setRewards(receipt.events.LevelUp.returnValues)
+				setTransactionState('levelUp')
+				dispatch(fireConffeti())
+				dispatch(fetchData())
 			} else {
 				setTransactionState('success')
 			}
@@ -59,6 +65,8 @@ const Loader = () => {
 			setTransactionState('')
 		}
 	}
+
+	console.log('rewards', rewards)
 
 	return (
 		<>
@@ -90,8 +98,21 @@ const Loader = () => {
                             </>,
 							'mint':
                             <>
-                            	<Card player={player} marketItem={undefined}/>
-                            	<Button variant="primary" onClick={onHide}>Collect</Button>
+                            	<Stack alignItems="center" spacing={2}>
+                            		<Typography variant="h4">Mint result</Typography>
+                            		<Divider/>
+                            		<Card player={player} marketItem={undefined}/>
+                            		<Divider/>
+                            		<Button
+                            			sx={{ mt: 2 }}
+                            			variant="contained"
+                            			color="secondary"
+                            			fullWidth
+                            			onClick={onHide}
+                            		>
+										Collect
+                            		</Button>
+                            	</Stack>
                             </>,
 							'trainingDone':
                             <Stack alignItems="center" spacing={2}>
@@ -124,7 +145,35 @@ const Loader = () => {
                             	>
 									Collect
                             	</Button>
-                            </Stack>
+                            </Stack>,
+							'levelUp':
+								<Stack alignItems="center" spacing={2}>
+									<Typography variant="h4">Level up results</Typography>
+									<Divider/>
+									<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+										<Typography variant="subtitle1">Level up Results: </Typography>
+										<Typography
+											color="secondary"
+											variant="subtitle2"
+										>
+											{ rewards.levelGain }
+										</Typography>
+									</Stack>
+									<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+										<Typography variant="subtitle1">Xp Gained : </Typography>
+										<Typography variant="subtitle2">{rewards.xpGain}</Typography>
+									</Stack>
+									<Divider/>
+									<Button
+										sx={{ mt: 2 }}
+										variant="contained"
+										color="secondary"
+										fullWidth
+										onClick={onHide}
+									>
+										Collect
+									</Button>
+								</Stack>
 						}[transactionState]
 					}
 					<Button

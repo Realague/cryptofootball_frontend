@@ -231,7 +231,7 @@ const FootballPlayerCollection = () => {
 					].map((c, i) => (
 						c === 'Mint' ?
 							<Box key={i} p={2} display="flex" alignItems="center" justifyContent="center">
-								<Button fullWidth variant="contained" onClick={() => setTabValue(0)}>Mint</Button>
+								<MintButton>Mint</MintButton>
 							</Box>
 							:
 							<Tab

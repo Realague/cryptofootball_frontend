@@ -6,11 +6,9 @@ import footballHeroesService from '../services/FootballPlayerService'
 
 const MintButton = () => {
 	return (
-		<Box className="navMenu" style={{ clear: 'both' }}>
-			<Button sx={{ margin: '10px' }} variant="contained" color="primary" className="float-left" onClick={() => footballHeroesService.mint()}>
+		<Button fullWidth variant="contained" color="primary" onClick={() => footballHeroesService.mint()}>
                 Mint
-			</Button>
-		</Box>
+		</Button>
 	)
 }
 

@@ -29,7 +29,6 @@ const Loader = () => {
 		transaction.transaction.on('transactionHash', function () {
 			setTransactionState('loading')
 		}).on('receipt', function (receipt) {
-			console.log('recepeit', receipt)
 			if (receipt.events.TrainingDone) {
 				setTransactionState('trainingDone')
 				setRewards(receipt.events.TrainingDone.returnValues)

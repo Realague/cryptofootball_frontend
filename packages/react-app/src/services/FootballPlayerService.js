@@ -279,26 +279,26 @@ class FootballHeroesService {
     }
 
     async payToLevelUp(playerId, amount) {
-        let GBAllowance = await this.getGbAllowance(addresses.Game)
+        let GBAllowance = await this.getGbAllowance(addresses.FootballPlayers)
         if (parseInt(Web3.utils.fromWei(GBAllowance)) < amount * store.getState().user.GBPrice) {
-            await this.approveGb(addresses.Game)
+            await this.approveGb(addresses.FootballPlayers)
         }
         store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.payToLevelUp(playerId, amount).send()}))
     }
 
     async upgradeFrame(playerId, playerToBurn) {
-        let BusdAllowance = await this.getBusdAllowance(addresses.Game)
+        let BusdAllowance = await this.getBusdAllowance(addresses.FootballPlayers)
         if (parseInt(Web3.utils.fromWei(BusdAllowance)) < 30) {
-            await this.approveBusd(addresses.Game)
+            await this.approveBusd(addresses.FootballPlayers)
         }
         //TODO check  real amount
-        let GBAllowance = await this.getGbAllowance(addresses.Game)
+        let GBAllowance = await this.getGbAllowance(addresses.FootballPlayers)
         if (parseInt(Web3.utils.fromWei(GBAllowance)) < 30 * store.getState().user.GBPrice) {
-            await this.approveGb(addresses.Game)
+            await this.approveGb(addresses.FootballPlayers)
         }
-        let isApproved = await this.footballPlayerIsApproved(addresses.Game)
+        let isApproved = await this.footballPlayerIsApproved(addresses.FootballPlayers)
         if (!isApproved) {
-            await this.approveFootballPlayer(addresses.Game)
+            await this.approveFootballPlayer(addresses.FootballPlayers)
         }
         store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.upgradeFrame(playerId, playerToBurn).send()}))
     }

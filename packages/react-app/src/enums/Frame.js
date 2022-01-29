@@ -1,5 +1,5 @@
 class Frame {
-    static None = new Frame(0, 'None', {
+    static Iron = new Frame(0, 'Iron', {
         light: '#646464',
         main: '#5d5d5d',
         dark: '#3c3c3c',
@@ -24,7 +24,7 @@ class Frame {
         main: '#2cb4ca',
         dark: '#2cb4ca',
     })
-    static TierList = [Frame.None, Frame.Bronze, Frame.Silver, Frame.Gold, Frame.Diamond]
+    static TierList = [Frame.Iron, Frame.Bronze, Frame.Silver, Frame.Gold, Frame.Diamond]
 
     constructor(id, name, color) {
         this.id = id;

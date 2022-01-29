@@ -28,7 +28,8 @@ const Loader = () => {
 		setShowLoader(true)
 		transaction.transaction.on('transactionHash', function () {
 			setTransactionState('loading')
-		}).on('receipt', function (receipt) {
+		}).on('receipt', async function (receipt) {
+			console.log('receipt', receipt)
 			if (receipt.events.TrainingDone) {
 				setTransactionState('trainingDone')
 				setRewards(receipt.events.TrainingDone.returnValues)
@@ -36,8 +37,12 @@ const Loader = () => {
 				if (receipt.events.TrainingDone.returnValues.won === true) {
 					dispatch(fireConffeti())
 				}
+			} else if (receipt.events.UpgradeFrame) {
+				getPlayer(receipt.events.UpgradeFrame.returnValues.playerId, 'improveFrame')
+				dispatch(fireConffeti())
+				dispatch(fetchData())
 			} else if (receipt.events.NewPlayer) {
-				getPlayer(receipt.events.NewPlayer.returnValues.playerId)
+				getPlayer(receipt.events.NewPlayer.returnValues.playerId, 'mint')
 				dispatch(fireConffeti())
 				dispatch(fetchData())
 			}  else if (receipt.events.LevelUp) {
@@ -48,14 +53,15 @@ const Loader = () => {
 			} else {
 				setTransactionState('success')
 			}
-		}).on('error', function () {
+		}).on('error', function (e) {
+			console.log('error', e)
 			setTransactionState('error')
 		})
 	}
 
-	const getPlayer = async (playerId) => {
+	const getPlayer = async (playerId, state = 'mint') => {
 		setPlayer(await footballHeroesService.getFootballPlayer(playerId))
-		setTransactionState('mint')
+		setTransactionState(state)
 	}
 
 	const onHide = () => {
@@ -113,6 +119,22 @@ const Loader = () => {
                             		</Button>
                             	</Stack>
                             </>,
+							'improveFrame':
+								<Stack alignItems="center" spacing={2}>
+									<Typography variant="h4">Imprve frame result</Typography>
+									<Divider/>
+									<Card player={player} marketItem={undefined} />
+									<Divider/>
+									<Button
+										sx={{ mt: 2 }}
+										variant="contained"
+										color="secondary"
+										fullWidth
+										onClick={onHide}
+									>
+										Collect
+									</Button>
+								</Stack>,
 							'trainingDone':
                             <Stack alignItems="center" spacing={2}>
                             	<Typography variant="h4">Training result</Typography>

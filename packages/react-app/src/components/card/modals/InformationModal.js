@@ -195,6 +195,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
             && p.frame == player.frame
             && p.position == player.position
             && p.id != player.id
+            && p.isAvailable === true
         )
 
         return (

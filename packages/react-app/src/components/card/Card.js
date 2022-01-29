@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Chip, Grid, Stack, Typography } from '@mui/material'
+import { Box, Chip, Grid, Popover, Stack, Typography } from '@mui/material'
 import InformationModal from './modals/InformationModal'
 import Frame from '../../enums/Frame'
 import Position from '../../enums/Position'
@@ -13,6 +13,8 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 	const { team } = useSelector(state => state.game)
 	const [stamina, setStamina] = useState(0)
 	const [openedModal, setOpenedModal] = useState(undefined)
+	const [anchorElExperience, setAnchorElExperience] = useState(undefined)
+	const [anchorElStamina, setAnchorElStamina] = useState(undefined)
 
 	useEffect(() => {
 		if (!isNpc) {
@@ -90,18 +92,73 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 				<Stack hidden={isNpc} direction={mobile ? 'column' : 'row'} width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
 					<Typography hidden={mobile} width="20px" variant="subtitle2">XP</Typography>
 					<ExperienceProgressBar
+						onMouseEnter={(event) => {
+							setAnchorElExperience(event.currentTarget)
+						}}
+						onMouseLeave={() => {
+							setAnchorElExperience(undefined)
+						}}
 						variant="determinate"
 						value={(player.xp / footballHeroesService.getXpRequireToLvlUp(player.score))  * 100}
 					/>
+					<Popover
+						id="mouse-over-popover"
+						sx={{
+							pointerEvents: 'none',
+						}}
+						open={Boolean(anchorElExperience)}
+						anchorEl={anchorElExperience}
+						anchorOrigin={{
+							vertical: 'bottom',
+							horizontal: 'left',
+						}}
+						transformOrigin={{
+							vertical: 'top',
+							horizontal: 'left',
+						}}
+						onClose={() => setAnchorElExperience(undefined)}
+						disableRestoreFocus
+					>
+						<Typography sx={{ p: 1 }}>
+							{+player.xp} / {footballHeroesService.getXpRequireToLvlUp(player.score) * 100}
+						</Typography>
+					</Popover>
 				</Stack>
 				<Stack hidden={isNpc} direction={mobile ? 'column' : 'row'} width="80%" alignItems="center" justifyContent="space-between" spacing={1}>
 					<BsFillLightningChargeFill
 						hidden={mobile}
 						style={{ color: 'yellow', width: '20px' }}/>
 					<StaminaProgressBar
+						onMouseEnter={(event) => {
+							setAnchorElStamina(event.currentTarget)
+						}}
+						onMouseLeave={() => {
+							setAnchorElStamina(undefined)
+						}}
 						variant="determinate"
 						value={+player.currentStamina}
 					/>
+					<Popover
+						id="mouse-over-popover"
+						sx={{
+							pointerEvents: 'none',
+						}}
+						open={Boolean(anchorElStamina)}
+						anchorEl={anchorElStamina}
+						anchorOrigin={{
+							vertical: 'bottom',
+							horizontal: 'left',
+						}}
+						transformOrigin={{
+							vertical: 'top',
+							horizontal: 'left',
+						}}
+						onClose={() => setAnchorElStamina(undefined)}
+						disableRestoreFocus
+					>
+						<Typography sx={{ p: 1 }}>{+player.currentStamina} / 100</Typography>
+					</Popover>
+
 				</Stack>
 			</Stack>
 			{

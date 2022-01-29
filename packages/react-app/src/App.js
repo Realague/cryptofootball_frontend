@@ -15,6 +15,7 @@ import { fetchData, fireConffeti } from './features/gameSlice'
 import { SnackbarProvider } from 'notistack'
 import ReactCanvasConfetti from 'react-canvas-confetti'
 import { setTeamDrawerState } from './features/settingsSlice'
+import Box from '@mui/material/Box'
 
 
 function randomInRange(min, max) {
@@ -124,7 +125,14 @@ const App = () => {
 							isReady ?
 								<Outlet/>
 								:
-								<CircularProgress/>
+								<Box sx={{
+									height: '100vh',
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center'
+								}}>
+									<CircularProgress color='secondary'/>
+								</Box>
 						}
 						{
 							account &&

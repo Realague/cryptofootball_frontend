@@ -87,6 +87,14 @@ export const gameSlice = createSlice({
 		removePlayerFromTeamById: (state, action) => {
 			state.team.players = state.team.players.filter(p => p.id !== action.payload)
 		},
+		updatePlayerInCollection: (state, action) => {
+			state.team.players = state.team.players.map(p => {
+				if (p.id === action.payload.id) {
+					return action.player
+				}
+				return p
+			})
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchData.fulfilled, (state, action) => {
@@ -109,6 +117,7 @@ export const {
 	setPlayersForSale,
 	fireConffeti,
 	stopConffeti,
+	updatePlayerInCollection,
 } = gameSlice.actions
 
 export default gameSlice.reducer

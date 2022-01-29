@@ -6,7 +6,7 @@ import { Modal, Button, Stack, Typography, Divider } from '@mui/material'
 import { darkModal } from '../css/style'
 import { useDispatch, useSelector } from 'react-redux'
 import footballHeroesService from '../services/FootballPlayerService'
-import { fetchData, fireConffeti } from '../features/gameSlice'
+import { fetchData, fireConffeti, updatePlayerInCollection } from '../features/gameSlice'
 
 const Loader = () => {
 	const [transactionState, setTransactionState] = useState('')

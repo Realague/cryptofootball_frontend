@@ -1,5 +1,16 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "storageAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -16,37 +27,6 @@
       }
     ],
     "name": "ClaimReward",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "playerId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "xpGain",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "levelGain",
-        "type": "uint256"
-      }
-    ],
-    "name": "LevelUp",
     "type": "event"
   },
   {
@@ -72,15 +52,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "opponentGoal",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "teamGoal",
-        "type": "uint256"
+        "internalType": "int256",
+        "name": "scoreDifference",
+        "type": "int256"
       }
     ],
     "name": "MatchResult",
@@ -140,25 +114,6 @@
       }
     ],
     "name": "TrainingDone",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "playerId",
-        "type": "uint256"
-      }
-    ],
-    "name": "UpgradeFrame",
     "type": "event"
   },
   {
@@ -306,426 +261,6 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "playerId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "payToLevelUp",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "opponentTeamId",
-        "type": "uint256"
-      }
-    ],
-    "name": "playMatch",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "refreshOpponents",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_claimCooldown",
-        "type": "uint256"
-      }
-    ],
-    "name": "setClaimCooldown",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_claimFeeDecreaseRatePerDay",
-        "type": "uint256"
-      }
-    ],
-    "name": "setClaimFeeDecreaseRatePerDay",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_claimFeePercentage",
-        "type": "uint256"
-      }
-    ],
-    "name": "setClaimFeePercentage",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "attackerNb",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "midfielderNb",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "defenderNb",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Composition[]",
-        "name": "_compositions",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "setCompositions",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "_levelUpOpen",
-        "type": "bool"
-      }
-    ],
-    "name": "setLevelUpOpen",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "isOpen",
-        "type": "bool"
-      }
-    ],
-    "name": "setMatchOpen",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_pairAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setPairAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_playerContract",
-        "type": "address"
-      }
-    ],
-    "name": "setPlayerContract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "composition",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "goalKeeper",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "attackers",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "midfielders",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "defenders",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "currentMatchAvailable",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "lastMatchPlayed",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct FootballTeam",
-        "name": "footballTeam",
-        "type": "tuple"
-      }
-    ],
-    "name": "setPlayerTeam",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_rewardPoolAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setRewardPoolAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_staminaMax",
-        "type": "uint256"
-      }
-    ],
-    "name": "setStaminaMax",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "_staminaRegenPerDay",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "setStaminaRegenPerDay",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "id",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "difficulty",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "baseWinrate",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rewards",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "xpGain",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct TrainingGround[]",
-        "name": "_trainingGrounds",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "setTrainingGround",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "_trainingOpen",
-        "type": "bool"
-      }
-    ],
-    "name": "setTrainingOpen",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_upgradeFrameFee",
-        "type": "uint256"
-      }
-    ],
-    "name": "setUpgradeFrameFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "_upgradeFrameOpen",
-        "type": "bool"
-      }
-    ],
-    "name": "setUpgradeFrameOpen",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_xpPerDollar",
-        "type": "uint256"
-      }
-    ],
-    "name": "setXpPerDollar",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "trainingGroundId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "playerId",
-        "type": "uint256"
-      }
-    ],
-    "name": "trainingGround",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "playerId1",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "playerId2",
-        "type": "uint256"
-      }
-    ],
-    "name": "upgradeFrame",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      }
-    ],
-    "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "storageAddress",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
   },
   {
     "inputs": [],
@@ -1126,19 +661,6 @@
   },
   {
     "inputs": [],
-    "name": "levelUpOpen",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "owner",
     "outputs": [
       {
@@ -1148,6 +670,26 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "opponentTeamId",
+        "type": "uint256"
+      }
+    ],
+    "name": "playMatch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "refreshOpponents",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -1165,6 +707,255 @@
   },
   {
     "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_claimCooldown",
+        "type": "uint256"
+      }
+    ],
+    "name": "setClaimCooldown",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_claimFeeDecreaseRatePerDay",
+        "type": "uint256"
+      }
+    ],
+    "name": "setClaimFeeDecreaseRatePerDay",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_claimFeePercentage",
+        "type": "uint256"
+      }
+    ],
+    "name": "setClaimFeePercentage",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "attackerNb",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "midfielderNb",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "defenderNb",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Composition[]",
+        "name": "_compositions",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setCompositions",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "isOpen",
+        "type": "bool"
+      }
+    ],
+    "name": "setMatchOpen",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_pairAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setPairAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "composition",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "goalKeeper",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "attackers",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "midfielders",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "defenders",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "currentMatchAvailable",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lastMatchPlayed",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct FootballTeam",
+        "name": "footballTeam",
+        "type": "tuple"
+      }
+    ],
+    "name": "setPlayerTeam",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_staminaMax",
+        "type": "uint256"
+      }
+    ],
+    "name": "setStaminaMax",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "_staminaRegenPerDay",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "setStaminaRegenPerDay",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "difficulty",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "baseWinrate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewards",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpGain",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct TrainingGround[]",
+        "name": "_trainingGrounds",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setTrainingGround",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "_trainingOpen",
+        "type": "bool"
+      }
+    ],
+    "name": "setTrainingOpen",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "trainingGroundId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "playerId",
+        "type": "uint256"
+      }
+    ],
+    "name": "trainingGround",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "trainingOpen",
     "outputs": [
       {
@@ -1177,16 +968,29 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "upgradeFrameOpen",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
       }
     ],
-    "stateMutability": "view",
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

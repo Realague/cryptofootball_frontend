@@ -277,7 +277,7 @@ class FootballHeroesService {
         if (parseInt(Web3.utils.fromWei(GBAllowance)) < amount * store.getState().user.GBPrice) {
             await this.approveGb(addresses.Game)
         }
-        store.dispatch(setTransaction({transaction: this.gameContract.methods.payToLevelUp(playerId, amount).send()}))
+        store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.payToLevelUp(playerId, amount).send()}))
     }
 
     async upgradeFrame(playerId, playerToBurn) {
@@ -295,7 +295,7 @@ class FootballHeroesService {
         if (!isApproved) {
             await this.approveFootballPlayer(addresses.Game)
         }
-        store.dispatch(setTransaction({transaction: this.gameContract.methods.upgradeFrame(playerId, playerToBurn).send()}))
+        store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.upgradeFrame(playerId, playerToBurn).send()}))
     }
 
     async getCompositionList() {

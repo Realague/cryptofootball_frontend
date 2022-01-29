@@ -68,7 +68,7 @@
           },
           {
             "internalType": "address",
-            "name": "owner",
+            "name": "buyer",
             "type": "address"
           },
           {
@@ -88,6 +88,24 @@
       }
     ],
     "name": "addMarketItems",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rewards",
+        "type": "uint256"
+      }
+    ],
+    "name": "claimRewards",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -140,6 +158,11 @@
             "internalType": "uint256",
             "name": "xp",
             "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAvailable",
+            "type": "bool"
           }
         ],
         "internalType": "struct Player",
@@ -195,6 +218,11 @@
             "internalType": "uint256",
             "name": "xp",
             "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAvailable",
+            "type": "bool"
           }
         ],
         "internalType": "struct Player",
@@ -374,7 +402,7 @@
           },
           {
             "internalType": "address",
-            "name": "owner",
+            "name": "buyer",
             "type": "address"
           },
           {
@@ -419,7 +447,7 @@
           },
           {
             "internalType": "address",
-            "name": "owner",
+            "name": "buyer",
             "type": "address"
           },
           {
@@ -494,6 +522,25 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "wallet",
+        "type": "address"
+      }
+    ],
+    "name": "getOpponentTeams",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
@@ -547,6 +594,11 @@
             "internalType": "uint256",
             "name": "xp",
             "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAvailable",
+            "type": "bool"
           }
         ],
         "internalType": "struct Player",
@@ -761,7 +813,7 @@
           },
           {
             "internalType": "address",
-            "name": "owner",
+            "name": "buyer",
             "type": "address"
           },
           {
@@ -804,6 +856,24 @@
       }
     ],
     "name": "setOperatorApproval",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "opponents",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address",
+        "name": "wallet",
+        "type": "address"
+      }
+    ],
+    "name": "setOpponentTeams",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -856,6 +926,11 @@
             "internalType": "uint256",
             "name": "xp",
             "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAvailable",
+            "type": "bool"
           }
         ],
         "internalType": "struct Player",

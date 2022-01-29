@@ -52,21 +52,9 @@
       },
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "price",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "sold",
-        "type": "bool"
       }
     ],
     "name": "MarketItemCreated",
@@ -201,7 +189,7 @@
           },
           {
             "internalType": "address",
-            "name": "owner",
+            "name": "buyer",
             "type": "address"
           },
           {
@@ -290,7 +278,7 @@
           },
           {
             "internalType": "address",
-            "name": "owner",
+            "name": "buyer",
             "type": "address"
           },
           {
@@ -328,6 +316,32 @@
     "name": "listPlayer",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "listingFees",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "marketplaceOpen",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -398,19 +412,6 @@
       }
     ],
     "name": "setPlayerContract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_rewardPoolAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setRewardPoolAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -75,6 +75,7 @@ const App = () => {
 		if (isReady) {
 			dispatch(fetchData())
 		}
+		dispatch(fireConffeti('snow'))
 	}, [isReady])
 
 	return (
@@ -99,6 +100,23 @@ const App = () => {
 						}}
 						fire={confetti.fire}
 						reset={confetti.reset}
+						{
+							...(confetti.fire.style === 'snow' ? {
+								particleCount: 1000,
+								gravity: 0.4,
+								colors: ['#f84f4f', '#9ef84f', '#4f79f8', '#f8e14f'],
+								shapes: ['circle'],
+								ticks: 800,
+								scalar: randomInRange(0.4, 1),
+								spread: 140,
+								startVelocity: 100,
+								angle: 270,
+								origin: {
+									x: 0.5,
+									y: -2
+								},
+							} : {})
+						}
 					/>
 					<Main drawerTeamWidth={drawerTeamWidth} open={teamDrawerOpen}>
 						<Navbar toggleTheme={toggleThemeMode}/>

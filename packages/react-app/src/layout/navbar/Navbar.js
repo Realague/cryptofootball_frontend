@@ -15,6 +15,7 @@ import TokenImage from '../../images/token_black.png'
 
 const Navbar = ({ toggleTheme }) => {
 	const { GBExactPrice, account } = useSelector(state => state.user)
+	const { isReady } = useSelector(state => state.settings)
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const dispatch = useDispatch()
 
@@ -66,7 +67,7 @@ const Navbar = ({ toggleTheme }) => {
 				</Stack>
 			</Toolbar>
 			{
-				account && <AccountInfo/>
+				account && isReady && <AccountInfo/>
 			}
 		</AppBar>
 	)

@@ -48,7 +48,7 @@ const initialState = {
 	playersForSale: [],
 	fetching: false,
 	confetti: {
-		fire: false,
+		fire: { style: undefined },
 		reset: false,
 	}
 }
@@ -58,7 +58,7 @@ export const gameSlice = createSlice({
 	initialState,
 	reducers: {
 		fireConffeti: (state, action) => {
-			state.confetti.fire = {}
+			state.confetti.fire.style = action.payload
 		},
 		stopConffeti: (state, action) => {
 			state.confetti.reset = {}

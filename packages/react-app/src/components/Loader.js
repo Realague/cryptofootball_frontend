@@ -29,7 +29,6 @@ const Loader = () => {
 		transaction.transaction.on('transactionHash', function () {
 			setTransactionState('loading')
 		}).on('receipt', async function (receipt) {
-			console.log('receipt', receipt)
 			if (receipt.events.TrainingDone) {
 				setTransactionState('trainingDone')
 				setRewards(receipt.events.TrainingDone.returnValues)
@@ -70,8 +69,6 @@ const Loader = () => {
 			setTransactionState('')
 		}
 	}
-
-	console.log('rewards', rewards)
 
 	return (
 		<>
@@ -121,7 +118,7 @@ const Loader = () => {
                             </>,
 							'improveFrame':
 								<Stack alignItems="center" spacing={2}>
-									<Typography variant="h4">Imprve frame result</Typography>
+									<Typography variant="h4">Improve Frame</Typography>
 									<Divider/>
 									<Card player={player} marketItem={undefined} />
 									<Divider/>

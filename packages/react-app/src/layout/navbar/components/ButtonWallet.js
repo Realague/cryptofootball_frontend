@@ -40,23 +40,43 @@ const WalletButton = () => {
 	}
 
 	async function readOnChainData() {
-		let BUSDBalance = Web3.utils.fromWei(await footballHeroesService.getBusdBalance())
-		let GBBalance = Web3.utils.fromWei(await footballHeroesService.getGbBalance())
-		let GBExactPrice = Web3.utils.fromWei(await footballHeroesService.getGBExactPrice())
-		let GBPrice = await footballHeroesService.getFootballTokenPrice()
-		let claimFee = await footballHeroesService.getClaimFee()
-		let rewards = await footballHeroesService.getRewards()
-		let playersId = await footballHeroesService.getFootballPlayerList()
-		saveAccountInfo(GBPrice, GBExactPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId)
+		const jobs  = []
+		jobs.push(footballHeroesService.getFootballTokenPrice())
+		jobs.push(footballHeroesService.getGBExactPrice())
+		jobs.push(footballHeroesService.getRewards())
+		jobs.push(footballHeroesService.getClaimFee())
+		jobs.push(footballHeroesService.getGbBalance())
+		jobs.push(footballHeroesService.getBusdBalance())
+		jobs.push(footballHeroesService.getFootballPlayerList())
+		const jobsResult = await Promise.all(jobs)
+		saveAccountInfo(
+			jobsResult[0],
+			Web3.utils.fromWei(jobsResult[1]), // GB Exact price
+			jobsResult[2],
+			jobsResult[3],
+			Web3.utils.fromWei(jobsResult[4]), // GB Balance
+			Web3.utils.fromWei(jobsResult[5]), // BUSD Balance
+			jobsResult[6]
+		)
 	}
 
 	async function getContractState() {
-		footballHeroesService.isMarketplaceOpen().then(isMarketplaceOpen => setContractState({ isMarketplaceOpen }))
-		footballHeroesService.isMintOpen().then(isMintOpen => setContractState({ isMintOpen }))
-		footballHeroesService.isUpgradeFrameOpen().then(isUpgradeFrameOpen => setContractState({ isUpgradeFrameOpen }))
-		footballHeroesService.isLevelUpOpen().then(isLevelUpOpen => setContractState({ isLevelUpOpen }))
-		footballHeroesService.isTrainingOpen().then(isTrainingOpen => setContractState({ isTrainingOpen }))
-		footballHeroesService.isFootballMatchOpen().then(isMatchOpen => setContractState({ isMatchOpen }))
+		const jobs = []
+		jobs.push(footballHeroesService.isMarketplaceOpen())
+		jobs.push(footballHeroesService.isMintOpen())
+		jobs.push(footballHeroesService.isLevelUpOpen())
+		jobs.push(footballHeroesService.isTrainingOpen())
+		jobs.push(footballHeroesService.isFootballMatchOpen())
+		jobs.push(footballHeroesService.isUpgradeFrameOpen())
+		const jobsResult = await Promise.all(jobs)
+		dispatch(setContractState({
+			isMarketplaceOpen: jobsResult[0],
+			isMintOpen: jobsResult[1],
+			isLevelUpOpen: jobsResult[2],
+			isTrainingOpen: jobsResult[3],
+			isMatchOpen: jobsResult[4],
+			isUpgradeFrameOpen: jobsResult[5]
+		}))
 	}
 
 	async function fetchAccount() {
@@ -93,8 +113,7 @@ const WalletButton = () => {
 			setRendered(accounts[0].substring(0, 6) + '...' + accounts[0].substring(36))
 			footballHeroesService.init(provider, accounts[0])
 			dispatch(login(accounts[0]))
-			await readOnChainData()
-			await getContractState()
+			await Promise.all([readOnChainData(), getContractState()])
 		} catch (err) {
 			setRendered('')
 			logoutOfWeb3Modal()

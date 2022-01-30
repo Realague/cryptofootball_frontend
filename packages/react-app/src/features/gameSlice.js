@@ -1,29 +1,30 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import footballHeroesService from '../services/FootballPlayerService'
 
-export const fetchData = createAsyncThunk('game/fetchData', async () => {
+export const fetchData = createAsyncThunk('game/fetchData', async (args, { dispatch }) => {
 	let tempPlayers = []
+	console.log('Fetching Player list ( id )')
 	const collectionIds = await footballHeroesService.getFootballPlayerList()
+	console.log('Fetching Player list ( data )')
+	let jobs = []
 	for (let playerId of collectionIds.map(i => +i)) {
-		tempPlayers.push(await footballHeroesService.getFootballPlayer(playerId))
+		console.log('Fetching Player '  + playerId)
+		jobs.push(footballHeroesService.getFootballPlayer(playerId))
 	}
+	tempPlayers  = await Promise.all(jobs)
+	dispatch(setCollection(tempPlayers))
+	console.log('fetching get player team')
 	const playerTeam = await footballHeroesService.getPlayerTeam()
-	const ids = [
-		...playerTeam.attackers.map(id => +id),
-		...playerTeam.defenders.map(id => +id),
-		...playerTeam.midfielders.map(id => +id),
-		+playerTeam.goalKeeper
-	]
-	const players = []
-	for (let id of ids) {
-		players.push(tempPlayers.find(p => p.id == id))
-	}
+	const players = tempPlayers.map(p => p.isAvailable === false)
 	const tempMarketItems = []
 	const tempPlayersForSale = []
+	console.log('fetching get player listed')
 	let marketItemsId = await footballHeroesService.getListedPlayerOfAddress()
 	for (let i = 0; i !== marketItemsId.length; i++) {
+		console.log('fetching get market item')
 		let marketItem = await footballHeroesService.getMarketItem(marketItemsId[i])
 		tempMarketItems.push(marketItem)
+		console.log('fetching get football player')
 		tempPlayersForSale.push(await footballHeroesService.getFootballPlayer(marketItem.tokenId))
 	}
 	return {
@@ -31,7 +32,6 @@ export const fetchData = createAsyncThunk('game/fetchData', async () => {
 			strategy: +playerTeam.composition,
 			players: players,
 		},
-		collection: tempPlayers,
 		marketItems: tempMarketItems,
 		playersForSale: tempPlayersForSale,
 	}

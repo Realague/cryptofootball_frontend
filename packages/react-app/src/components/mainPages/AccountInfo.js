@@ -39,7 +39,7 @@ const AccountInfo = () => {
 	}, [seconds])
 
 	const setRewardTimer = async () => {
-		let seconds = Math.floor(await footballHeroesService.getRemainingClaimCooldown() / 1000)
+		let seconds = await footballHeroesService.getRemainingClaimCooldown()
 		setSeconds(seconds)
 	}
 

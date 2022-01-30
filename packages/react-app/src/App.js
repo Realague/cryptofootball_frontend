@@ -76,7 +76,7 @@ const App = () => {
 		if (isReady) {
 			dispatch(fetchData())
 		}
-		dispatch(fireConffeti('snow'))
+		//dispatch(fireConffeti('snow'))
 	}, [isReady])
 
 	return (

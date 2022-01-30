@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Card from './card/Card'
 import LoadingImage from '../images/gifs/loading.gif'
 import { CancelOutlined, CheckCircleOutlined } from '@mui/icons-material'
-import { Modal, Button, Stack, Typography, Divider } from '@mui/material'
+import { Modal, Button, Stack, Typography, Divider, Box } from '@mui/material'
 import { darkModal } from '../css/style'
 import { useDispatch, useSelector } from 'react-redux'
 import footballHeroesService from '../services/FootballPlayerService'
@@ -29,12 +29,20 @@ const Loader = () => {
 		transaction.transaction.on('transactionHash', function () {
 			setTransactionState('loading')
 		}).on('receipt', async function (receipt) {
+			console.log('receipt', receipt)
 			if (receipt.events.TrainingDone) {
 				setTransactionState('trainingDone')
 				setRewards(receipt.events.TrainingDone.returnValues)
 				dispatch(fetchData())
 				if (receipt.events.TrainingDone.returnValues.won === true) {
 					dispatch(fireConffeti())
+				}
+			} else if (receipt.events.MatchResult) {
+				setTransactionState('matchResult')
+				const matchResult = receipt.events.MatchResult.returnValues
+				setRewards(matchResult)
+				if (matchResult.won) {
+					dispatch(fireConffeti('snow'))
 				}
 			} else if (receipt.events.UpgradeFrame) {
 				getPlayer(receipt.events.UpgradeFrame.returnValues.playerId, 'improveFrame')
@@ -98,6 +106,36 @@ const Loader = () => {
                             	<CheckCircleOutlined color="success" sx={{ width: 100, height: 100 }}/>
                             	<Typography variant="h6">Success!</Typography>
                             </>,
+							'matchResult':
+						<Stack alignItems="center" spacing={2}>
+							<Typography variant="h4">Match result</Typography>
+							<Divider/>
+							<img style={{ width: rewards.won ? 150 : 200, height: 200 }} src={rewards.won ? '/coupetrans.png' : '/coupecassetrans.png'} alt=""/>
+							<Divider/>
+							<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+								<Typography variant="subtitle1">Result: </Typography>
+								<Typography
+									color={rewards.won === true ? 'green': 'red'}
+									variant="subtitle2"
+								>
+									{rewards.won === true ? 'Victory' : 'Defeat'}
+								</Typography>
+							</Stack>
+							<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+								<Typography variant="subtitle1">Rewards: </Typography>
+								<Typography variant="subtitle2">{rewards.rewards}</Typography>
+							</Stack>
+							<Divider/>
+							<Button
+								sx={{ mt: 2 }}
+								variant="contained"
+								color="secondary"
+								fullWidth
+								onClick={onHide}
+							>
+						Collect
+							</Button>
+						</Stack>,
 							'mint':
                             <>
                             	<Stack alignItems="center" spacing={2}>

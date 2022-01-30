@@ -8,12 +8,12 @@ const initialState = {
 	transaction: undefined,
 	isDraggingPlayer: false,
 	teamDrawerOpen: false,
-	isMarketplaceOpen: true,
-	isMintOpen: true,
-	isLevelUpOpen: true,
-	isTrainingOpen: true,
-	isMatchOpen: true,
-	isUpgradeFrameOpen: true
+	isMarketplaceOpen: false,
+	isMintOpen: false,
+	isLevelUpOpen: false,
+	isTrainingOpen: false,
+	isMatchOpen: false,
+	isUpgradeFrameOpen: false
 }
 
 export const settingsSlice = createSlice({
@@ -21,14 +21,10 @@ export const settingsSlice = createSlice({
 	initialState,
 	reducers: {
 		setContractState: (state, action) => {
+			console.log(state)
 			return {
 				...state,
-				isMarketplaceOpen: action.payload.isMarketplaceOpen,
-				isMintOpen: action.payload.isMintOpen,
-				isLevelUpOpen: action.payload.isLevelUpOpen,
-				isTrainingOpen: action.payload.isTrainingOpen,
-				isMatchOpen: action.payload.isMatchOpen,
-				isUpgradeFrameOpen: action.payload.isUpgradeFrameOpen
+				...action.payload,
 			}
 		},
 		setReady: (state, action) => {

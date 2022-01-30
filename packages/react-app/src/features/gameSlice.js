@@ -6,10 +6,12 @@ export const fetchData = createAsyncThunk('game/fetchData', async (args, { dispa
 	console.log('Fetching Player list ( id )')
 	const collectionIds = await footballHeroesService.getFootballPlayerList()
 	console.log('Fetching Player list ( data )')
+	let jobs = []
 	for (let playerId of collectionIds.map(i => +i)) {
 		console.log('Fetching Player '  + playerId)
-		tempPlayers.push(await footballHeroesService.getFootballPlayer(playerId))
+		jobs.push(footballHeroesService.getFootballPlayer(playerId))
 	}
+	tempPlayers  = await Promise.all(jobs)
 	dispatch(setCollection(tempPlayers))
 	console.log('fetching get player team')
 	const playerTeam = await footballHeroesService.getPlayerTeam()

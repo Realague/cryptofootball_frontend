@@ -1,23 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import footballHeroesService from '../services/FootballPlayerService'
 
-export const fetchData = createAsyncThunk('game/fetchData', async () => {
+export const fetchData = createAsyncThunk('game/fetchData', async (args, { dispatch }) => {
 	let tempPlayers = []
+	console.log('Fetching Player list ( id )')
 	const collectionIds = await footballHeroesService.getFootballPlayerList()
+	console.log('Fetching Player list ( data )')
 	for (let playerId of collectionIds.map(i => +i)) {
+		console.log('Fetching Player '  + playerId)
 		tempPlayers.push(await footballHeroesService.getFootballPlayer(playerId))
 	}
+	dispatch(setCollection(tempPlayers))
+	console.log('fetching get player team')
 	const playerTeam = await footballHeroesService.getPlayerTeam()
-	const ids = [
-		...playerTeam.attackers.map(id => +id),
-		...playerTeam.defenders.map(id => +id),
-		...playerTeam.midfielders.map(id => +id),
-		+playerTeam.goalKeeper
-	]
-	const players = []
-	for (let id of ids) {
-		players.push(tempPlayers.find(p => p.id == id))
-	}
+	const players = tempPlayers.map(p => p.isAvailable === false)
 	const tempMarketItems = []
 	const tempPlayersForSale = []
 	let marketItemsId = await footballHeroesService.getListedPlayerOfAddress()
@@ -31,7 +27,6 @@ export const fetchData = createAsyncThunk('game/fetchData', async () => {
 			strategy: +playerTeam.composition,
 			players: players,
 		},
-		collection: tempPlayers,
 		marketItems: tempMarketItems,
 		playersForSale: tempPlayersForSale,
 	}

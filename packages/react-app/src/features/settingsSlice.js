@@ -21,7 +21,6 @@ export const settingsSlice = createSlice({
 	initialState,
 	reducers: {
 		setContractState: (state, action) => {
-			console.log(state)
 			return {
 				...state,
 				...action.payload,

@@ -51,12 +51,12 @@ const WalletButton = () => {
 	}
 
 	async function getContractState() {
-		footballHeroesService.isMarketplaceOpen().then(isMarketplaceOpen => setContractState({ isMarketplaceOpen }))
-		footballHeroesService.isMintOpen().then(isMintOpen => setContractState({ isMintOpen }))
-		footballHeroesService.isUpgradeFrameOpen().then(isUpgradeFrameOpen => setContractState({ isUpgradeFrameOpen }))
-		footballHeroesService.isLevelUpOpen().then(isLevelUpOpen => setContractState({ isLevelUpOpen }))
-		footballHeroesService.isTrainingOpen().then(isTrainingOpen => setContractState({ isTrainingOpen }))
-		footballHeroesService.isFootballMatchOpen().then(isMatchOpen => setContractState({ isMatchOpen }))
+		footballHeroesService.isMarketplaceOpen().then(isMarketplaceOpen => dispatch(setContractState({ isMarketplaceOpen })))
+		footballHeroesService.isMintOpen().then(isMintOpen => dispatch(setContractState({ isMintOpen })))
+		footballHeroesService.isUpgradeFrameOpen().then(isUpgradeFrameOpen => dispatch(setContractState({ isUpgradeFrameOpen })))
+		footballHeroesService.isLevelUpOpen().then(isLevelUpOpen => dispatch(setContractState({ isLevelUpOpen })))
+		footballHeroesService.isTrainingOpen().then(isTrainingOpen => dispatch(setContractState({ isTrainingOpen })))
+		footballHeroesService.isFootballMatchOpen().then(isMatchOpen => dispatch(setContractState({ isMatchOpen })))
 	}
 
 	async function fetchAccount() {

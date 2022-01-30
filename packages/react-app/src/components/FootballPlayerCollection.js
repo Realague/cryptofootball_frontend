@@ -220,7 +220,7 @@ const FootballPlayerCollection = () => {
 					borderColor: 'divider',
 					width: '150px',
 					height: '80%',
-					overflowY: 'scroll',
+					overflowY: 'hidden',
 				}}
 			>
 				{

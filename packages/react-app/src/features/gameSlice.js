@@ -18,10 +18,13 @@ export const fetchData = createAsyncThunk('game/fetchData', async (args, { dispa
 	const players = tempPlayers.map(p => p.isAvailable === false)
 	const tempMarketItems = []
 	const tempPlayersForSale = []
+	console.log('fetching get player listed')
 	let marketItemsId = await footballHeroesService.getListedPlayerOfAddress()
 	for (let i = 0; i !== marketItemsId.length; i++) {
+		console.log('fetching get market item')
 		let marketItem = await footballHeroesService.getMarketItem(marketItemsId[i])
 		tempMarketItems.push(marketItem)
+		console.log('fetching get football player')
 		tempPlayersForSale.push(await footballHeroesService.getFootballPlayer(marketItem.tokenId))
 	}
 	return {

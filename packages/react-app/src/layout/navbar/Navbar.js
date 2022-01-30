@@ -60,7 +60,7 @@ const Navbar = ({ toggleTheme }) => {
 				</Stack>
 				<Stack spacing={2} direction="row">
 					<WalletButton/>
-					<Button onClick={toggleTheme} variant="contained" color="secondary">
+					<Button onClick={() => {}} variant="contained" color="secondary">
 						<img style={{ width: 25, height: 25, marginRight: '5px' }} src={TokenImage} alt="token"/>
 						{parseFloat(GBExactPrice).toFixed(2)}
 					</Button>

@@ -34,6 +34,7 @@ const MatchPage = () => {
 		const tempOpponents = []
 		const teamsId = await footballHeroesService.getOpponentFootballTeams()
 
+		console.log(teamsId)
 		for (const id of teamsId) {
 			const team = await footballHeroesService.getOpponentFootballTeam(id)
 			const teamData = {

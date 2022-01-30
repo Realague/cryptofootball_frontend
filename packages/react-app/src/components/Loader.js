@@ -169,7 +169,7 @@ const Loader = () => {
 									<Typography variant="h4">Level up results</Typography>
 									<Divider/>
 									<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-										<Typography variant="subtitle1">Level up Results: </Typography>
+										<Typography variant="subtitle1">Level gained: </Typography>
 										<Typography
 											color="secondary"
 											variant="subtitle2"

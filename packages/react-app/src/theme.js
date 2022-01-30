@@ -2,8 +2,69 @@ import { createTheme } from '@mui/material'
 
 export const lightTheme = createTheme({
 	palette: {
-		mode: 'light',
+		mode: 'dark',
+		primary: {
+			light: '#3f4576',
+			main: '#5b81ff',
+			dark: '#3737ff',
+			contrastText: '#000000',
+		},
+		secondary: {
+			light: '#ffde65',
+			main: '#d0ad34',
+			dark: '#9b7e00',
+			contrastText: '#000000',
+		},
+		background: {
+			light: '#414141',
+			default: '#625f5f',
+			dark: '#919191',
+			paper: '#9f9c9c'
+		},
 	},
+	typography: {
+		fontFamily: [
+			'noto-sans',
+			'Roboto',
+			'-apple-system',
+			'BlinkMacSystemFont',
+			'"Segoe UI"',
+			'Arial',
+			'sans-serif',
+		].join(','),
+		h6: {
+			fontSize: 16,
+			fontWeight: 700,
+		},
+		h5: {
+			fontSize: 16,
+			fontWeight: 400,
+		},
+		subtitle1: {
+			fontSize: 14,
+			fontWeight: 400,
+			lineHeight: 1,
+		},
+		subtitle2: {
+			fontSize: 14,
+			fontWeight: 700,
+			lineHeight: 1,
+		},
+		body1: {
+			fontSize: 12,
+			fontWeight: 400,
+			lineHeight: 1,
+		},
+		body2: {
+			fontSize: 12,
+			fontWeight: 700,
+			lineHeight: 1,
+		},
+		button: {
+			fontSize: 12,
+		},
+
+	}
 })
 
 export const theme = createTheme({

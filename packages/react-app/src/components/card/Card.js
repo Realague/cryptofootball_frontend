@@ -8,6 +8,7 @@ import ExperienceProgressBar from './components/ExperienceProgressBar'
 import StaminaProgressBar from './components/StaminaProgressBar'
 import footballHeroesService from '../../services/FootballPlayerService'
 import { useSelector } from 'react-redux'
+import theme from '../../theme'
 
 const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 	const { team } = useSelector(state => state.game)
@@ -181,6 +182,10 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 	return (
 		<Stack sx={{
 			display: 'flex',
+			cursor: 'pointer',
+			'&:hover': {
+				boxShadow: `1px 1px 5px ${theme.palette.secondary.main}`
+			}
 		}} direction="column" alignItems="center" width={'100%'}>
 			{renderCard()}
 			<InformationModal

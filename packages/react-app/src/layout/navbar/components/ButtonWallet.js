@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { login, updateAccount } from '../../../features/userSlice'
 import useWeb3Modal from '../../../hooks/useWeb3Modal'
-import { setContractState, setReady } from '../../../features/settingsSlice'
+import { setAttemptingToConnect, setContractState, setReady } from '../../../features/settingsSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
 
 const networkData =
@@ -82,6 +82,7 @@ const WalletButton = () => {
 	async function fetchAccount() {
 		try {
 			dispatch(setReady(false))
+			dispatch(setAttemptingToConnect(true))
 			const accounts = await provider.eth.getAccounts()
 
 			// Subscribe to accounts change
@@ -120,6 +121,7 @@ const WalletButton = () => {
 			console.error('eee', err)
 		} finally {
 			dispatch(setReady(true))
+			dispatch(setAttemptingToConnect(false))
 		}
 	}
 

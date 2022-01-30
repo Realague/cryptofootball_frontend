@@ -12,6 +12,7 @@ import { changeDrawerMobile } from '../../features/settingsSlice'
 import SwipeableFootDrawer from '../swipeableDrawer/swipeableDrawer'
 import { FaHamburger } from 'react-icons/all'
 import TokenImage from '../../images/token_black.png'
+import { fireConffeti } from '../../features/gameSlice'
 
 const Navbar = ({ toggleTheme }) => {
 	const { GBExactPrice, account } = useSelector(state => state.user)
@@ -60,7 +61,7 @@ const Navbar = ({ toggleTheme }) => {
 				</Stack>
 				<Stack spacing={2} direction="row">
 					<WalletButton/>
-					<Button onClick={() => {}} variant="contained" color="secondary">
+					<Button onClick={() => { dispatch(fireConffeti('snow'))}} variant="contained" color="secondary">
 						<img style={{ width: 25, height: 25, marginRight: '5px' }} src={TokenImage} alt="token"/>
 						{parseFloat(GBExactPrice).toFixed(2)}
 					</Button>

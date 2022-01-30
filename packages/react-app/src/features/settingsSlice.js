@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export
 
 const initialState = {
+	attemptingToConnect: false,
 	isReady: false,
 	drawerMobileOpen: false,
 	transaction: undefined,
@@ -20,6 +21,9 @@ export const settingsSlice = createSlice({
 	name: 'settings',
 	initialState,
 	reducers: {
+		setAttemptingToConnect: (state, action) => {
+			state.attemptingToConnect = action.payload
+		},
 		setContractState: (state, action) => {
 			return {
 				...state,
@@ -51,6 +55,7 @@ export const {
 	changeDrawerMobile,
 	setIsDraggingPlayer,
 	setTeamDrawerState,
+	setAttemptingToConnect,
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

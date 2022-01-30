@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, Stack, Typography, useMediaQuery } from '@mui/material'
+import { CircularProgress, Grid, Stack, Typography, useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import { useSelector } from 'react-redux'
 import footballHeroesService from '../../services/FootballPlayerService'
@@ -15,7 +15,7 @@ const MatchPage = () => {
 	const [selectedOpponent, setSelectedOpponent] = useState(undefined)
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-
+	const [isFetchingOpponents, setIsFetchingOpponents] = useState(true)
 
 	useEffect(() => {
 		fetchOpponents()
@@ -28,10 +28,15 @@ const MatchPage = () => {
 	}, [team])
 
 	const fetchOpponents = async () => {
+		setIsFetchingOpponents(true)
 		const tempOpponents = []
 		const teamsId = await footballHeroesService.getOpponentFootballTeams()
 
 		for (const id of teamsId) {
+			const jobsDefenders = []
+			const jobsAttackers = []
+			const jobsMidfielders = []
+			const jobGoalKeeper = []
 			const team = await footballHeroesService.getOpponentFootballTeam(id)
 			const teamData = {
 				id,
@@ -42,15 +47,19 @@ const MatchPage = () => {
 				score : team.averageScore,
 			}
 			for (const defenderId of team.defenders) {
-				teamData.defenders.push(await footballHeroesService.getOpponentPlayer(defenderId))
+				jobsDefenders.push(footballHeroesService.getOpponentPlayer(defenderId))
 			}
 			for (const attackerId of team.attackers) {
-				teamData.attackers.push(await footballHeroesService.getOpponentPlayer(attackerId))
+				jobsAttackers.push(footballHeroesService.getOpponentPlayer(attackerId))
 			}
 			for (const midfielderId of team.midfielders) {
-				teamData.midfielders.push(await footballHeroesService.getOpponentPlayer(midfielderId))
+				jobsMidfielders.push(footballHeroesService.getOpponentPlayer(midfielderId))
 			}
-			teamData.goalkeeper = await footballHeroesService.getOpponentPlayer(team.goalKeeper)
+			jobGoalKeeper.push(footballHeroesService.getOpponentPlayer(team.goalKeeper))
+			teamData.defenders = await Promise.all(jobsDefenders)
+			teamData.attackers = await Promise.all(jobsAttackers)
+			teamData.midfielders = await Promise.all(jobsMidfielders)
+			teamData.goalkeeper = (await Promise.all(jobGoalKeeper))[0]
 			tempOpponents.push(teamData)
 		}
 		setOpponents(tempOpponents)
@@ -62,6 +71,7 @@ const MatchPage = () => {
 			composition.goalkeeper = tempOpponents[0].goalkeeper
 			setSelectedOpponent(composition)
 		}
+		setIsFetchingOpponents(false)
 	}
 
 
@@ -139,7 +149,12 @@ const MatchPage = () => {
 				<Stack width={isMobile ? '100%': '40%'} justifyContent="flex-start" alignItems="center" spacing={2}>
 					<Typography variant="h5" color="secondary">Opponents</Typography>
 					<Stack>
-						<TabOpponent opponents={opponents} selectOpponent={selectOpponent}/>
+						{
+							isFetchingOpponents ?
+								<CircularProgress sx={{ marginTop: '15px' }} color="secondary"/>
+								:
+								<TabOpponent opponents={opponents} selectOpponent={selectOpponent}/>
+						}
 					</Stack>
 				</Stack>
 			</Stack>

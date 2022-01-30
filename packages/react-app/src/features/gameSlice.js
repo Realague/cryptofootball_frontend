@@ -49,6 +49,7 @@ const initialState = {
 	confetti: {
 		fire: { style: undefined },
 		reset: false,
+		style: ''
 	}
 }
 
@@ -57,7 +58,8 @@ export const gameSlice = createSlice({
 	initialState,
 	reducers: {
 		fireConffeti: (state, action) => {
-			state.confetti.fire.style = action.payload
+			state.confetti.fire = {}
+			state.confetti.style = action.payload
 		},
 		stopConffeti: (state, action) => {
 			state.confetti.reset = {}

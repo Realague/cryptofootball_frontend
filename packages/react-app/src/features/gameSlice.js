@@ -11,7 +11,6 @@ export const fetchData = createAsyncThunk('game/fetchData', async (args, { dispa
 	tempPlayers  = await Promise.all(jobs)
 	dispatch(setCollection(tempPlayers))
 	const playerTeam = await footballHeroesService.getPlayerTeam()
-	console.log(playerTeam)
 	const players = tempPlayers.filter(p => p.isAvailable === false)
 	const tempMarketItems = []
 	const tempPlayersForSale = []

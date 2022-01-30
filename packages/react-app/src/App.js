@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { CircularProgress, useMediaQuery } from '@mui/material'
+import { CircularProgress, Typography, useMediaQuery } from '@mui/material'
 import Navbar from './layout/navbar/Navbar'
 import { Outlet } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
@@ -14,7 +14,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { fetchData } from './features/gameSlice'
 import { SnackbarProvider } from 'notistack'
 import ReactCanvasConfetti from 'react-canvas-confetti'
-import { setTeamDrawerState } from './features/settingsSlice'
+import { setAttemptingToConnect, setTeamDrawerState } from './features/settingsSlice'
 import Box from '@mui/material/Box'
 
 
@@ -41,7 +41,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && pr
 
 const App = () => {
 	const [themeMode, setThemeMode] = useState('dark')
-	const { isReady } = useSelector(state => state.settings)
+	const { isReady, attemptingToConnect } = useSelector(state => state.settings)
 	const { account } = useSelector(state => state.user)
 	const { confetti } = useSelector(state => state.game)
 	const { teamDrawerOpen } = useSelector(state => state.settings)
@@ -117,8 +117,14 @@ const App = () => {
 									justifyContent: 'center',
 									alignItems: 'center'
 								}}>
-									<CircularProgress color='secondary'/>
+									{
+										attemptingToConnect ?
+											<CircularProgress color='secondary'/>
+											:
+											<Typography>You must first connect your wallet to access the app</Typography>
+									}
 								</Box>
+
 						}
 						{
 							account &&

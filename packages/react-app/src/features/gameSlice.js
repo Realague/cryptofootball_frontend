@@ -1,8 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import footballHeroesService from '../services/FootballPlayerService'
-import { act } from '@testing-library/react'
 
 export const fetchData = createAsyncThunk('game/fetchData', async () => {
+	let tempPlayers = []
+	const collectionIds = await footballHeroesService.getFootballPlayerList()
+	for (let playerId of collectionIds.map(i => +i)) {
+		tempPlayers.push(await footballHeroesService.getFootballPlayer(playerId))
+	}
 	const playerTeam = await footballHeroesService.getPlayerTeam()
 	const ids = [
 		...playerTeam.attackers.map(id => +id),
@@ -12,12 +16,7 @@ export const fetchData = createAsyncThunk('game/fetchData', async () => {
 	]
 	const players = []
 	for (let id of ids) {
-		players.push(await footballHeroesService.getFootballPlayer(id))
-	}
-	let tempPlayers = []
-	const collectionIds = await footballHeroesService.getFootballPlayerList()
-	for (let playerId of collectionIds.map(i => +i)) {
-		tempPlayers.push(await footballHeroesService.getFootballPlayer(playerId))
+		players.push(tempPlayers.find(p => p.id == id))
 	}
 	const tempMarketItems = []
 	const tempPlayersForSale = []

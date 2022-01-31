@@ -49,7 +49,7 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 				direction="row"
 				justifyContent="space-between"
 				alignItems="center"
-				paddingX={2}
+				paddingX={mobile ? 0 : 2}
 				sx={{
 					paddingBottom: '5px',
 				}}

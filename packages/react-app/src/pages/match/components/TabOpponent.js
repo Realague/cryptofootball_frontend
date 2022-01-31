@@ -7,8 +7,10 @@ import { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled'
 import TabUnstyled, { tabUnstyledClasses } from '@mui/base/TabUnstyled'
 import theme from '../../../theme'
 import PlayerIcon from './PlayerIcon'
-import { Button, Divider, Stack, Typography } from '@mui/material'
+import { Button, Divider, easing, Slide, Stack, Typography } from '@mui/material'
 import footballHeroesService from '../../../services/FootballPlayerService'
+import LayoutContent from '../../../components/LayoutContent'
+import { useState } from 'react'
 
 
 const Tab = styled(TabUnstyled)`
@@ -67,6 +69,9 @@ const TabsList = styled(TabsListUnstyled)`
 `
 
 export default function TabOpponent({ opponents, selectOpponent }) {
+	const [oldIndex, setOldIndex] = useState(0)
+	const [currentIndex, setCurrentIndex] = useState(0)
+
 	return (
 		<TabsUnstyled defaultValue={0} style={{
 			borderRadius: '10px',
@@ -75,47 +80,60 @@ export default function TabOpponent({ opponents, selectOpponent }) {
 			<TabsList>
 				{
 					opponents.map((o, i) => (
-						<Tab key={i+40} onClick={() => selectOpponent(o)}>Team {i + 1}</Tab>
+						<Tab key={i+40} onClick={() => {
+							setOldIndex(currentIndex)
+							setCurrentIndex(i)
+							selectOpponent(o)
+						}}>Team {i + 1}</Tab>
 					))
 				}
 			</TabsList>
 			{
 				opponents.map((o, i) => (
-					<TabPanel key={i+50} value={i}>
-						<Stack spacing={1}>
-							<Stack direction="row" spacing={2} alignItems="center" justifyContent="center" pb={3}>
-								<Typography variant="h5">Team Score:</Typography>
-								<Typography variant="h5" sx={{
-									textShadow: '0 0 10px yellow',
-								}}>{o.score}</Typography>
-							</Stack>
-							<Divider/>
-							{
-								['defenders', 'midfielders', 'attackers'].map((position, i) => (
-									<Stack key={i} spacing={2} p={2}>
-										<Typography variant="subtitle2" color="secondary">{position.toUpperCase()}</Typography>
-										<Stack direction="row" flexWrap spacing={2}>
-											{
-												o[position].map((p, indexPlayer) => (
-													<PlayerIcon isNpc key={i + indexPlayer + 60} player={p}/>)
-												)
-											}
-										</Stack>
+					<TabPanel key={i+50} value={i} sx={{ overflow: 'hidden' }}>
+						<Slide key={i+50}
+							   timeout={500}
+							   direction={currentIndex > oldIndex ? 'left' : 'right'}
+							   appear
+							   in
+						>
+							<LayoutContent>
+								<Stack spacing={1}>
+									<Stack direction="row" spacing={2} alignItems="center" justifyContent="center" pb={3}>
+										<Typography variant="h5">Team Score:</Typography>
+										<Typography variant="h5" sx={{
+											textShadow: '0 0 10px yellow',
+										}}>{o.score}</Typography>
 									</Stack>
-								))
-							}
-							<Divider/>
-							<Button
-								variant="contained"
-								color="secondary"
-								fullWidth
-								onClick={async () => {
-									await footballHeroesService.playMatch(o.id)
-								}}
-							>
+									<Divider/>
+									{
+										['defenders', 'midfielders', 'attackers'].map((position, i) => (
+											<Stack key={i} spacing={2} p={2}>
+												<Typography variant="subtitle2" color="secondary">{position.toUpperCase()}</Typography>
+												<Stack direction="row" flexWrap spacing={2}>
+													{
+														o[position].map((p, indexPlayer) => (
+															<PlayerIcon isNpc key={i + indexPlayer + 60} player={p}/>)
+														)
+													}
+												</Stack>
+											</Stack>
+										))
+									}
+									<Divider/>
+									<Button
+										variant="contained"
+										color="secondary"
+										fullWidth
+										onClick={async () => {
+											await footballHeroesService.playMatch(o.id)
+										}}
+									>
 							Play
-							</Button>
-						</Stack>
+									</Button>
+								</Stack>
+							</LayoutContent>
+						</Slide>
 					</TabPanel>
 				))
 			}

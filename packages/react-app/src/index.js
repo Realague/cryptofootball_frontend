@@ -6,13 +6,13 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import { Provider, useSelector } from 'react-redux'
 import { ThemeProvider } from '@emotion/react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import MarketplacePage from './pages/marketplace/MarketplacePage'
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import theme from './theme'
 import { Box, CircularProgress, CssBaseline, Typography } from '@mui/material'
 import { persistor, store } from './store'
-import CollectionPage from './pages/collection/CollectionPage.js'
+import CollectionPage from './pages/collection/CollectionPage'
+import MarketplacePage from './pages/marketplace/MarketplacePage'
 import MatchPage from './pages/match/MatchPage'
 import PresentationPage from './components/presentation/PresentationPage'
 
@@ -49,6 +49,7 @@ ReactDOM.render(
 				<BrowserRouter>
 					<Routes>
 						<Route path="/" element={<App/>}>
+							<Route path="/" element={<Navigate to="/collection" />} />
 							<Route path="/collection" element={<AuthenticatedRoute render={<CollectionPage/>}/>}/>
 							<Route path="/marketplace" element={<AuthenticatedRoute render={<MarketplacePage/>}/>}/>
 							<Route path="/match" element={<AuthenticatedRoute render={<MatchPage/>}/>}/>

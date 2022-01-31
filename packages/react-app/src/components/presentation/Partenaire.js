@@ -6,14 +6,22 @@ function Partenaire() {
 		<div style={{ clear: 'both' }} className="container-partenaire">
 			<div className="partenaire-left">
 				<a href="https://www.qries.com/">
-					<img alt="Qries" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Binance_logo.svg/2560px-Binance_logo.svg.png">
+					<img
+						style={{
+							height: '45px',
+							width: '200px',
+						}}
+						alt="Qries" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Binance_logo.svg/2560px-Binance_logo.svg.png">
 					</img>
 				</a>
 			</div>
 
 			<div className="partenaire-right">
 				<a href="https://www.qries.com/">
-					<img alt="Qries" src="https://www.savefuturecoin.com/assets/img/live-pancakeswap.png">
+					<img style={{
+						height: '40px',
+						width: '200px',
+					}} alt="Qries" src="https://www.savefuturecoin.com/assets/img/live-pancakeswap.png">
 					</img>
 				</a>
 			</div>

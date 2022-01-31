@@ -3,15 +3,16 @@ import PresentationCarousel from './PresentationCarousel'
 import Presentation from './Presentation'
 import Contact from './Contact'
 import Partenaire from './Partenaire'
+import { Stack } from '@mui/material'
 
 function PresentationPage() {
 	return (
-		<div>
+		<Stack spacing={2}>
 			<PresentationCarousel/>
 			<Contact/>
 			<Presentation/>
 			<Partenaire/>
-		</div>
+		</Stack>
 	)
 }
 

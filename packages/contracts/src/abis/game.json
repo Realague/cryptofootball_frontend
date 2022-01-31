@@ -111,6 +111,12 @@
         "internalType": "bool",
         "name": "levelUp",
         "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "playerId",
+        "type": "uint256"
       }
     ],
     "name": "TrainingDone",

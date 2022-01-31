@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from './card/Card'
 import LoadingImage from '../images/gifs/loading.gif'
 import { CancelOutlined, CheckCircleOutlined } from '@mui/icons-material'
@@ -6,7 +6,7 @@ import { Modal, Button, Stack, Typography, Divider, Box } from '@mui/material'
 import { darkModal } from '../css/style'
 import { useDispatch, useSelector } from 'react-redux'
 import footballHeroesService from '../services/FootballPlayerService'
-import { fetchData, fireConffeti, updatePlayerInCollection } from '../features/gameSlice'
+import {addPlayerToCollection, fetchData, fireConffeti, updatePlayerInCollection} from '../features/gameSlice'
 
 const Loader = () => {
 	const [transactionState, setTransactionState] = useState('')
@@ -33,10 +33,10 @@ const Loader = () => {
 			if (receipt.events.TrainingDone) {
 				setTransactionState('trainingDone')
 				setRewards(receipt.events.TrainingDone.returnValues)
-				dispatch(fetchData())
 				if (receipt.events.TrainingDone.returnValues.won === true) {
 					dispatch(fireConffeti())
 				}
+				dispatch(updatePlayerInCollection(await footballHeroesService.getFootballPlayer(rewards.playerId)))
 			} else if (receipt.events.MatchResult) {
 				setTransactionState('matchResult')
 				const matchResult = receipt.events.MatchResult.returnValues
@@ -45,18 +45,19 @@ const Loader = () => {
 					dispatch(fireConffeti('snow'))
 				}
 			} else if (receipt.events.UpgradeFrame) {
-				getPlayer(receipt.events.UpgradeFrame.returnValues.playerId, 'improveFrame')
-				dispatch(fetchData())
+				await getPlayer(receipt.events.UpgradeFrame.returnValues.playerId, 'improveFrame')
 				dispatch(fireConffeti())
+				dispatch(updatePlayerInCollection(player))
 			} else if (receipt.events.NewPlayer) {
-				getPlayer(receipt.events.NewPlayer.returnValues.playerId, 'mint')
-				dispatch(fetchData())
+				await getPlayer(receipt.events.NewPlayer.returnValues.playerId, 'mint')
 				dispatch(fireConffeti())
+				dispatch(addPlayerToCollection(player))
 			}  else if (receipt.events.LevelUp) {
 				setRewards(receipt.events.LevelUp.returnValues)
 				setTransactionState('levelUp')
 				dispatch(fetchData())
 				dispatch(fireConffeti())
+				dispatch(updatePlayerInCollection(await footballHeroesService.getFootballPlayer(rewards.playerId)))
 			} else {
 				setTransactionState('success')
 			}
@@ -88,7 +89,7 @@ const Loader = () => {
                             <>
                             	<img style={{ width: 350, height: 200 }} src={LoadingImage}
                             		alt=""/>
-                            	<Typography variant="h6">Waiting confirmation...</Typography>
+                            	<Typography variant="h6">Please confirm transaction</Typography>
                             </>,
 							'loading':
                             <>

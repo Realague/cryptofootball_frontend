@@ -49,11 +49,11 @@ ReactDOM.render(
 				<BrowserRouter>
 					<Routes>
 						<Route path="/" element={<App/>}>
-							<Route path="/" element={<PresentationPage/>}/>
 							<Route path="/collection" element={<AuthenticatedRoute render={<CollectionPage/>}/>}/>
 							<Route path="/marketplace" element={<AuthenticatedRoute render={<MarketplacePage/>}/>}/>
 							<Route path="/match" element={<AuthenticatedRoute render={<MatchPage/>}/>}/>
 						</Route>
+						<Route path="/presentation" element={<PresentationPage/>}/>
 					</Routes>
 				</BrowserRouter>
 			</ThemeProvider>

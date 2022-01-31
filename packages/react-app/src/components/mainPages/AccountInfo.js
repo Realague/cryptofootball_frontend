@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useSelector } from 'react-redux'
 import '../../css/accountInfo.css'
-import { Button, Divider, Stack, Typography } from '@mui/material'
+import { Button, Divider, Stack, Typography, useMediaQuery } from '@mui/material'
 import { ClaimModal } from '../accountInfo/modals/ClaimModal'
 import { useTheme } from '@emotion/react'
 import TokenImage from '../../images/token.png'
 import BusdImage from '../../images/busd.png'
 import footballHeroesService from '../../services/FootballPlayerService'
+import { theme } from '../../theme'
 
 const AccountInfo = () => {
 	const {
@@ -23,6 +24,8 @@ const AccountInfo = () => {
 	const [seconds, setSeconds] = useState(0)
 	const theme = useTheme()
 	const [hasStarted, setHasStarted] = useState(false)
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
 
 	useEffect(() => {
 		if (seconds === 0 && !hasStarted) {
@@ -85,7 +88,7 @@ const AccountInfo = () => {
 				sx={{
 					backgroundColor: theme.palette.background.paper,
 					boxShadow: `inset -5px -5px 5px 5px ${theme.palette.background.paper}`,
-					overflowX: 'scroll',
+					overflowX: isMobile ? 'scroll' : 'hidden',
 				}}
 			>
 				<Stack

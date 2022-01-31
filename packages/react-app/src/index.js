@@ -15,6 +15,8 @@ import CollectionPage from './pages/collection/CollectionPage'
 import MarketplacePage from './pages/marketplace/MarketplacePage'
 import MatchPage from './pages/match/MatchPage'
 import PresentationPage from './components/presentation/PresentationPage'
+import MintPage from './pages/mint/MintPage'
+import TrainingPage from './pages/training/TrainingPage'
 
 const AuthenticatedRoute = ({ render }) => {
 	const { account } = useSelector(state => state.user)
@@ -53,6 +55,8 @@ ReactDOM.render(
 							<Route path="/collection" element={<AuthenticatedRoute render={<CollectionPage/>}/>}/>
 							<Route path="/marketplace" element={<AuthenticatedRoute render={<MarketplacePage/>}/>}/>
 							<Route path="/match" element={<AuthenticatedRoute render={<MatchPage/>}/>}/>
+							<Route path="/mint" element={<AuthenticatedRoute render={<MintPage/>}/>}/>
+							<Route path="/training" element={<AuthenticatedRoute render={<TrainingPage/>}/>}/>
 						</Route>
 						<Route path="/presentation" element={<PresentationPage/>}/>
 					</Routes>

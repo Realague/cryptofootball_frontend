@@ -24,6 +24,8 @@ const Navbar = ({ toggleTheme }) => {
 		//{ name: 'Home', path: '' },
 		{ name: 'Collection', path: 'collection' },
 		{ name: 'Match', path: 'match' },
+		{ name: 'Mint', path: 'mint' },
+		{ name: 'Training', path: 'training' },
 		{ name: 'Marketplace', path: 'marketplace' },
 		//{ name: 'Claim Tokens', path: 'claims' },
 	]

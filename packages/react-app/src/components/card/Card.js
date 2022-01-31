@@ -29,7 +29,11 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 
 	const renderCard = () => (
 		<Stack
-			onClick={() => setOpenedModal('information')}
+			onClick={() => {
+				if (!isNpc) {
+					setOpenedModal('information')
+				}
+			}}
 			width={mobile ? '160px' : '250px'}
 			height={mobile ? '270px' : '350px'}
 			sx={{
@@ -39,26 +43,30 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 				backgroundPosition: 'center',
 			}}
 			padding={6}
-			paddingTop={mobile ? '50px' : '70px'}
+			paddingTop={mobile ? '50px' : player.frame == 1 ? '80px' : '70px'}
 		>
 			<Stack
 				direction="row"
 				justifyContent="space-between"
 				alignItems="center"
+				paddingX={2}
+				sx={{
+					paddingBottom: '5px',
+				}}
 			>
 				<Typography
 					variant="subtitle1"
 					display="flex"
 					justifyContent="flex-end"
 					sx={{
-						textShadow: '1px 1px 0 black'
+						textShadow: '1px 1px 0 black',
 					}}
 				>
 					{Position.positionIdToString(player.position)}
 				</Typography>
 				{
 					!mobile && team.players.find(p => player.id == p.id) !== undefined &&
-						<Chip sx={{ position: 'absolute', marginLeft: '40px', marginBottom: '20px' }} label="In Team" />
+						<Chip sx={{ height: '20px' }} label="In Team" />
 				}
 				<Typography
 					variant="h6"
@@ -66,7 +74,6 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 					justifyContent="center"
 					sx={{
 						textShadow: '0 0 10px yellow',
-						paddingBottom: isNpc ? '45px' : '',
 					}}
 				>
 					{player.score}
@@ -182,9 +189,9 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 	return (
 		<Stack sx={{
 			display: 'flex',
-			cursor: 'pointer',
+			cursor: isNpc ? '' : 'pointer',
 			'&:hover': {
-				boxShadow: `1px 1px 5px ${theme.palette.secondary.main}`
+				boxShadow: isNpc ? '' : `1px 1px 5px ${theme.palette.secondary.main}`
 			}
 		}} direction="column" alignItems="center" width={'100%'}>
 			{renderCard()}

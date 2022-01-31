@@ -1,12 +1,15 @@
 import React from 'react'
 import '../../css/contact.css'
-import { Grid, Stack } from '@mui/material'
+import { Grid, Stack, useMediaQuery } from '@mui/material'
+import { theme } from '../../theme'
 
 function Contact() {
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
 	return (
 		<Stack spacing={2}>
 			<h3 className="title-contact">Join our community</h3>
-			<Grid container>
+			<Grid container direction={isMobile ? 'column' : 'row'} spacing={2}>
 				<Grid item xs={4} display="flex" alignItems="center" justifyContent="center">
 					<img
 						style={{

@@ -85,6 +85,7 @@ const AccountInfo = () => {
 				sx={{
 					backgroundColor: theme.palette.background.paper,
 					boxShadow: `inset -5px -5px 5px 5px ${theme.palette.background.paper}`,
+					overflowX: 'scroll',
 				}}
 			>
 				<Stack

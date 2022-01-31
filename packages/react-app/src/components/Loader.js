@@ -46,17 +46,17 @@ const Loader = () => {
 				}
 			} else if (receipt.events.UpgradeFrame) {
 				getPlayer(receipt.events.UpgradeFrame.returnValues.playerId, 'improveFrame')
-				dispatch(fireConffeti())
 				dispatch(fetchData())
+				dispatch(fireConffeti())
 			} else if (receipt.events.NewPlayer) {
 				getPlayer(receipt.events.NewPlayer.returnValues.playerId, 'mint')
-				dispatch(fireConffeti())
 				dispatch(fetchData())
+				dispatch(fireConffeti())
 			}  else if (receipt.events.LevelUp) {
 				setRewards(receipt.events.LevelUp.returnValues)
 				setTransactionState('levelUp')
-				dispatch(fireConffeti())
 				dispatch(fetchData())
+				dispatch(fireConffeti())
 			} else {
 				setTransactionState('success')
 			}
@@ -173,6 +173,8 @@ const Loader = () => {
 							'trainingDone':
                             <Stack alignItems="center" spacing={2}>
                             	<Typography variant="h4">Training result</Typography>
+                            	<Divider/>
+                            	<img style={{ width: 150	, height: 200 }} src={rewards.won ? '/training_win_white.png' : '/training_lose_white.png'} alt=""/>
                             	<Divider/>
                             	<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                             		<Typography variant="subtitle1">Result: </Typography>

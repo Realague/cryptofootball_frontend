@@ -13,16 +13,27 @@ import {
 import RandomPlayer from './components/RandomPlayer'
 import footballHeroesService from '../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
+import Web3 from 'web3'
+import TokenImage from '../../images/token.png'
 
 const MintPage = () => {
 	const [mintTeamComposition, setMintTeamComposition] = useState(-1)
 	const [availableCompositions, setAvailableCompositions] = useState([])
+	const [prices, setPrices] = useState({
+		fee: undefined,
+		player: undefined,
+	})
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
-
 	useEffect(() => {
 		footballHeroesService.getCompositionList().then(compositions => setAvailableCompositions(compositions))
+		Promise.all([footballHeroesService.getMintFees(), footballHeroesService.getMintPrice()]).then(results => {
+			setPrices({
+				fee: Web3.utils.fromWei(results[0]),
+				player: Web3.utils.fromWei(results[1])
+			})
+		})
 	}, [])
 
 	return (
@@ -49,6 +60,21 @@ const MintPage = () => {
 								</Typography>
 								<Divider flexItem />
 								<Typography>ma super image ici</Typography>
+								<Divider flexItem />
+								<Stack direction="row" justifyContent="space-between" spacing={2} alignItems="center">
+									<Stack direction="row" spacing={1} alignItems="center">
+										<Typography variant="caption">
+											Fees: { prices.fee !== undefined && prices.fee }
+										</Typography>
+										<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
+									</Stack>
+									<Stack direction="row" spacing={1} alignItems="center">
+										<Typography variant="caption">
+											Price: { prices.fee !== undefined && prices.player }
+										</Typography>
+										<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
+									</Stack>
+								</Stack>
 								<Divider flexItem />
 								<Button
 									fullWidth
@@ -99,16 +125,29 @@ const MintPage = () => {
 										</Stack>
 								}
 								<Divider flexItem />
+								<Stack direction="row" justifyContent="space-between" spacing={2} alignItems="center">
+									<Stack direction="row" spacing={1} alignItems="center">
+										<Typography variant="caption">
+											Fees: { prices.fee !== undefined && prices.fee * 11 }
+										</Typography>
+										<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
+									</Stack>
+									<Stack direction="row" spacing={1} alignItems="center">
+										<Typography variant="caption">
+											Price: { prices.fee !== undefined && prices.player * 11 }
+										</Typography>
+										<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
+									</Stack>
+								</Stack>
+								<Divider flexItem />
 								<Button
 									fullWidth
 									disabled={mintTeamComposition === -1}
 									variant="contained"
 									color="secondary"
 									onClick={() => {
-
 										console.log('composition to mint: ' + mintTeamComposition)
 										footballHeroesService.mintTeam(mintTeamComposition)
-										// footballHeroesService.mint()
 									}}
 								>
 									Mint

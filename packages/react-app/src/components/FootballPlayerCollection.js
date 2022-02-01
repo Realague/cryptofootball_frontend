@@ -27,7 +27,7 @@ import { ItemTypes } from './Constants'
 import LayoutContent from './LayoutContent'
 import { fetchData } from '../features/gameSlice'
 
-const FootballPlayerCollection = () => {
+const FootballPlayerCollection = ( { isTrainingPage = false } ) => {
 	const { collection, marketItems, playersForSale, fetching } = useSelector(state => state.game)
 	const [showAllPlayer, setShowAllPlayer] = useState(true)
 	const [tabValue, setTabValue] = useState(1)

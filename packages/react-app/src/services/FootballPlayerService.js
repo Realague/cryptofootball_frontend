@@ -245,6 +245,24 @@ class FootballHeroesService {
         store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.mintPlayer().send()}))
     }
 
+    async mintTeam(composition) {
+        const userStore = store.getState().user
+        const mintPrice = await this.getMintPrice()
+        const mintFees = await this.getMintFees()
+        if (parseInt(Web3.utils.toWei(userStore.BUSDBalance, 'ether')) < parseInt(mintFees) && parseInt(Web3.utils.toWei(userStore.GBBalance, 'ether')) < mintPrice * userStore.GBPrice) {
+            return
+        }
+        let allowances = await this.getAllowances(addresses.FootballPlayers)
+        if (parseInt(Web3.utils.fromWei(allowances.busd)) < parseInt(Web3.utils.fromWei(mintFees))) {
+            await this.approveBusd(addresses.FootballPlayers)
+        }
+        if (parseInt(Web3.utils.fromWei(allowances.gb)) < Web3.utils.fromWei((mintPrice * userStore.GBPrice).toString())) {
+            await this.approveGb(addresses.FootballPlayers)
+        }
+        store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.mintTeam(composition, addresses.Game).send()}))
+    }
+
+
     async listFootballPlayer(price, playerId) {
         if (!price || parseInt(price) <= 0) {
             return
@@ -269,8 +287,8 @@ class FootballHeroesService {
         store.dispatch(setTransaction({transaction: this.marketplaceContract.methods.cancelListing(itemId).send()}))
     }
 
-    async trainPlayer(trainingGroundId, playerId) {
-        store.dispatch(setTransaction({transaction: this.gameContract.methods.trainingGround(trainingGroundId, playerId).send()}))
+    async trainPlayer(trainingGroundId, playerId, useAllStamina = false) {
+        store.dispatch(setTransaction({transaction: this.gameContract.methods.trainingGround(trainingGroundId, playerId, useAllStamina).send()}))
     }
 
     async buyPlayer(marketItem) {

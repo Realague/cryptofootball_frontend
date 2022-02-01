@@ -107,6 +107,7 @@ const MintPage = () => {
 									onClick={() => {
 
 										console.log('composition to mint: ' + mintTeamComposition)
+										footballHeroesService.mintTeam(mintTeamComposition)
 										// footballHeroesService.mint()
 									}}
 								>

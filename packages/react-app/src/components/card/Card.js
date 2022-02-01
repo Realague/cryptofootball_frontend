@@ -10,7 +10,7 @@ import footballHeroesService from '../../services/FootballPlayerService'
 import { useSelector } from 'react-redux'
 import theme from '../../theme'
 
-const Card = ({ player, marketItem, mobile = false, isNpc }) => {
+const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, isTrainingPage = false }) => {
 	const { team } = useSelector(state => state.game)
 	const [stamina, setStamina] = useState(0)
 	const [openedModal, setOpenedModal] = useState(undefined)
@@ -30,6 +30,10 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 	const renderCard = () => (
 		<Stack
 			onClick={() => {
+				if (onClick !== undefined) {
+					onClick(player)
+					return
+				}
 				if (!isNpc) {
 					setOpenedModal('information')
 				}
@@ -201,10 +205,10 @@ const Card = ({ player, marketItem, mobile = false, isNpc }) => {
 				onClose={() => setOpenedModal(undefined)}
 				open={openedModal === 'information'}
 				frame={renderCard}
+				isTrainingPage={isTrainingPage}
 				player={player}
 				marketItem={marketItem}
 			/>
-
 		</Stack>
 	)
 }

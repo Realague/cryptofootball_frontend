@@ -23,16 +23,16 @@ import {addPlayerToTeam, removePlayerFromTeamById} from "../../../features/gameS
 import Strategy from "../../../enums/Strategy";
 
 
-const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, mobile}) => {
+const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, mobile, isTrainingPage = false}) => {
     const {account, GBBalance, GBPrice} = useSelector(state => state.user)
     const {isMarketplaceOpen, isMintOpen, isLevelUpOpen, isTrainingOpen, isMatchOpen, isUpgradeFrameOpen} = useSelector(state => state.settings)
     const {team} = useSelector(state => state.game)
-    const [action, setAction] = useState(undefined)
+    const [action, setAction] = useState(isTrainingPage ? "train" : undefined)
     const [maxGBToConsume, setMaxGBToConsume] = useState(0)
     const xpPerDollar = 50
     const ref = createRef()
     const informationRef = createRef()
-    const [informationShown, setInformationShown] = useState(true)
+    const [informationShown, setInformationShown] = useState(isTrainingPage ? false : true)
     const sellForm = useForm({mode: 'onChange'})
     const dispatch = useDispatch()
     const theme = useTheme()
@@ -88,8 +88,6 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
             <Button hidden={marketItem !== undefined} disabled={+player.frame === 4 || !isUpgradeFrameOpen} onClick={() => chooseAction('improve-frame')} fullWidth
                     color="primary" variant="contained">Improve
                 Frame</Button>
-            <Button hidden={marketItem !== undefined} disabled={+player.stamina < 20 || !isTrainingOpen} onClick={() => chooseAction('train')} fullWidth color="primary"
-                    variant="contained">Train</Button>
             <Button hidden={marketItem !== undefined} disabled={!isMarketplaceOpen} onClick={() => chooseAction('sell')} fullWidth color="secondary"
                     variant="contained"
                     my={4}>Sell</Button>
@@ -301,7 +299,11 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                         </Box>
                     }
 
-                    <Box ref={informationRef} width={action === 'improve-frame' ? isMobile ? '240px' : '400px' : '240px'} height={'400px'} overflow={'hidden'}>
+                    <Box ref={informationRef}
+                         width={
+                             action === 'improve-frame' ? isMobile ? '240px' : '400px' : '240px'
+                         }
+                         height={'400px'} overflow={'hidden'}>
                         <Slide
                             in={action === undefined && informationShown}
                             onExited={() => {

@@ -85,9 +85,9 @@ export const gameSlice = createSlice({
 			state.team.players = state.team.players.filter(p => p.id !== action.payload)
 		},
 		updatePlayerInCollection: (state, action) => {
-			state.team.players = state.team.players.map(p => {
+			state.collection = state.collection.map(p => {
 				if (p.id === action.payload.id) {
-					return action.player
+					return action.payload
 				}
 				return p
 			})

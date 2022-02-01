@@ -6,7 +6,7 @@ import { Modal, Button, Stack, Typography, Divider, Box } from '@mui/material'
 import { darkModal } from '../css/style'
 import { useDispatch, useSelector } from 'react-redux'
 import footballHeroesService from '../services/FootballPlayerService'
-import {addPlayerToCollection, fetchData, fireConffeti, updatePlayerInCollection} from '../features/gameSlice'
+import { addPlayerToCollection, fetchData, fireConffeti, updatePlayerInCollection } from '../features/gameSlice'
 
 const Loader = () => {
 	const [transactionState, setTransactionState] = useState('')
@@ -36,7 +36,8 @@ const Loader = () => {
 				if (receipt.events.TrainingDone.returnValues.won === true) {
 					dispatch(fireConffeti())
 				}
-				dispatch(updatePlayerInCollection(await footballHeroesService.getFootballPlayer(rewards.playerId)))
+				console.log(rewards)
+				dispatch(updatePlayerInCollection(await footballHeroesService.getFootballPlayer(receipt.events.TrainingDone.returnValues.playerId)))
 			} else if (receipt.events.MatchResult) {
 				setTransactionState('matchResult')
 				const matchResult = receipt.events.MatchResult.returnValues
@@ -47,7 +48,7 @@ const Loader = () => {
 			} else if (receipt.events.UpgradeFrame) {
 				await getPlayer(receipt.events.UpgradeFrame.returnValues.playerId, 'improveFrame')
 				dispatch(fireConffeti())
-				dispatch(updatePlayerInCollection(player))
+				dispatch(updatePlayerInCollection(await footballHeroesService.getFootballPlayer(receipt.events.UpgradeFrame.returnValues.playerId)))
 			} else if (receipt.events.NewPlayer) {
 				await getPlayer(receipt.events.NewPlayer.returnValues.playerId, 'mint')
 				dispatch(fireConffeti())

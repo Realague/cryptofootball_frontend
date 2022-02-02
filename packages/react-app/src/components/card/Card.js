@@ -183,8 +183,9 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 		<Stack sx={{
 			display: 'flex',
 			cursor: isNpc ? '' : 'pointer',
+			borderRadius: '3px',
 			'&:hover': {
-				boxShadow: isNpc ? '' : `1px 1px 5px ${theme.palette.secondary.main}`
+				boxShadow: isNpc ? '' : `0 0 5px ${theme.palette.secondary.main}`
 			}
 		}} direction="column" alignItems="center" width={'100%'}>
 			{renderCard()}

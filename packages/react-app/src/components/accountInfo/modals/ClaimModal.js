@@ -1,7 +1,7 @@
 import React from 'react'
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import Button from '@mui/material/Button'
-import footballHeroesService from "../../../services/FootballPlayerService";
+import footballHeroesService from '../../../services/FootballPlayerService'
 
 export const ClaimModal = ({ onClose, open, rewards, claimFee }) => {
 
@@ -15,17 +15,25 @@ export const ClaimModal = ({ onClose, open, rewards, claimFee }) => {
 			<DialogTitle>Claim Rewards</DialogTitle>
 			<DialogContent>
 				<DialogContentText id="alert-dialog-slide-description">
-                    With your current {claimFee}% claim fee, you'll
-                    receive {rewards} $GB
-                    out of {rewards} $GB
-                    Claim fee decay at a rate of 2% everyday
+					With your current <strong>{claimFee}%</strong> claim fee, you'll
+					receive <strong>{rewards} $GB</strong> out
+					of <strong>{rewards} $GB</strong> Claim fee decay at a rate of 2% everyday
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>
-				<Button color="error" variant="outlined"
-					onClick={() => onClose()}>Cancel</Button>
-				<Button onClick={async () => await footballHeroesService.claimRewards()} color="secondary" variant="contained"
-				>Claim</Button>
+				<Button
+					variant="contained"
+					onClick={() => onClose()}
+				>
+					Cancel
+				</Button>
+				<Button
+					onClick={async () => await footballHeroesService.claimRewards()}
+					color="secondary"
+					variant="contained"
+				>
+					Claim
+				</Button>
 			</DialogActions>
 		</Dialog>
 	)

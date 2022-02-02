@@ -16,6 +16,8 @@ import { useTheme } from '@emotion/react'
 import Web3 from 'web3'
 import TokenImage from '../../images/token.png'
 import { useSelector } from 'react-redux'
+import football1 from '../../images/football-1.jpg'
+import football2 from '../../images/football-2.jpg'
 
 const MintPage = () => {
 	const { isInTransaction } = useSelector(state => state.settings)
@@ -39,7 +41,7 @@ const MintPage = () => {
 	}, [])
 
 	return (
-		<Stack p={4} spacing={2}>
+		<Stack p={2} spacing={2}>
 			<Typography color="secondary" variant="h4">
 				Mint
 			</Typography>
@@ -61,7 +63,13 @@ const MintPage = () => {
 									MINT PLAYER
 								</Typography>
 								<Divider flexItem />
-								<Typography>ma super image ici</Typography>
+								<img
+									style={{
+										height: '240px',
+										width: '100%',
+									}}
+									src={football2}
+								/>
 								<Divider flexItem />
 								<Stack direction="row" justifyContent="space-between" spacing={2} alignItems="center">
 									<Stack direction="row" spacing={1} alignItems="center">
@@ -100,7 +108,13 @@ const MintPage = () => {
 									MINT TEAM
 								</Typography>
 								<Divider flexItem />
-								<Typography>ma super image ici</Typography>
+								<img
+									style={{
+										height: '240px',
+										width: '100%',
+									}}
+									src={football1}
+								/>
 								<Divider flexItem />
 								{
 									availableCompositions.length === 0 ?

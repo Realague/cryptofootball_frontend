@@ -24,23 +24,23 @@ const TrainingModal = ({ modalOptions, setModalOptions }) => {
 	const difficulties = [{
 		name: 'EASY',
 		id: 0,
-		xp: 20,
-		token: 200,
-		stamina: 20,
+		xp: 100,
+		token: 5,
+		stamina: 25,
 	},
 	{
 		name: 'MEDIUM',
 		id: 1,
-		xp: 20,
-		token: 200,
-		stamina: 20,
+		xp: 150,
+		token: 7,
+		stamina: 25,
 	},
 	{
 		name: 'HARD',
 		id: 2,
-		xp: 20,
-		token: 200,
-		stamina: 20,
+		xp: 200,
+		token: 10,
+		stamina: 25,
 	}]
 
 	return (

@@ -2,8 +2,10 @@ import React from 'react'
 import { Button, Divider, Stack, Typography } from '@mui/material'
 import TokenImage from '../../../images/token.png'
 import { BsFillLightningChargeFill } from 'react-icons/bs'
+import {useSelector} from "react-redux";
 
 const TrainingColumn = ({ difficulty, selectedMode, setSelectedMode }) => {
+	const { GBPrice } = useSelector(state => state.user)
 
 	return (
 		<Stack
@@ -13,7 +15,7 @@ const TrainingColumn = ({ difficulty, selectedMode, setSelectedMode }) => {
 			<Typography alignSelf="center" variant="h5" color="secondary">{difficulty.name}</Typography>
 			<Stack direction="row" spacing={1} alignItems="center">
 				<Typography variant="body2">
-                    + {difficulty.token}
+                    + {difficulty.token * +GBPrice}
 				</Typography>
 				<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
 			</Stack>

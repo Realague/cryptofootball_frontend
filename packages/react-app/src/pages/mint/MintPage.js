@@ -65,6 +65,10 @@ const MintPage = () => {
 								<Divider flexItem />
 								<img
 									style={{
+										boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
+										border: `1px solid ${theme.palette.secondary.main}`,
+										borderRadius: '2px',
+										objectFit: 'cover',
 										height: '240px',
 										width: '100%',
 									}}
@@ -110,6 +114,10 @@ const MintPage = () => {
 								<Divider flexItem />
 								<img
 									style={{
+										boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
+										border: `1px solid ${theme.palette.secondary.main}`,
+										borderRadius: '2px',
+										objectFit: 'cover',
 										height: '240px',
 										width: '100%',
 									}}

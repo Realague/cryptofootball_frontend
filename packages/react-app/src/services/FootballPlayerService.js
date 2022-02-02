@@ -1,7 +1,7 @@
 import web3Contract from 'web3-eth-contract'
 import {abis, addresses} from "@project/contracts";
 import Web3 from "web3";
-import {setTransaction} from "../features/settingsSlice";
+import {setTransaction, setTransactionState} from "../features/settingsSlice";
 import {store} from "../store";
 import Position from "../enums/Position";
 import {fetchData, resetTeam} from "../features/gameSlice";
@@ -230,36 +230,37 @@ class FootballHeroesService {
 
     async mint() {
         const userStore = store.getState().user
-        const mintPrice = await this.getMintPrice()
-        const mintFees = await this.getMintFees()
-
-        if (parseInt(Web3.utils.toWei(userStore.BUSDBalance, 'ether')) < parseInt(mintFees) && parseInt(Web3.utils.toWei(userStore.GBBalance, 'ether')) < mintPrice * userStore.GBPrice) {
+        store.dispatch(setTransactionState(true))
+        const result = await Promise.all([this.getMintPrice(), this.getMintFees()])
+        if (parseInt(Web3.utils.toWei(userStore.BUSDBalance, 'ether')) < parseInt(result[1]) && parseInt(Web3.utils.toWei(userStore.GBBalance, 'ether')) < result[0] * userStore.GBPrice) {
             return
         }
         let allowances = await this.getAllowances(addresses.FootballPlayers)
-        if (parseInt(Web3.utils.fromWei(allowances.busd)) < parseInt(Web3.utils.fromWei(mintFees))) {
+        if (parseInt(Web3.utils.fromWei(allowances.busd)) < parseInt(Web3.utils.fromWei(result[1]))) {
             await this.approveBusd(addresses.FootballPlayers)
         }
-        if (parseInt(Web3.utils.fromWei(allowances.gb)) < Web3.utils.fromWei((mintPrice * userStore.GBPrice).toString())) {
+        if (parseInt(Web3.utils.fromWei(allowances.gb)) < Web3.utils.fromWei((result[0] * userStore.GBPrice).toString())) {
             await this.approveGb(addresses.FootballPlayers)
         }
+        store.dispatch(setTransactionState(false))
         store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.mintPlayer().send()}))
     }
 
     async mintTeam(composition) {
+        store.dispatch(setTransactionState(true))
         const userStore = store.getState().user
-        const mintPrice = await this.getMintPrice()
-        const mintFees = await this.getMintFees()
-        if (parseInt(Web3.utils.toWei(userStore.BUSDBalance, 'ether')) < parseInt(mintFees) && parseInt(Web3.utils.toWei(userStore.GBBalance, 'ether')) < mintPrice * userStore.GBPrice) {
+        const result = await Promise.all([this.getMintPrice(), this.getMintFees()])
+        if (parseInt(Web3.utils.toWei(userStore.BUSDBalance, 'ether')) < parseInt(result[1]) && parseInt(Web3.utils.toWei(userStore.GBBalance, 'ether')) < result[0] * userStore.GBPrice) {
             return
         }
         let allowances = await this.getAllowances(addresses.FootballPlayers)
-        if (parseInt(Web3.utils.fromWei(allowances.busd)) < parseInt(Web3.utils.fromWei(mintFees))) {
+        if (parseInt(Web3.utils.fromWei(allowances.busd)) < parseInt(Web3.utils.fromWei(result[1]))) {
             await this.approveBusd(addresses.FootballPlayers)
         }
-        if (parseInt(Web3.utils.fromWei(allowances.gb)) < Web3.utils.fromWei((mintPrice * userStore.GBPrice).toString())) {
+        if (parseInt(Web3.utils.fromWei(allowances.gb)) < Web3.utils.fromWei((result[0] * userStore.GBPrice).toString())) {
             await this.approveGb(addresses.FootballPlayers)
         }
+        store.dispatch(setTransactionState(false))
         store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.mintTeam(composition, addresses.Game).send()}))
     }
 

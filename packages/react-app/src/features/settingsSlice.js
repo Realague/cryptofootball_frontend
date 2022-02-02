@@ -14,7 +14,8 @@ const initialState = {
 	isLevelUpOpen: false,
 	isTrainingOpen: false,
 	isMatchOpen: false,
-	isUpgradeFrameOpen: false
+	isUpgradeFrameOpen: false,
+	isInTransaction: false,
 }
 
 export const settingsSlice = createSlice({
@@ -44,6 +45,9 @@ export const settingsSlice = createSlice({
 		},
 		setTeamDrawerState: (state, action) => {
 			state.teamDrawerOpen = action.payload
+		},
+		setTransactionState: (state, action) => {
+			state.isInTransaction = action.payload
 		}
 	},
 })
@@ -56,6 +60,7 @@ export const {
 	setIsDraggingPlayer,
 	setTeamDrawerState,
 	setAttemptingToConnect,
+	setTransactionState
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

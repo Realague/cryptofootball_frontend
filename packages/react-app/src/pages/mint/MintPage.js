@@ -15,8 +15,10 @@ import footballHeroesService from '../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
 import Web3 from 'web3'
 import TokenImage from '../../images/token.png'
+import { useSelector } from 'react-redux'
 
 const MintPage = () => {
+	const { isInTransaction } = useSelector(state => state.settings)
 	const [mintTeamComposition, setMintTeamComposition] = useState(-1)
 	const [availableCompositions, setAvailableCompositions] = useState([])
 	const [prices, setPrices] = useState({
@@ -80,9 +82,15 @@ const MintPage = () => {
 									fullWidth
 									variant="contained"
 									color="secondary"
+									disabled={isInTransaction}
 									onClick={() => footballHeroesService.mint()}
 								>
-									Mint
+									{
+										isInTransaction ?
+											<CircularProgress size={21}/>
+											:
+											'Mint'
+									}
 								</Button>
 							</Stack>
 						</Grid>
@@ -142,7 +150,7 @@ const MintPage = () => {
 								<Divider flexItem />
 								<Button
 									fullWidth
-									disabled={mintTeamComposition === -1}
+									disabled={mintTeamComposition === -1 || isInTransaction}
 									variant="contained"
 									color="secondary"
 									onClick={() => {
@@ -150,7 +158,12 @@ const MintPage = () => {
 										footballHeroesService.mintTeam(mintTeamComposition)
 									}}
 								>
-									Mint
+									{
+										isInTransaction ?
+											<CircularProgress size={21}/>
+											:
+											'Mint'
+									}
 								</Button>
 							</Stack>
 						</Grid>

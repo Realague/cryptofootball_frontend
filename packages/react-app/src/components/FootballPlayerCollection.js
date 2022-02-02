@@ -30,7 +30,7 @@ import { fetchData } from '../features/gameSlice'
 const FootballPlayerCollection = ({ isTrainingPage = false }) => {
 	const { collection, marketItems, playersForSale, fetching } = useSelector(state => state.game)
 	const [showAllPlayer, setShowAllPlayer] = useState(true)
-	const [tabValue, setTabValue] = useState(1)
+	const [tabValue, setTabValue] = useState(0)
 	const frames = Frame.TierList.slice().reverse()
 	const [sortOption, setSortOption] = useState('score')
 	const [sortDirection, setSortDirection] = useState('desc')
@@ -177,8 +177,9 @@ const FootballPlayerCollection = ({ isTrainingPage = false }) => {
 									</Grid>
 								))
 								:
+								collection !== undefined &&
 								collection
-									.filter(p => filter === undefined ? true : p[filterProperty] == filter)
+									.filter(p => (p === undefined || filter === undefined) ? true : p[filterProperty] == filter)
 									.sort(sortMethod)
 									.map((player, idx) => (
 										<Grid item key={idx}>

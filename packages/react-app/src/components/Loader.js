@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import Card from './card/Card'
 import LoadingImage from '../images/gifs/loading.gif'
 import { CancelOutlined, CheckCircleOutlined } from '@mui/icons-material'
-import { Modal, Button, Stack, Typography, Divider, Box } from '@mui/material'
-import { darkModal } from '../css/style'
+import { Modal, Button, Stack, Typography, Divider, Box, Grid } from '@mui/material'
+import { darkModal, trainingModal } from '../css/style'
 import { useDispatch, useSelector } from 'react-redux'
 import footballHeroesService from '../services/FootballPlayerService'
 import {
+	addPlayersToCollection,
 	addPlayerToCollection,
 	fetchData,
 	fireConffeti,
@@ -21,6 +22,7 @@ const Loader = () => {
 	const [showLoader, setShowLoader] = useState(false)
 	const [rewards, setRewards] = useState(0)
 	const [player, setPlayer] = useState(undefined)
+	const [players, setPlayers] = useState([])
 	const dispatch = useDispatch()
 
 	const { transaction } = useSelector(state => state.settings)
@@ -72,7 +74,10 @@ const Loader = () => {
 				await getPlayer(receipt.events.NewPlayer.returnValues.playerId, 'mint')
 				dispatch(fireConffeti())
 				dispatch(addPlayerToCollection(player))
-			}  else if (receipt.events.LevelUp) {
+			} else if (receipt.events.NewPlayers) {
+				await getPlayers(receipt.events.NewPlayers.returnValues.playersId, 'mintTeam')
+				dispatch(fireConffeti())
+			} else if (receipt.events.LevelUp) {
 				setRewards(receipt.events.LevelUp.returnValues)
 				setTransactionState('levelUp')
 				dispatch(fetchData())
@@ -89,6 +94,14 @@ const Loader = () => {
 
 	const getPlayer = async (playerId, state = 'mint') => {
 		setPlayer(await footballHeroesService.getFootballPlayer(playerId))
+		setTransactionState(state)
+	}
+
+	const getPlayers = async (playersId, state = 'mint') => {
+		const players = await Promise.all(playersId.map(id => footballHeroesService.getFootballPlayer(id)))
+		console.log(players)
+		setPlayers(players)
+		dispatch(addPlayersToCollection(players))
 		setTransactionState(state)
 	}
 
@@ -175,6 +188,36 @@ const Loader = () => {
                             		</Button>
                             	</Stack>
                             </>,
+							'mintTeam':
+									<Stack sx={{
+										...trainingModal,
+										alignItem: 'center',
+										width: '75vw',
+									}} spacing={2}>
+										<Typography variant="h4">Mint result</Typography>
+										<Divider/>
+										<Grid container sx={{ height: '50vh', overflowY: 'scroll' }}>
+											{
+												players.map(player => {
+													return (
+														<Grid item key={player.id} xs={'auto'}>
+															<Card player={player} marketItem={undefined}/>
+														</Grid>
+													)
+												})
+											}
+										</Grid>
+										<Divider/>
+										<Button
+											sx={{ mt: 2 }}
+											variant="contained"
+											color="secondary"
+											fullWidth
+											onClick={onHide}
+										>
+											Collect
+										</Button>
+									</Stack>,
 							'improveFrame':
 								<Stack alignItems="center" spacing={2}>
 									<Typography variant="h4">Improve Frame</Typography>

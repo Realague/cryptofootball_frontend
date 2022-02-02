@@ -81,6 +81,9 @@ export const gameSlice = createSlice({
 		addPlayerToCollection: (state, action) => {
 			state.collection = [...state.collection, action.payload]
 		},
+		addPlayersToCollection: (state, action) => {
+			state.collection = [...state.collection, ...action.payload]
+		},
 		removePlayerFromTeamById: (state, action) => {
 			state.team.players = state.team.players.filter(p => p.id !== action.payload)
 		},
@@ -113,6 +116,7 @@ export const {
 	setMarketItems,
 	setPlayersForSale,
 	addPlayerToCollection,
+	addPlayersToCollection,
 	fireConffeti,
 	stopConffeti,
 	updatePlayerInCollection,

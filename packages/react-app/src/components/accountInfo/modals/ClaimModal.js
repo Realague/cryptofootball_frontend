@@ -16,7 +16,7 @@ export const ClaimModal = ({ onClose, open, rewards, claimFee }) => {
 			<DialogContent>
 				<DialogContentText id="alert-dialog-slide-description">
 					With your current <strong>{claimFee}%</strong> claim fee, you'll
-					receive <strong>{rewards} $GB</strong> out
+					receive <strong>{(rewards * ((100 - +claimFee) / 100)).toFixed(2)} $GB</strong> out
 					of <strong>{rewards} $GB</strong> Claim fee decay at a rate of 2% everyday
 				</DialogContentText>
 			</DialogContent>

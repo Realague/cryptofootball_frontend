@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, {createRef, forwardRef, useEffect, useState} from 'react'
 import {
-    Box,
+    Box, CircularProgress,
     Divider,
     Fade, Grid,
     Input,
@@ -25,7 +25,7 @@ import Strategy from "../../../enums/Strategy";
 
 const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, mobile, isTrainingPage = false}) => {
     const {account, GBBalance, GBPrice} = useSelector(state => state.user)
-    const {isMarketplaceOpen, isMintOpen, isLevelUpOpen, isTrainingOpen, isMatchOpen, isUpgradeFrameOpen} = useSelector(state => state.settings)
+    const {isMarketplaceOpen, isInTransaction, isLevelUpOpen, isTrainingOpen, isMatchOpen, isUpgradeFrameOpen} = useSelector(state => state.settings)
     const {team} = useSelector(state => state.game)
     const [action, setAction] = useState(isTrainingPage ? "train" : undefined)
     const [maxGBToConsume, setMaxGBToConsume] = useState(0)
@@ -209,7 +209,12 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                             await footballHeroesService.upgradeFrame(player.id, p.id)
                             chooseAction(undefined)
                         }}
-                        icon={<Done/>}
+                        icon={
+                            isInTransaction ?
+                                <CircularProgress/>
+                                :
+                                <Done/>
+                        }
                     />
                     ))
                     }

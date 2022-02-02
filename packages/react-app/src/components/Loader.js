@@ -11,7 +11,6 @@ import {
 	addPlayerToCollection,
 	fetchData,
 	fireConffeti,
-	setCollection,
 	updatePlayerInCollection
 } from '../features/gameSlice'
 import { updateBalances } from '../features/userSlice'

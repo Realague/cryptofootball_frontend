@@ -1,11 +1,23 @@
 import React, { useState } from 'react'
-import { Button, Checkbox, CircularProgress, Divider, Grid, Modal, Stack, Typography, useMediaQuery } from '@mui/material'
+import {
+	Button,
+	Checkbox,
+	CircularProgress,
+	Divider,
+	Grid,
+	IconButton,
+	Modal,
+	Stack,
+	Typography,
+	useMediaQuery
+} from '@mui/material'
 import TrainingColumn from './TrainingColumn'
 import { trainingModal } from '../../../css/style'
 import { theme } from '../../../theme'
 import football1 from '../../../images/football-1.jpg'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import { BsFillLightningChargeFill } from 'react-icons/bs'
+import { ChevronLeft, ChevronRight, Close, RemoveCircle } from '@mui/icons-material'
 
 const TrainingModal = ({ modalOptions, setModalOptions }) => {
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -55,7 +67,7 @@ const TrainingModal = ({ modalOptions, setModalOptions }) => {
 			<Grid
 				container
 				width={isMobile ? '95vw' : '65vw'}
-				height={isMobile ? 'auto' : '75vh'}
+				height={isMobile ? 'auto' : 'auto'}
 				sx={{
 					gridAutoColumns: 'column',
 					...trainingModal,
@@ -77,6 +89,11 @@ const TrainingModal = ({ modalOptions, setModalOptions }) => {
 							:
 
 							<Stack alignItems="center" justifyContent="center" spacing={2} p={2}>
+								<Stack direction="row" width="100%" justifyContent="flex-end">
+									<IconButton onClick={() => setModalOptions({ ...modalOptions, open : false })}>
+										<Close/>
+									</IconButton>
+								</Stack>
 								<Typography color="secondary" variant="h4">Training Ground</Typography>
 								<Typography variant="h6">
                             Choose the difficulty of the training

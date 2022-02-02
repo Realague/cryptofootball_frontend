@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import Button from '@mui/material/Button'
+import footballHeroesService from "../../../services/FootballPlayerService";
 
 export const ClaimModal = ({ onClose, open, rewards, claimFee }) => {
 
@@ -23,7 +24,7 @@ export const ClaimModal = ({ onClose, open, rewards, claimFee }) => {
 			<DialogActions>
 				<Button color="error" variant="outlined"
 					onClick={() => onClose()}>Cancel</Button>
-				<Button color="secondary" variant="contained"
+				<Button onClick={async () => await footballHeroesService.claimRewards()} color="secondary" variant="contained"
 				>Claim</Button>
 			</DialogActions>
 		</Dialog>

@@ -12,20 +12,9 @@ import theme from '../../theme'
 
 const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, isTrainingPage = false }) => {
 	const { team } = useSelector(state => state.game)
-	const [stamina, setStamina] = useState(0)
 	const [openedModal, setOpenedModal] = useState(undefined)
 	const [anchorElExperience, setAnchorElExperience] = useState(undefined)
 	const [anchorElStamina, setAnchorElStamina] = useState(undefined)
-
-	useEffect(() => {
-		if (!isNpc) {
-			getPlayerStamina()
-		}
-	}, [])
-
-	const getPlayerStamina = async () => {
-		setStamina(await footballHeroesService.getCurrentStamina(player.id))
-	}
 
 	const renderCard = () => (
 		<Stack

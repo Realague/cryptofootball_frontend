@@ -10,7 +10,7 @@ import {
 	PERSIST,
 	PURGE,
 	REGISTER,
-	persistStore, createTransform,
+	persistStore,
 } from 'reduxjs-toolkit-persist'
 
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'

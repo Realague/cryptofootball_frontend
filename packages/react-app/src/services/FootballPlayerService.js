@@ -4,6 +4,7 @@ import Web3 from "web3";
 import {setTransaction} from "../features/settingsSlice";
 import {store} from "../store";
 import Position from "../enums/Position";
+import {fetchData, resetTeam} from "../features/gameSlice";
 
 class FootballHeroesService {
 
@@ -398,6 +399,13 @@ class FootballHeroesService {
         return compo
     }
 
+    async resetTeam() {
+        store.dispatch(setTransaction({
+            name: 'resetTeam',
+            transaction: this.gameContract.methods.resetTeam().send()
+        }))
+    }
+
     async refreshOpponentTeams() {
         let GBAllowance = await this.getGbAllowance(addresses.Game)
         let amount = await this.gameContract.methods.refreshOpponentsFee.call()
@@ -435,6 +443,6 @@ class FootballHeroesService {
     }
 }
 
-const footballHeroesService = new FootballHeroesService()
+let footballHeroesService = new FootballHeroesService()
 
 export default footballHeroesService

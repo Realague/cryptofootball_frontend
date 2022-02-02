@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
 	account: undefined,
@@ -10,6 +10,7 @@ const initialState = {
 	rewards: '0',
 	playersId: [],
 	isConnected: false,
+	fetching: false,
 }
 
 export const userSlice = createSlice({
@@ -19,6 +20,13 @@ export const userSlice = createSlice({
 		login: (state, action) => {
 			state.account = action.payload
 			state.isConnected = true
+		},
+		updateBalances: (state, action) => {
+			return {
+				...state,
+				BUSDBalance: action.payload.BUSDBalance,
+				GBBalance: action.payload.GBBalance,
+			}
 		},
 		updateAccount: (state, action) => {
 			return {
@@ -41,6 +49,7 @@ export const userSlice = createSlice({
 export const {
 	login,
 	updateAccount,
+	updateBalances,
 	logout,
 } = userSlice.actions
 

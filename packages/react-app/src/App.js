@@ -14,7 +14,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { fetchData } from './features/gameSlice'
 import { SnackbarProvider } from 'notistack'
 import ReactCanvasConfetti from 'react-canvas-confetti'
-import { setAttemptingToConnect, setTeamDrawerState } from './features/settingsSlice'
+import { setTeamDrawerState } from './features/settingsSlice'
 import Box from '@mui/material/Box'
 
 

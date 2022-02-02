@@ -6,7 +6,15 @@ import { Modal, Button, Stack, Typography, Divider, Box } from '@mui/material'
 import { darkModal } from '../css/style'
 import { useDispatch, useSelector } from 'react-redux'
 import footballHeroesService from '../services/FootballPlayerService'
-import { addPlayerToCollection, fetchData, fireConffeti, updatePlayerInCollection } from '../features/gameSlice'
+import {
+	addPlayerToCollection,
+	fetchData,
+	fireConffeti,
+	setCollection,
+	updatePlayerInCollection
+} from '../features/gameSlice'
+import { updateBalances } from '../features/userSlice'
+import Web3 from 'web3'
 
 const Loader = () => {
 	const [transactionState, setTransactionState] = useState('')
@@ -23,6 +31,13 @@ const Loader = () => {
 		}
 	}, [transaction])
 
+	const refreshBalances = async () => {
+		const BUSDBalance = Web3.utils.fromWei(await footballHeroesService.getBusdBalance())
+		const GBBalance = Web3.utils.fromWei(await footballHeroesService.getGbBalance())
+		console.log(BUSDBalance, GBBalance)
+		dispatch(updateBalances({ BUSDBalance, GBBalance }))
+	}
+
 	const callBack = async () => {
 		setTransactionState('confirmation')
 		setShowLoader(true)
@@ -30,6 +45,10 @@ const Loader = () => {
 			setTransactionState('loading')
 		}).on('receipt', async function (receipt) {
 			console.log('receipt', receipt)
+			refreshBalances()
+			if (transaction.name === 'resetTeam') {
+				dispatch(fetchData())
+			}
 			if (receipt.events.TrainingDone) {
 				setTransactionState('trainingDone')
 				setRewards(receipt.events.TrainingDone.returnValues)

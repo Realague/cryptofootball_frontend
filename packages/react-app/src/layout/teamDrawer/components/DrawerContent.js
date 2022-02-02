@@ -6,22 +6,22 @@ import Position from '../../../enums/Position'
 import LayoutContent from '../../../components/LayoutContent'
 import PlayerListItem from './PlayerListItem'
 import { useDispatch, useSelector } from 'react-redux'
-import { removePlayerFromTeamById, resetTeam, setStrategy } from '../../../features/gameSlice'
+import { fetchData, removePlayerFromTeamById, resetTeam, setStrategy } from '../../../features/gameSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
 import { Remove } from '@mui/icons-material'
 
 const DrawerContent = ({ lastPlayerDropped }) => {
-	const { team } = useSelector(state => state.game)
+	const { team, fetching } = useSelector(state => state.game)
 	const dispatch = useDispatch()
 	const theme = useTheme()
 	const [compositions, setCompositions] = useState([])
 
 	useEffect(() => {
-		fetchData().finally(() => setCompositions(Strategy.Strategies))
+		fetch().finally(() => setCompositions(Strategy.Strategies))
 	}, [])
 
-	const fetchData = async () => {
+	const fetch = async () => {
 		if (Strategy.Strategies.length === 0) {
 			const response = await footballHeroesService.getCompositionList()
 			response.forEach(compo => {
@@ -42,6 +42,10 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 
 	const resetStrategy = () => {
 		dispatch(resetTeam())
+	}
+
+	const destroyTeam = async () => {
+		await footballHeroesService.resetTeam()
 	}
 
 	const saveTeam = async () => {
@@ -128,6 +132,14 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 								color="primary"
 							>
 								Reset team
+							</Button>
+							<Button
+								disabled={team.players.length === 0}
+								onClick={() => destroyTeam()}
+								variant="contained"
+								color="error"
+							>
+								Destroy team
 							</Button>
 						</Stack>
 

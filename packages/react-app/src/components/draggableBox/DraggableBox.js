@@ -25,6 +25,8 @@ const DraggableBox = ({ type, item, children }) => {
 		if (isDragging && !teamDrawerOpen) {
 			dispatch(setTeamDrawerState(true))
 		}
+
+		return () => {setIsDraggingPlayer(false)}
 	}, [isDragging])
 
 	return (

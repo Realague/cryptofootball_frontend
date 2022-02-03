@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import ProjectLogo from '../../images/projectLogo.jpg'
 import WalletButton from './components/ButtonWallet'
 import Button from '@mui/material/Button'
-import { AppBar, Box, IconButton, Stack, Toolbar, useMediaQuery } from '@mui/material'
+import { AppBar, Box, IconButton, Stack, Toolbar, Typography, useMediaQuery } from '@mui/material'
 import NavigationLink from './components/NavbarLink'
 import AccountInfo from '../../components/mainPages/AccountInfo'
 import { theme } from '../../theme'
@@ -60,6 +60,11 @@ const Navbar = ({ toggleTheme }) => {
 							/>
 						))
 					}
+					<Typography variant="h6" onClick={() => {
+						window.open('https://footballheroes.gitbook.io/footballheroes/')
+					}}>
+							Whitepaper
+					</Typography>
 				</Stack>
 				<Stack spacing={2} direction="row">
 					<WalletButton/>

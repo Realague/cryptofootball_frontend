@@ -15,6 +15,7 @@ import footballHeroesService from '../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
 import Web3 from 'web3'
 import TokenImage from '../../images/token.png'
+import BusdImage from '../../images/busd.png'
 import { useSelector } from 'react-redux'
 import football1 from '../../images/football-1.jpg'
 import football2 from '../../images/football-2.jpg'
@@ -80,7 +81,7 @@ const MintPage = () => {
 										<Typography variant="caption">
 											Fees: { prices.fee !== undefined && prices.fee }
 										</Typography>
-										<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
+										<img style={{ width: 20, height: 20 }} src={BusdImage} alt="token"/>
 									</Stack>
 									<Stack direction="row" spacing={1} alignItems="center">
 										<Typography variant="caption">
@@ -160,7 +161,7 @@ const MintPage = () => {
 										<Typography variant="caption">
 											Fees: { prices.fee !== undefined && prices.fee * 11 }
 										</Typography>
-										<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
+										<img style={{ width: 20, height: 20 }} src={BusdImage} alt="token"/>
 									</Stack>
 									<Stack direction="row" spacing={1} alignItems="center">
 										<Typography variant="caption">

@@ -20,6 +20,7 @@ export const fetchData = createAsyncThunk('game/fetchData', async (args, { dispa
 		tempMarketItems.push(marketItem)
 		tempPlayersForSale.push(await footballHeroesService.getFootballPlayer(marketItem.tokenId))
 	}
+	console.log(players)
 	return {
 		team: {
 			strategy: +playerTeam.composition,
@@ -78,6 +79,9 @@ export const gameSlice = createSlice({
 		addPlayerToTeam: (state, action) => {
 			state.team.players = [...state.team.players, action.payload]
 		},
+		setTeam: (state, action) => {
+			state.team.players = action.payload
+		},
 		addPlayerToCollection: (state, action) => {
 			state.collection = [...state.collection, action.payload]
 		},
@@ -110,6 +114,7 @@ export const {
 	setStrategy,
 	resetTeam,
 	addPlayerToTeam,
+	setTeam,
 	removePlayerFromTeamById,
 	setTeamPlayers,
 	setCollection,

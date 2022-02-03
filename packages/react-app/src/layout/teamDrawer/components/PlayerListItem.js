@@ -14,7 +14,7 @@ const PlayerListItem = ({ player, onClick, icon = <Remove /> }) => {
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
 	const removePlayer = (playerId) => {
-		dispatch(removePlayerFromTeamById(playerId))
+		// dispatch(removePlayerFromTeamById(playerId))
 	}
 
 	return (

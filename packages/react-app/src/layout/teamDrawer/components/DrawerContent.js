@@ -11,7 +11,7 @@ import footballHeroesService from '../../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
 import { Remove } from '@mui/icons-material'
 
-const DrawerContent = ({ lastPlayerDropped }) => {
+const DrawerContent = ({ lastPlayerDropped, tempTeam, setTempTeam }) => {
 	const { team, fetching } = useSelector(state => state.game)
 	const dispatch = useDispatch()
 	const theme = useTheme()
@@ -49,7 +49,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 	}
 
 	const saveTeam = async () => {
-		if (team.players.length !== 11) {
+		if (tempTeam.length !== 11) {
 			return
 		}
 		const composition = {
@@ -58,7 +58,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 			midfielders: [],
 			attackers: [],
 		}
-		team.players.forEach(p => {
+		tempTeam.forEach(p => {
 			switch (+p.position) {
 			case Position.Attacker.id:
 				composition.attackers.push(+p.id)
@@ -119,7 +119,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 					<Stack alignItems="center" sx={{ width: '100%', backgroundColor: theme.palette.background.valueOf() }} spacing={2}>
 						<Stack direction="row" spacing={2} alignItems="center">
 							<Button
-								disabled={team.players.length !== 11}
+								disabled={tempTeam.length !== 11}
 								onClick={() => saveTeam()}
 								variant="contained"
 								color="secondary"
@@ -134,7 +134,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 								Reset team
 							</Button>
 							<Button
-								disabled={team.players.length === 0}
+								disabled={tempTeam.length === 0}
 								onClick={() => destroyTeam()}
 								variant="contained"
 								color="error"
@@ -157,24 +157,34 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 											<Stack key={role} direction="row" spacing={2} alignItems="center">
 												<Typography variant="subtitle2">{Position.Positions[role].name}</Typography>
 												<Typography variant="subtitle2">
-													{team.players.filter(p => p.position === role).length} / {Strategy.Strategies[team.strategy].composition[role]}
+													{tempTeam.filter(p => p.position === role).length} / {Strategy.Strategies[team.strategy].composition[role]}
 												</Typography>
 											</Stack>
 											{
-												team.players.filter(p => p.position === role).map(p => {
+												tempTeam.filter(p => p.position === role).map(p => {
 													return (lastPlayerDropped !== undefined && lastPlayerDropped.id === p.id) ?
 														<Slide appear in key={p.id} direction="right">
 															<LayoutContent>
 																<PlayerListItem
 																	player={p}
 																	icon={<Remove/>}
-																	onClick={() => dispatch(removePlayerFromTeamById(p.id))}/>
+																	onClick={() => {
+																		//dispatch(removePlayerFromTeamById(p.id))
+																		setTempTeam(
+																			tempTeam.filter(t => t.id !== p.id)
+																		)
+																	}}/>
 															</LayoutContent>
 														</Slide>
 														:
 														<PlayerListItem
 															icon={<Remove/>}
-															onClick={() => dispatch(removePlayerFromTeamById(p.id))}
+															onClick={() => {
+																setTempTeam(
+																	tempTeam.filter(t => t.id !== p.id)
+																)
+																//dispatch(removePlayerFromTeamById(p.id))
+															}}
 															key={p.id} player={p}/>
 												})
 											}

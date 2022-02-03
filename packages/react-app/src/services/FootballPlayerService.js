@@ -180,7 +180,7 @@ class FootballHeroesService {
     }
 
     getXpRequireToLvlUp(score) {
-        return score * (score / 2);
+        return score * (score / 3);
     }
 
     async getFootballTokenPrice() {
@@ -273,7 +273,6 @@ class FootballHeroesService {
             store.dispatch(setTransactionState(false))
         }
      }
-
 
     async listFootballPlayer(price, playerId) {
         if (!price || parseInt(price) <= 0) {

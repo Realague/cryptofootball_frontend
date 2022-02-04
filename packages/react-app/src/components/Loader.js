@@ -70,9 +70,10 @@ const Loader = () => {
 				dispatch(fireConffeti())
 				dispatch(updatePlayerInCollection(await footballHeroesService.getFootballPlayer(receipt.events.UpgradeFrame.returnValues.playerId)))
 			} else if (receipt.events.NewPlayer) {
-				await getPlayer(receipt.events.NewPlayer.returnValues.playerId, 'mint')
+				const newPlayer = await getPlayer(receipt.events.NewPlayer.returnValues.playerId, 'mint')
+				console.log('player added', newPlayer)
+				dispatch(addPlayerToCollection(newPlayer))
 				dispatch(fireConffeti())
-				dispatch(addPlayerToCollection(player))
 			} else if (receipt.events.NewPlayers) {
 				await getPlayers(receipt.events.NewPlayers.returnValues.playersId, 'mintTeam')
 				dispatch(fireConffeti())
@@ -92,8 +93,10 @@ const Loader = () => {
 	}
 
 	const getPlayer = async (playerId, state = 'mint') => {
-		setPlayer(await footballHeroesService.getFootballPlayer(playerId))
+		const fetchedPlayer = await footballHeroesService.getFootballPlayer(playerId)
+		setPlayer(fetchedPlayer)
 		setTransactionState(state)
+		return fetchedPlayer
 	}
 
 	const getPlayers = async (playersId, state = 'mint') => {

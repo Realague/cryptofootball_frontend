@@ -7,6 +7,7 @@ import TabOpponent  from './components/TabOpponent'
 import PlayerIcon from './components/PlayerIcon'
 import { useTheme } from '@emotion/react'
 import LoadingButton from '@mui/lab/LoadingButton'
+import TokenImage from '../../images/token.png'
 
 const MatchPage = () => {
 	const { team } = useSelector(state => state.game)
@@ -171,6 +172,13 @@ const MatchPage = () => {
 							onClick={async () => {
 								await footballHeroesService.refreshOpponentTeams()
 							}}
+							endIcon={
+								<Stack direction="row" alignItems="center" spacing={0.5}>
+									<Divider orientation="vertical" />
+									<Typography variant="body1">100</Typography>
+									<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
+								</Stack>
+							}
 						>
 							Refresh opponents
 						</LoadingButton>

@@ -13,6 +13,8 @@ import SwipeableFootDrawer from '../swipeableDrawer/swipeableDrawer'
 import { FaHamburger } from 'react-icons/all'
 import TokenImage from '../../images/token_black.png'
 import { fireConffeti } from '../../features/gameSlice'
+import MailIcon from '@mui/icons-material/Mail'
+import { AdminPanelSettings, Apps, HourglassBottom, SportsSoccer, Storefront, VideogameAsset } from '@mui/icons-material'
 
 const Navbar = ({ toggleTheme }) => {
 	const { GBExactPrice, account } = useSelector(state => state.user)
@@ -22,11 +24,11 @@ const Navbar = ({ toggleTheme }) => {
 
 	const menu = [
 		//{ name: 'Home', path: '' },
-		{ name: 'Collection', path: 'collection' },
-		{ name: 'Match', path: 'match' },
-		{ name: 'Mint', path: 'mint' },
-		{ name: 'Training', path: 'training' },
-		{ name: 'Marketplace', path: 'marketplace' },
+		{ name: 'Collection', path: 'collection', icon: <Apps/> },
+		{ name: 'Match', path: 'match', icon: <SportsSoccer/> },
+		{ name: 'Mint', path: 'mint', icon: <AdminPanelSettings/> },
+		{ name: 'Training', path: 'training', icon: <HourglassBottom/> },
+		{ name: 'Marketplace', path: 'marketplace', icon: <Storefront/> },
 		//{ name: 'Claim Tokens', path: 'claims' },
 	]
 
@@ -39,6 +41,7 @@ const Navbar = ({ toggleTheme }) => {
 			<Toolbar sx={{
 				display: 'flex',
 				justifyContent: 'space-between',
+				overflowX: isMobile ? 'scroll' : 'hidden',
 				alignItems: 'center',
 				flexDirection: 'row',
 				width: '100%',
@@ -60,7 +63,7 @@ const Navbar = ({ toggleTheme }) => {
 							/>
 						))
 					}
-					<Typography variant="h6" onClick={() => {
+					<Typography hidden={isMobile} variant="h6" onClick={() => {
 						window.open('https://footballheroes.gitbook.io/footballheroes/')
 					}}>
 							Whitepaper

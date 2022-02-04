@@ -9,7 +9,6 @@ export const fetchData = createAsyncThunk('game/fetchData', async (args, { dispa
 		jobs.push(footballHeroesService.getFootballPlayer(playerId))
 	}
 	tempPlayers  = await Promise.all(jobs)
-	console.log('updatee')
 	dispatch(setCollection(tempPlayers))
 	const playerTeam = await footballHeroesService.getPlayerTeam()
 	const players = tempPlayers.filter(p => p.isAvailable === false)

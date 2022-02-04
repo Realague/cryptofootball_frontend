@@ -11,6 +11,8 @@ import MailIcon from '@mui/icons-material/Mail'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeDrawerMobile } from '../../features/settingsSlice'
 import { useNavigate } from 'react-router-dom'
+import { Typography } from '@mui/material'
+import { MenuBook } from '@mui/icons-material'
 
 const SwipeableFootDrawer = ({ menu }) => {
 	const { drawerMobileOpen } = useSelector(state => state.settings)
@@ -37,14 +39,22 @@ const SwipeableFootDrawer = ({ menu }) => {
 			onKeyDown={toggleDrawer(anchor, false)}
 		>
 			<List>
-				{menu.map(({ name, path }, index) => (
+				{menu.map(({ name, path, icon }, index) => (
 					<ListItem button key={name} onClick={() => navigate(path)}>
 						<ListItemIcon>
-							{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+							{icon}
 						</ListItemIcon>
-						<ListItemText primary={name} />
+						<ListItemText primaryTypographyProps={{
+							variant: 'subtitle1'
+						}} primary={name} />
 					</ListItem>
 				))}
+				<ListItem button key={'whitepaper'} onClick={() => window.open('https://footballheroes.gitbook.io/footballheroes/')}>
+					<ListItemIcon>
+						<MenuBook/>
+					</ListItemIcon>
+					<ListItemText primary={'Whitepaper'} />
+				</ListItem>
 			</List>
 			<Divider />
 		</Box>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Divider, Drawer, Stack, useMediaQuery, } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import Strategy from '../../enums/Strategy'
@@ -17,15 +17,8 @@ const TeamDrawer = ({ open, changeState }) => {
 	const [lastPlayerDropped, setLastPlayerDropped] = useState(undefined)
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-	const [tempTeam, setTempTeam] = useState([])
 
 	const drawerTeamWidth = isMobile ? 200 : 500
-
-	useEffect(() => {
-		if (team.players !== undefined) {
-			setTempTeam(team.players)
-		}
-	}, [team])
 
 	const onPlayerDropped = async (player) => {
 		if (team.strategy === undefined) {
@@ -35,18 +28,17 @@ const TeamDrawer = ({ open, changeState }) => {
 
 		const usedStrategy = Strategy.Strategies.find(s => s.id === team.strategy)
 
-		if (usedStrategy.composition[player.position] <= tempTeam.filter(p => p.position === player.position).length) {
+		if (usedStrategy.composition[player.position] <= team.players.filter(p => p.position === player.position).length) {
 			enqueueSnackbar('Too many players on this position', { variant: 'error' })
 			return
 		}
 
-		if (tempTeam.filter(p => p.id === player.id).length) {
+		if (team.players.filter(p => p.id === player.id).length) {
 			enqueueSnackbar('Cannot use the same user more than once', { variant: 'error' })
 			return
 		}
 		setLastPlayerDropped(player)
-		setTempTeam([...tempTeam, player])
-		//dispatch(addPlayerToTeam(player))
+		dispatch(addPlayerToTeam(player))
 		enqueueSnackbar('Player added !', { variant: 'success' })
 	}
 
@@ -76,7 +68,7 @@ const TeamDrawer = ({ open, changeState }) => {
 					isDraggingPlayer ?
 						<DraggingContent onDrop={(v) => onPlayerDropped(v)}/>
 						:
-						<DrawerContent tempTeam={tempTeam} setTempTeam={setTempTeam} lastPlayerDropped={lastPlayerDropped}/>
+						<DrawerContent lastPlayerDropped={lastPlayerDropped}/>
 
 				}
 			</Stack>

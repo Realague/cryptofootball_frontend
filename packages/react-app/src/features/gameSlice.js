@@ -9,6 +9,7 @@ export const fetchData = createAsyncThunk('game/fetchData', async (args, { dispa
 		jobs.push(footballHeroesService.getFootballPlayer(playerId))
 	}
 	tempPlayers  = await Promise.all(jobs)
+	console.log('updatee')
 	dispatch(setCollection(tempPlayers))
 	const playerTeam = await footballHeroesService.getPlayerTeam()
 	const players = tempPlayers.filter(p => p.isAvailable === false)
@@ -20,7 +21,6 @@ export const fetchData = createAsyncThunk('game/fetchData', async (args, { dispa
 		tempMarketItems.push(marketItem)
 		tempPlayersForSale.push(await footballHeroesService.getFootballPlayer(marketItem.tokenId))
 	}
-	console.log(players)
 	return {
 		team: {
 			strategy: +playerTeam.composition,
@@ -116,10 +116,7 @@ export const {
 	addPlayerToTeam,
 	setTeam,
 	removePlayerFromTeamById,
-	setTeamPlayers,
 	setCollection,
-	setMarketItems,
-	setPlayersForSale,
 	addPlayerToCollection,
 	addPlayersToCollection,
 	fireConffeti,

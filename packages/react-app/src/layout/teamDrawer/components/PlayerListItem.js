@@ -14,7 +14,7 @@ const PlayerListItem = ({ player, onClick, icon = <Remove /> }) => {
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
 	const removePlayer = (playerId) => {
-		// dispatch(removePlayerFromTeamById(playerId))
+		dispatch(removePlayerFromTeamById(playerId))
 	}
 
 	return (
@@ -68,7 +68,7 @@ const PlayerListItem = ({ player, onClick, icon = <Remove /> }) => {
 					</Typography>
 				</Stack>
 
-				<IconButton onClick={() => onClick(player) || removePlayer(player.id)}>
+				<IconButton onClick={() => onClick(player)}>
 					{icon}
 				</IconButton>
 			</Stack>

@@ -185,15 +185,11 @@ const FootballPlayerCollection = ({ isTrainingPage = false }) => {
 									.map((player, idx) => (
 										<Grid item key={idx}>
 											<DraggableBox type={ItemTypes.PLAYER} item={player}>
-												<Slide direction="up" appear={true} in={true}>
-													<LayoutContent ref={ref}>
-														<Card
-															mobile={isMobile}
-															player={!showAllPlayer && marketItems ? playersForSale : player}
-															marketItem={!showAllPlayer && marketItems ? marketItems[idx] : undefined}
-														/>
-													</LayoutContent>
-												</Slide>
+												<Card
+													mobile={isMobile}
+													player={!showAllPlayer && marketItems ? playersForSale : player}
+													marketItem={!showAllPlayer && marketItems ? marketItems[idx] : undefined}
+												/>
 											</DraggableBox>
 
 										</Grid>

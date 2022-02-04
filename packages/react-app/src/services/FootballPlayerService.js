@@ -228,6 +228,10 @@ class FootballHeroesService {
         return await this.marketplaceContract.methods.listingFees().call();
     }
 
+    async getMatchAvailable() {
+        return await this.gameContract.methods.getCurrentMatchAvailable().call()
+    }
+
     async mint() {
         try {
             const userStore = store.getState().user

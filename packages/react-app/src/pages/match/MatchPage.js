@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, CircularProgress, Grid, Stack, Typography, useMediaQuery } from '@mui/material'
+import { Button, CircularProgress, Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import { useSelector } from 'react-redux'
 import footballHeroesService from '../../services/FootballPlayerService'
@@ -17,9 +17,12 @@ const MatchPage = () => {
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 	const [isFetchingOpponents, setIsFetchingOpponents] = useState(true)
+	const [matchAvailable, setMatchAvailable] = useState(0)
 
 	useEffect(() => {
 		fetchOpponents()
+		footballHeroesService.getMatchAvailable().then(amount =>  setMatchAvailable(amount))
+
 	}, [])
 
 	useEffect(() => {
@@ -160,6 +163,11 @@ const MatchPage = () => {
 						>
 							Refresh opponents
 						</LoadingButton>
+						<Divider/>
+						<Typography alignSelf="center" variant="body2">
+							Match available: ${matchAvailable}
+						</Typography>
+						<Divider/>
 						{
 							isFetchingOpponents ?
 								<CircularProgress sx={{ marginTop: '15px' }} color="secondary"/>

@@ -124,10 +124,6 @@ export default function TabOpponent({ opponents, selectOpponent }) {
 										))
 									}
 									<Divider/>
-									<Typography alignSelf="center" variant="body2">
-										Match left: 2/2
-									</Typography>
-									<Divider/>
 									<LoadingButton
 										variant="contained"
 										color="secondary"

@@ -165,7 +165,7 @@ const MatchPage = () => {
 						</LoadingButton>
 						<Divider/>
 						<Typography alignSelf="center" variant="body2">
-							Match available: ${matchAvailable}
+							Match available: {matchAvailable}
 						</Typography>
 						<Divider/>
 						{

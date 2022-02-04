@@ -121,7 +121,7 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 						disableRestoreFocus
 					>
 						<Typography sx={{ p: 1 }}>
-							{+player.xp} / {footballHeroesService.getXpRequireToLvlUp(player.score) * 100}
+							{+player.xp} / {parseInt(footballHeroesService.getXpRequireToLvlUp(player.score))}
 						</Typography>
 					</Popover>
 				</Stack>

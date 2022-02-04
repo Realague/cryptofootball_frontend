@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Card from '../../../components/card/Card'
+import footballHeroesService from '../../../services/FootballPlayerService'
 
 const RandomPlayer = () => {
 	const [fakePlayer, setFakePlayer] = useState({
@@ -14,13 +15,16 @@ const RandomPlayer = () => {
 
 	useEffect(() => {
 		const timer = setInterval(() => {
-			setFakePlayer({
-				imageId: randomNumber(3),
-				frame: randomNumber(4),
-				rarity: randomNumber(3),
-				position: randomNumber(4),
+			let fakePlayer = {
+				imageId: 0,
+                frame: randomNumber(4),
+				rarity: randomNumber(2),
+				position: randomNumber(3),
 				score: randomNumber(100),
-			})
+			}
+
+            fakePlayer.imageId = randomNumber(footballHeroesService.names[fakePlayer.position][fakePlayer.position].length - 1)
+			setFakePlayer(fakePlayer)
 		}, 1000)
 		return () => clearInterval(timer)
 	}, [])

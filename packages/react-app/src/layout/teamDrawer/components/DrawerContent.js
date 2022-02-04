@@ -139,7 +139,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 								variant="contained"
 								color="error"
 							>
-								Destroy team
+								Disband team
 							</Button>
 						</Stack>
 

@@ -70,7 +70,7 @@ const TabsList = styled(TabsListUnstyled)`
   align-content: space-between;
 `
 
-export default function TabOpponent({ opponents, selectOpponent }) {
+export default function TabOpponent({ opponents, selectOpponent, refreshAvailableMatch }) {
 	const { isInTransaction } = useSelector(state => state.settings)
 	const [oldIndex, setOldIndex] = useState(0)
 	const [currentIndex, setCurrentIndex] = useState(0)
@@ -131,6 +131,7 @@ export default function TabOpponent({ opponents, selectOpponent }) {
 										fullWidth
 										onClick={async () => {
 											await footballHeroesService.playMatch(o.id)
+											refreshAvailableMatch()
 										}}
 									>
 							Play

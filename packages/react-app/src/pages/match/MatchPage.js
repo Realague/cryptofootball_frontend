@@ -22,8 +22,7 @@ const MatchPage = () => {
 
 	useEffect(() => {
 		fetchOpponents()
-		footballHeroesService.getMatchAvailable().then(amount =>  setMatchAvailable(amount))
-
+		fetchAvailableMatchs()
 	}, [])
 
 	useEffect(() => {
@@ -31,6 +30,10 @@ const MatchPage = () => {
 			footballHeroesService.convertPlayersIdToComposition(team).then(c => setMyComposition(c))
 		}
 	}, [team])
+
+	const fetchAvailableMatchs = () => {
+		footballHeroesService.getMatchAvailable().then(amount =>  setMatchAvailable(amount))
+	}
 
 	const fetchOpponents = async () => {
 		setIsFetchingOpponents(true)
@@ -186,7 +189,7 @@ const MatchPage = () => {
 							isFetchingOpponents ?
 								<CircularProgress sx={{ marginTop: '15px' }} color="secondary"/>
 								:
-								<TabOpponent opponents={opponents} selectOpponent={selectOpponent}/>
+								<TabOpponent refreshAvailableMatch={fetchAvailableMatchs} opponents={opponents} selectOpponent={selectOpponent}/>
 						}
 					</Stack>
 				</Stack>

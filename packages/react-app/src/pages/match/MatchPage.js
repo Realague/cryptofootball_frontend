@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { CircularProgress, Grid, Stack, Typography, useMediaQuery } from '@mui/material'
+import { Button, CircularProgress, Grid, Stack, Typography, useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import { useSelector } from 'react-redux'
 import footballHeroesService from '../../services/FootballPlayerService'
 import TabOpponent  from './components/TabOpponent'
 import PlayerIcon from './components/PlayerIcon'
 import { useTheme } from '@emotion/react'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 const MatchPage = () => {
 	const { team } = useSelector(state => state.game)
-	const { teamDrawerOpen } = useSelector(state => state.settings)
+	const { teamDrawerOpen, isInTransaction } = useSelector(state => state.settings)
 	const [opponents, setOpponents] = useState([])
 	const [myComposition, setMyComposition] = useState(undefined)
 	const [selectedOpponent, setSelectedOpponent] = useState(undefined)
@@ -148,7 +149,17 @@ const MatchPage = () => {
 				</Grid>
 				<Stack width={isMobile ? '100%': '40%'} justifyContent="flex-start" alignItems="center" spacing={2}>
 					<Typography variant="h5" color="secondary">Opponents</Typography>
-					<Stack>
+					<Stack spacing={1}>
+						<LoadingButton
+							variant="contained"
+							fullWidth
+							loading={isInTransaction}
+							onClick={async () => {
+								await footballHeroesService.refreshOpponentTeams()
+							}}
+						>
+							Refresh opponents
+						</LoadingButton>
 						{
 							isFetchingOpponents ?
 								<CircularProgress sx={{ marginTop: '15px' }} color="secondary"/>

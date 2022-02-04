@@ -429,12 +429,17 @@ class FootballHeroesService {
     }
 
     async refreshOpponentTeams() {
-        let GBAllowance = await this.getGbAllowance(addresses.Game)
-        let amount = await this.gameContract.methods.refreshOpponentsFee.call()
-        if (parseInt(Web3.utils.fromWei(GBAllowance)) < amount * store.getState().user.GBPrice) {
-            await this.approveGb(addresses.Game)
+        try {
+            store.dispatch(setTransactionState(true))
+            let GBAllowance = await this.getGbAllowance(addresses.Game)
+            let amount = await this.gameContract.methods.refreshOpponentsFee.call()
+            if (parseInt(Web3.utils.fromWei(GBAllowance)) < amount * store.getState().user.GBPrice) {
+                await this.approveGb(addresses.Game)
+            }
+            await this.gameContract.methods.refreshOpponents().send()
+        } finally {
+            store.dispatch(setTransactionState(false))
         }
-        await this.gameContract.methods.refreshOpponents().send()
     }
 
     async setPlayerTeam(composition, goalkeeper, defenders, midfielders, attackers) {

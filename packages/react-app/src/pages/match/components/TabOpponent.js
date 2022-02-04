@@ -10,7 +10,9 @@ import PlayerIcon from './PlayerIcon'
 import { Button, Divider, easing, Slide, Stack, Typography } from '@mui/material'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import LayoutContent from '../../../components/LayoutContent'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 
 const Tab = styled(TabUnstyled)`
@@ -69,6 +71,7 @@ const TabsList = styled(TabsListUnstyled)`
 `
 
 export default function TabOpponent({ opponents, selectOpponent }) {
+	const { isInTransaction } = useSelector(state => state.settings)
 	const [oldIndex, setOldIndex] = useState(0)
 	const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -108,7 +111,7 @@ export default function TabOpponent({ opponents, selectOpponent }) {
 									<Divider/>
 									{
 										['defenders', 'midfielders', 'attackers'].map((position, i) => (
-											<Stack key={i} spacing={2} p={2}>
+											<Stack key={i} spacing={1} p={1}>
 												<Typography variant="subtitle2" color="secondary">{position.toUpperCase()}</Typography>
 												<Stack direction="row" flexWrap spacing={2}>
 													{
@@ -121,16 +124,21 @@ export default function TabOpponent({ opponents, selectOpponent }) {
 										))
 									}
 									<Divider/>
-									<Button
+									<Typography alignSelf="center" variant="body2">
+										Match left: 2/2
+									</Typography>
+									<Divider/>
+									<LoadingButton
 										variant="contained"
 										color="secondary"
+										loading={isInTransaction}
 										fullWidth
 										onClick={async () => {
 											await footballHeroesService.playMatch(o.id)
 										}}
 									>
 							Play
-									</Button>
+									</LoadingButton>
 								</Stack>
 							</LayoutContent>
 						</Slide>

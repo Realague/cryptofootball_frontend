@@ -153,6 +153,17 @@ const MatchPage = () => {
 				<Stack width={isMobile ? '100%': '40%'} justifyContent="flex-start" alignItems="center" spacing={2}>
 					<Typography variant="h5" color="secondary">Opponents</Typography>
 					<Stack spacing={1}>
+						<Divider/>
+						<Typography alignSelf="center" variant="body2">
+							Match available: {matchAvailable} / {
+								[2, 3, 4, 5, 6][
+									Math.round(
+										team.players.reduce((prev, current) => (prev || 0) + +current.frame, 0) / 11
+									)
+								]
+							}
+						</Typography>
+						<Divider/>
 						<LoadingButton
 							variant="contained"
 							fullWidth
@@ -163,11 +174,6 @@ const MatchPage = () => {
 						>
 							Refresh opponents
 						</LoadingButton>
-						<Divider/>
-						<Typography alignSelf="center" variant="body2">
-							Match available: {matchAvailable}
-						</Typography>
-						<Divider/>
 						{
 							isFetchingOpponents ?
 								<CircularProgress sx={{ marginTop: '15px' }} color="secondary"/>

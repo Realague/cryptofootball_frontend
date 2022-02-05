@@ -14,7 +14,15 @@ import { FaHamburger } from 'react-icons/all'
 import TokenImage from '../../images/token_black.png'
 import { fireConffeti } from '../../features/gameSlice'
 import MailIcon from '@mui/icons-material/Mail'
-import { AdminPanelSettings, Apps, HourglassBottom, SportsSoccer, Storefront, VideogameAsset } from '@mui/icons-material'
+import {
+	AdminPanelSettings,
+	Apps,
+	HourglassBottom,
+	Menu,
+	SportsSoccer,
+	Storefront,
+	VideogameAsset
+} from '@mui/icons-material'
 
 const Navbar = ({ toggleTheme }) => {
 	const { GBExactPrice, account } = useSelector(state => state.user)
@@ -49,7 +57,7 @@ const Navbar = ({ toggleTheme }) => {
 				<Stack direction="row" alignItems="center" spacing={2}>
 					{ isMobile &&
 					<IconButton onClick={() => dispatch(changeDrawerMobile(true))}>
-						<FaHamburger/>
+						<Menu/>
 					</IconButton>
 					}
 					<img src={ProjectLogo} style={{ height: 42, width: 42, marginRight: 15, borderRadius: '50%' }} alt=""/>

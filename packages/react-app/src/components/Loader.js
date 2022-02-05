@@ -149,6 +149,7 @@ const Loader = () => {
 							<Divider/>
 							<Typography
 								color={rewards.won === true ? 'green': 'red'}
+								fontSize="24px"
 								variant="h5"
 							>
 								{rewards.won === true ? 'Victory' : 'Defeat'}
@@ -241,6 +242,7 @@ const Loader = () => {
                             	<Typography
                             		color={rewards.won === true ? 'green': 'red'}
                             		variant="h5"
+                            		fontSize="24px"
                             	>
                             		{rewards.won === true ? 'Victory' : 'Defeat'}
                             	</Typography>

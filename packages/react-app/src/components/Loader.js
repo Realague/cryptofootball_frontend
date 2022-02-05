@@ -15,6 +15,7 @@ import {
 } from '../features/gameSlice'
 import { updateBalances } from '../features/userSlice'
 import Web3 from 'web3'
+import TokenPrice from './tokenPrice/TokenPrice'
 
 const Loader = () => {
 	const [transactionState, setTransactionState] = useState('')
@@ -146,20 +147,17 @@ const Loader = () => {
 						<Stack alignItems="center" spacing={2}>
 							<Typography variant="h4">Match result</Typography>
 							<Divider/>
+							<Typography
+								color={rewards.won === true ? 'green': 'red'}
+								variant="h5"
+							>
+								{rewards.won === true ? 'Victory' : 'Defeat'}
+							</Typography>
 							<img style={{ width: rewards.won ? 150 : 200, height: 200 }} src={rewards.won ? '/coupetrans.png' : '/coupecassetrans.png'} alt=""/>
 							<Divider/>
 							<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-								<Typography variant="subtitle1">Result: </Typography>
-								<Typography
-									color={rewards.won === true ? 'green': 'red'}
-									variant="subtitle2"
-								>
-									{rewards.won === true ? 'Victory' : 'Defeat'}
-								</Typography>
-							</Stack>
-							<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
 								<Typography variant="subtitle1">Rewards: </Typography>
-								<Typography variant="subtitle2">{rewards.rewards}</Typography>
+								<TokenPrice typoVariant="subtitle2" price={rewards.rewards} token="gb"/>
 							</Stack>
 							<Divider/>
 							<Button
@@ -240,20 +238,17 @@ const Loader = () => {
                             <Stack alignItems="center" spacing={2}>
                             	<Typography variant="h4">Training result</Typography>
                             	<Divider/>
+                            	<Typography
+                            		color={rewards.won === true ? 'green': 'red'}
+                            		variant="h5"
+                            	>
+                            		{rewards.won === true ? 'Victory' : 'Defeat'}
+                            	</Typography>
                             	<img style={{ width: 150	, height: 200 }} src={rewards.won ? '/training_win_white.png' : '/training_lose_white.png'} alt=""/>
                             	<Divider/>
                             	<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                            		<Typography variant="subtitle1">Result: </Typography>
-                            		<Typography
-                            			color={rewards.won === true ? 'green': 'red'}
-                            			variant="subtitle2"
-                            		>
-                            			{rewards.won === true ? 'Victory' : 'Defeat'}
-                            		</Typography>
-                            	</Stack>
-                            	<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                             		<Typography variant="subtitle1">Rewards: </Typography>
-                            		<Typography variant="subtitle2">{rewards.rewards}</Typography>
+                            		<TokenPrice typoVariant="subtitle2" price={rewards.rewards} token="gb"/>
                             	</Stack>
                             	<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                             		<Typography variant="subtitle1">Xp earnt: </Typography>

@@ -87,7 +87,7 @@ export default function TabOpponent({ opponents, selectOpponent, setMatchAvailab
 							setOldIndex(currentIndex)
 							setCurrentIndex(i)
 							selectOpponent(o)
-						}}>Team {i + 1}</Tab>
+						}}>Opponent {i + 1}</Tab>
 					))
 				}
 			</TabsList>

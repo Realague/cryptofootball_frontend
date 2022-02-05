@@ -19,6 +19,7 @@ const MatchPage = () => {
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 	const [isFetchingOpponents, setIsFetchingOpponents] = useState(true)
 	const [matchAvailable, setMatchAvailable] = useState(0)
+	const [refreshPrice, setRefreshPrice] = useState(0)
 
 	useEffect(() => {
 		fetchOpponents()
@@ -29,6 +30,7 @@ const MatchPage = () => {
 		if (team !== undefined) {
 			footballHeroesService.convertPlayersIdToComposition(team).then(c => setMyComposition(c))
 		}
+		footballHeroesService.getRefreshFees().then(price => setRefreshPrice(price))
 	}, [team])
 
 	const fetchAvailableMatchs = () => {
@@ -178,7 +180,7 @@ const MatchPage = () => {
 							endIcon={
 								<Stack direction="row" alignItems="center" spacing={0.5}>
 									<Divider orientation="vertical" />
-									<Typography variant="body1">100</Typography>
+									<Typography variant="body1">{refreshPrice}</Typography>
 									<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
 								</Stack>
 							}

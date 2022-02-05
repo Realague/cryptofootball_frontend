@@ -63,9 +63,18 @@ const Navbar = ({ toggleTheme }) => {
 							/>
 						))
 					}
-					<Typography hidden={isMobile} variant="h6" onClick={() => {
-						window.open('https://footballheroes.gitbook.io/footballheroes/')
-					}}>
+					<Typography
+						hidden={isMobile}
+						variant="h6"
+						onClick={() => {
+							window.open('https://footballheroes.gitbook.io/footballheroes/')
+						}}
+						sx={{
+							'&:hover': {
+								cursor: 'pointer',
+							}
+						}}
+					>
 							Whitepaper
 					</Typography>
 				</Stack>

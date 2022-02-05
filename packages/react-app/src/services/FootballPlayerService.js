@@ -380,6 +380,10 @@ class FootballHeroesService {
         return await this.gameContract.methods.getOpponentPlayer(id).call()
     }
 
+    async getRefreshFees() {
+        return await this.gameContract.methods.refreshOpponentsFee().call()
+    }
+
     async convertPlayersIdToComposition(team) {
         if (team.players.length !== 11) {
             return undefined
@@ -436,7 +440,8 @@ class FootballHeroesService {
         try {
             store.dispatch(setTransactionState(true))
             let GBAllowance = await this.getGbAllowance(addresses.Game)
-            let amount = await this.gameContract.methods.refreshOpponentsFee.call()
+            let amount = await this.gameContract.methods.refreshOpponentsFee().call()
+            console.log(amount)
             if (parseInt(Web3.utils.fromWei(GBAllowance)) < amount * store.getState().user.GBPrice) {
                 await this.approveGb(addresses.Game)
             }

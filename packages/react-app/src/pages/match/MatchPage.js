@@ -191,7 +191,11 @@ const MatchPage = () => {
 							isFetchingOpponents ?
 								<CircularProgress sx={{ marginTop: '15px' }} color="secondary"/>
 								:
-								<TabOpponent refreshAvailableMatch={fetchAvailableMatchs} opponents={opponents} selectOpponent={selectOpponent}/>
+								<TabOpponent
+									matchAvailable={matchAvailable}
+									setMatchAvailable={setMatchAvailable}
+									opponents={opponents} selectOpponent={selectOpponent}
+								/>
 						}
 					</Stack>
 				</Stack>

@@ -16,9 +16,9 @@ import { fireConffeti } from '../../features/gameSlice'
 import MailIcon from '@mui/icons-material/Mail'
 import {
 	AdminPanelSettings,
-	Apps,
+	Apps, FitnessCenter,
 	HourglassBottom,
-	Menu,
+	Menu, PersonAdd,
 	SportsSoccer,
 	Storefront,
 	VideogameAsset
@@ -34,8 +34,8 @@ const Navbar = ({ toggleTheme }) => {
 		//{ name: 'Home', path: '' },
 		{ name: 'Collection', path: 'collection', icon: <Apps/> },
 		{ name: 'Match', path: 'match', icon: <SportsSoccer/> },
-		{ name: 'Mint', path: 'mint', icon: <AdminPanelSettings/> },
-		{ name: 'Training', path: 'training', icon: <HourglassBottom/> },
+		{ name: 'Mint', path: 'mint', icon: <PersonAdd/> },
+		{ name: 'Training', path: 'training', icon: <FitnessCenter/> },
 		{ name: 'Marketplace', path: 'marketplace', icon: <Storefront/> },
 		//{ name: 'Claim Tokens', path: 'claims' },
 	]

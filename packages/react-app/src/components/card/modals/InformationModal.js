@@ -245,6 +245,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                                 player={p}
                                 button={
                                         <LoadingButton
+                                            hidden={p.frame == 5}
                                             loading={isInTransaction}
                                             onClick={async () => {
                                                 await footballHeroesService.upgradeFrame(player.id, p.id)
@@ -253,17 +254,17 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                                             variant="contained"
                                             color="primary"
                                             endIcon={
-                                                <Stack>
+                                                <Stack alignItems="flex-end">
                                                     <TokenPrice
                                                         typoVariant="caption"
-                                                        price={100}
+                                                        price={[5, 10, 15, 20, 30][+p.frame]}
                                                         size={15}
                                                         token="gb"
                                                     />
                                                     <TokenPrice
                                                         typoVariant="caption"
                                                         size={15}
-                                                        price={100}
+                                                        price={5}
                                                         token="busd"
                                                     />
                                                 </Stack>

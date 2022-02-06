@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Divider, Grid, Slide, Stack, Typography } from '@mui/material'
+import { Box, Divider, Grid, Slide, Stack, Typography, useMediaQuery } from '@mui/material'
 import Strategy from '../../../enums/Strategy'
 import Button from '@mui/material/Button'
 import Position from '../../../enums/Position'
@@ -10,15 +10,18 @@ import { fetchData, removePlayerFromTeamById, resetTeam, setStrategy } from '../
 import footballHeroesService from '../../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
 import { Remove } from '@mui/icons-material'
+import { theme } from '../../../theme'
 
 const DrawerContent = ({ lastPlayerDropped }) => {
 	const { team, fetching } = useSelector(state => state.game)
 	const dispatch = useDispatch()
 	const theme = useTheme()
 	const [compositions, setCompositions] = useState([])
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
 	useEffect(() => {
 		fetch().finally(() => setCompositions(Strategy.Strategies))
+		return () => setCompositions([])
 	}, [])
 
 	const fetch = async () => {
@@ -117,7 +120,7 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 					</Stack>
 					: // strategy selected
 					<Stack alignItems="center" sx={{ width: '100%', backgroundColor: theme.palette.background.valueOf() }} spacing={2}>
-						<Stack direction="row" spacing={2} alignItems="center">
+						<Stack direction={isMobile ? 'column' : 'row'} spacing={1} alignItems="center">
 							<Button
 								disabled={team.players.length !== 11}
 								onClick={() => saveTeam()}

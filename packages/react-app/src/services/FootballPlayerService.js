@@ -354,7 +354,6 @@ class FootballHeroesService {
             if (parseInt(Web3.utils.fromWei(BusdAllowance)) < 10) {
                 await this.approveBusd(addresses.FootballPlayers)
             }
-            //TODO check  real amount
             let GBAllowance = result[1]
             if (parseInt(Web3.utils.fromWei(GBAllowance)) < [5, 10, 15, 20, 30][frame] * store.getState().user.GBPrice) {
                 await this.approveGb(addresses.FootballPlayers)

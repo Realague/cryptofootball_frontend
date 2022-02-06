@@ -158,7 +158,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
             for (let i = 0; i < value; i++) {
                 xpRequired += footballHeroesService.getXpRequireToLvlUp(+player.score + i)
             }
-            xpRequired -= +player.score
+            xpRequired -= +player.xp
             setSliderValue(Math.ceil(xpRequired / (xpPerDollar / GBPrice)))
             setLevelValue(value)
         }
@@ -249,7 +249,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
 
                 <Stack spacing={2} alignItems="center">
                     <Typography gutterBottom>
-                        xp gained: {sliderValue * xpPerDollar / GBPrice}
+                        xp gained: {(sliderValue * xpPerDollar / GBPrice).toFixed(2)}
                     </Typography>
                     <Typography hidden={true} gutterBottom>
                         lvl

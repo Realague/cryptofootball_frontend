@@ -40,7 +40,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
     const {team} = useSelector(state => state.game)
     const [action, setAction] = useState(isTrainingPage ? "train" : undefined)
     const [maxGBToConsume, setMaxGBToConsume] = useState(0)
-    const xpPerDollar = 50
+    const xpPerDollar = 200
     const ref = createRef()
     const informationRef = createRef()
     const [informationShown, setInformationShown] = useState(isTrainingPage ? false : true)
@@ -95,12 +95,12 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
 
             <Button hidden={marketItem !== undefined} disabled={+player.score === 100 || !isLevelUpOpen}
                     onClick={() => chooseAction('level-up')} fullWidth color="primary"
-                    variant="contained">Level
-                Up</Button>
+                    variant="contained">Level Up
+            </Button>
             <Button hidden={marketItem !== undefined} disabled={+player.frame === 4 || !isUpgradeFrameOpen}
                     onClick={() => chooseAction('improve-frame')} fullWidth
-                    color="primary" variant="contained">Improve
-                Frame</Button>
+                    color="primary" variant="contained">Upgrade Tier
+            </Button>
             <Button hidden={marketItem !== undefined} disabled={!isMarketplaceOpen} onClick={() => chooseAction('sell')}
                     fullWidth color="secondary"
                     variant="contained"

@@ -248,7 +248,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                                             hidden={p.frame == 5}
                                             loading={isInTransaction}
                                             onClick={async () => {
-                                                await footballHeroesService.upgradeFrame(player.id, p.id)
+                                                await footballHeroesService.upgradeFrame(player.id, p.id, p.frame)
                                                 chooseAction(undefined)
                                             }}
                                             variant="contained"
@@ -264,7 +264,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                                                     <TokenPrice
                                                         typoVariant="caption"
                                                         size={15}
-                                                        price={5}
+                                                        price={10}
                                                         token="busd"
                                                     />
                                                 </Stack>

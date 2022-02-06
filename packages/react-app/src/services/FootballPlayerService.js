@@ -334,7 +334,7 @@ class FootballHeroesService {
         }
     }
 
-    async upgradeFrame(playerId, playerToBurn) {
+    async upgradeFrame(playerId, playerToBurn, frame) {
         try {
             store.dispatch(setTransactionState(true))
             const result = await Promise.all([
@@ -348,7 +348,7 @@ class FootballHeroesService {
             }
             //TODO check  real amount
             let GBAllowance = result[1]
-            if (parseInt(Web3.utils.fromWei(GBAllowance)) < 20 * store.getState().user.GBPrice) {
+            if (parseInt(Web3.utils.fromWei(GBAllowance)) < [5, 10, 15, 20, 30][frame] * store.getState().user.GBPrice) {
                 await this.approveGb(addresses.FootballPlayers)
             }
             let isApproved = result[3]

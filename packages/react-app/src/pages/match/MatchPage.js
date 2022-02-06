@@ -55,6 +55,7 @@ const MatchPage = () => {
 				midfielders: [],
 				goalkeeper: undefined,
 				score : team.averageScore,
+				rewards: team.rewards
 			}
 			for (const defenderId of team.defenders) {
 				jobsDefenders.push(footballHeroesService.getOpponentPlayer(defenderId))

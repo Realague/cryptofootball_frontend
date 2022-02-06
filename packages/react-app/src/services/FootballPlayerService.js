@@ -322,7 +322,15 @@ class FootballHeroesService {
     async payToLevelUp(playerId, amount) {
         try {
             store.dispatch(setTransactionState(true))
-            let GBAllowance = await this.getGbAllowance(addresses.FootballPlayers)
+            const result = await Promise.all([
+                this.getBusdAllowance(addresses.FootballPlayers),
+                this.getGbAllowance(addresses.FootballPlayers),
+            ])
+            let BusdAllowance = result[0]
+            if (parseInt(Web3.utils.fromWei(BusdAllowance)) < 10) {
+                await this.approveBusd(addresses.FootballPlayers)
+            }
+            let GBAllowance = result[1]
             if (parseInt(Web3.utils.fromWei(GBAllowance)) < amount * store.getState().user.GBPrice) {
                 await this.approveGb(addresses.FootballPlayers)
             }

@@ -82,7 +82,7 @@ const Loader = () => {
 				setRewards(receipt.events.LevelUp.returnValues)
 				setTransactionState('levelUp')
 				dispatch(fireConffeti())
-				dispatch(updatePlayerInCollection(await footballHeroesService.getFootballPlayer(rewards.playerId)))
+				dispatch(updatePlayerInCollection(await footballHeroesService.getFootballPlayer(receipt.events.LevelUp.returnValues.playerId)))
 			} else {
 				setTransactionState('success')
 			}

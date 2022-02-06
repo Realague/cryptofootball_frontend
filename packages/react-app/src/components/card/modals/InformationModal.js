@@ -139,6 +139,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
 
     const LevelUpContent = forwardRef(({children}, ref) => {
         const [sliderValue, setSliderValue] = useState(0)
+        const [levelValue, setLevelValue] = useState(0)
 
         const handleBlur = () => {
             if (sliderValue < 1) {
@@ -148,16 +149,32 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
             }
         }
 
+        const handleLevelInputChange = async (event) => {
+            let value = Number(event.target.value)
+            if (value + +player.score > 100) {
+                value = 100 - +player.score
+            }
+            let xpRequired = 0
+            for (let i = 0; i < value; i++) {
+                xpRequired += footballHeroesService.getXpRequireToLvlUp(+player.score + i)
+            }
+            xpRequired -= +player.xp
+            setSliderValue(Math.ceil(xpRequired / (xpPerDollar / GBPrice)))
+            setLevelValue(value)
+        }
+
         const handleInputChange = (event) => {
             const value = Number(event.target.value)
             if (value < 0) {
                 setSliderValue(0)
             } else {
                 setSliderValue(Math.round(value > maxGBToConsume ? maxGBToConsume : value))
+                setLevelValue(footballHeroesService.calculateNewScore(sliderValue * xpPerDollar / GBPrice, player.xp, player.score) - player.score)
             }
         }
 
         const handleSliderChange = (event, newValue) => {
+            setLevelValue(footballHeroesService.calculateNewScore(sliderValue * xpPerDollar / GBPrice, player.xp, player.score) - player.score)
             setSliderValue(Math.round(newValue))
         }
 
@@ -208,19 +225,51 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                             />
                         </Grid>
                     </Grid>
+                    <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-around">
+                        <Typography variant="body2" color="secondary">
+                            Level(s) gained
+                        </Typography>
+                        <Input
+                            sx={{
+                                padding: '2px',
+                            }}
+                            color="secondary"
+                            value={levelValue}
+                            size="small"
+                            onChange={handleLevelInputChange}
+                            inputProps={{
+                                step: 1,
+                                min: 1,
+                                max: 100 - +player.score,
+                                type: 'number',
+                            }}
+                        />
+                    </Stack>
                 </Stack>
 
                 <Stack spacing={2} alignItems="center">
                     <Typography gutterBottom>
-                        xp gained: {sliderValue * xpPerDollar / GBPrice}
+                        xp gained: {(sliderValue * xpPerDollar / GBPrice).toFixed(2)}
                     </Typography>
-                    <Typography gutterBottom>
+                    <Typography hidden={true} gutterBottom>
                         lvl
                         gained: {footballHeroesService.calculateNewScore(sliderValue * xpPerDollar / GBPrice, player.xp, player.score) - player.score}
                     </Typography>
                 </Stack>
-                <Button fullWidth color="primary" variant="contained"
-                        onClick={() => footballHeroesService.payToLevelUp(player.id, sliderValue / GBPrice)}>Confirm</Button>
+                <Button
+                    fullWidth
+                    color="primary"
+                    variant="contained"
+                    onClick={() => footballHeroesService.payToLevelUp(player.id, sliderValue / GBPrice)}
+                    endIcon={
+                        <TokenPrice
+                            typoVariant="caption"
+                            price={10}
+                            size={15}
+                            token="busd"
+                        />
+                    }
+                >Confirm</Button>
             </LayoutContent>)
     })
 

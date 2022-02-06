@@ -13,6 +13,8 @@ import LayoutContent from '../../../components/LayoutContent'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import LoadingButton from '@mui/lab/LoadingButton'
+import Box from '@mui/material/Box'
+import GbImage from '../../../images/token.png'
 
 
 const Tab = styled(TabUnstyled)`
@@ -102,11 +104,22 @@ export default function TabOpponent({ opponents, selectOpponent, setMatchAvailab
 						>
 							<LayoutContent>
 								<Stack spacing={1}>
-									<Stack direction="row" spacing={2} alignItems="center" justifyContent="center" pb={3}>
-										<Typography variant="h5">Team Score:</Typography>
-										<Typography variant="h5" sx={{
-											textShadow: '0 0 10px yellow',
-										}}>{o.score}</Typography>
+									<Stack direction="row" spacing={2} alignItems="center" justifyContent="space-around" pb={3}>
+										<Stack alignItems="center">
+											<Typography variant="h5">Team Score</Typography>
+											<Typography variant="h5" sx={{
+												textShadow: '0 0 10px yellow',
+											}}>{o.score}</Typography>
+										</Stack>
+										<Stack alignItems="center">
+											<Typography variant="h5">Rewards</Typography>
+											<Stack direction="row" alignItems="center" spacing={0.5}>
+												<Typography variant="h5" sx={{
+													textShadow: '0 0 10px yellow',
+												}}>{o.rewards}</Typography>
+												<img style={{ width: 20, height: 20 }} src={GbImage} alt="gb token"/>
+											</Stack>
+										</Stack>
 									</Stack>
 									<Divider/>
 									{

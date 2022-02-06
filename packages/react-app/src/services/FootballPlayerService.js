@@ -9,22 +9,22 @@ import {fetchData, resetTeam} from "../features/gameSlice";
 class FootballHeroesService {
 
     names = [[
-        ["MENDY", "NAVAS"],
-        ["COURTOIS", "DE GEA", "ALISSON"],
-        ["LLORIS", "KAHN"],
-        ["NEUER", "BUFFON", "CASILLAS"]
-    ], [["MARQUINHOS", "ALABA", "VARANE", "HERNANDEZ"],
-        ["SILVA", "HAKAMI", "PEPE", "PIQUE", "BONUCCI"],
-        ["RAMOS", "MARCELO", "VAN DIJK", "ALVES", "HUMMELS", "LAHM"],
-        ["CARLOS", "CAFU", "MALDINI", "PUYOL"]
-    ], [["MAHREZ", "POGBA", "KOKE", "CASEMIRO", "FRED"],
-        ["DE BRUYNE", "FERNANDES", "VERRATTI", "DI MARIA", "JORGINHO", "GERRARD"],
-        ["MODRIC", "MULLER", "KANTE", "ERIKSEN", "XAVI"],
-        ["ZIDANE", "PELE", "INIESTA", "MARADONA", "RONALDINHO", "PIRLO"]
-    ], [["LUKAKU", "HAZARD", "WERNER", "CAVANI", "ICARDI", "JESUS", "GIROUD", "HULK"],
-        ["SALAH", "KANE", "DZEKO", "VARDY", "ROBINHO", "ADRIANO"],
-        ["NEYMAR", "MBAPPE", "LEWANDOWSKI", "BENZEMA", "HAALAND", "IBRAHIMOVIC"],
-        ["MESSI", "RONALDO", "DROGBA", "HENRY", "RAUL"]
+        ["MENDO", "NAVOS"],
+        ["COURTOY", "DE GEO", "ALASSON"],
+        ["LORIS", "KOHN"],
+        ["NEUAR", "BUFFUN", "COSILLAS"]
+    ], [["MARQUINHAS", "ALOBA", "VORANE", "HERNANDO"],
+        ["SILVI", "HAKAMA", "POPE", "PIQUA", "BONUCCO"],
+        ["RAMAS", "MARCILO", "VAN DOJK", "ALVAS", "HUMMOLS", "LOHM"],
+        ["CORLOS", "COFE", "MALDANI", "PUYEL"]
+    ], [["MAHRAZ", "PAGBO", "KEKO", "COSEMIRO", "FROD"],
+        ["DE BRUYONE", "FERNANDOS", "VERROTTI", "DI MARIO", "JARGINHO", "GEGE"],
+        ["MODROC", "MOLLER", "KANTO", "ERIKSAN", "XAVO"],
+        ["ZIZOU", "PELO", "INIOSTA", "MARODONA", "RANOLDINHO", "PORLI"]
+    ], [["LUKAKO", "HAZIRD", "WERNAR", "CAVONI", "ICORDI", "JASUS", "GAROUD", "HOLK"],
+        ["SOLAH", "KONE", "DZAKO", "VURDY", "RABINHO", "ADRIUNO"],
+        ["NEYMUR", "MBOPPE", "LEWANDOWSKU", "BENZIMA", "HAULAND", "UBRAHIMOVIC"],
+        ["MASSI", "RENALDO", "DRAGBO", "HENRA", "RAOUL"]
     ]]
 
     init(provider, address) {

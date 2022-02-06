@@ -169,7 +169,7 @@ const MatchPage = () => {
 					<Typography variant="h5" color="secondary">Opponents</Typography>
 					<Stack spacing={1}>
 						<Divider/>
-						<Stack direction="row" justifyContent="space-between" alignItems="center">
+						<Stack direction="row" width="100%" justifyContent="space-between" alignItems="center" spacing={2}>
 							<Stack direction="row" alignItems="center" spacing={0.5}>
 								<Typography alignSelf="center" variant="body2">
 									My team score:
@@ -214,7 +214,9 @@ const MatchPage = () => {
 						</LoadingButton>
 						{
 							isFetchingOpponents ?
-								<CircularProgress sx={{ marginTop: '15px' }} color="secondary"/>
+								<Box display="flex" alignItems="center" justifyContent="center" width="100%">
+									<CircularProgress sx={{ marginTop: '15px' }} color="secondary"/>
+								</Box>
 								:
 								<TabOpponent
 									matchAvailable={matchAvailable}

@@ -143,15 +143,14 @@ const MatchPage = () => {
 			<Stack
 				direction="row"
 				width={isMobile ? '90%' : '100%' }
-				height="100%"
 				justifyContent={isMobile ? 'center' : ''}
 			>
-				<Stack width="60%" hidden={isMobile} height={teamDrawerOpen ? '70%' : '100%'} spacing={1}>
+				<Stack width="60%" hidden={isMobile}  spacing={1} p={teamDrawerOpen ? 2 : 0}>
 					<Typography variant="h4" color="secondary">Match</Typography>
 					<Divider flexItem/>
 					<Grid  container sx={{
 						background: 'url("/stadium.png")',
-						height: '500px',
+						height: teamDrawerOpen ? '350px' : '500px',
 						backgroundSize: '100% 100%',
 						backgroundRepeat: 'no-repeat',
 					}}>

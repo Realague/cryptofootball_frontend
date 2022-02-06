@@ -59,7 +59,11 @@ const TrainingModal = ({ modalOptions, setModalOptions }) => {
 		<Modal
 			closeAfterTransition
 			open={modalOptions.open}
-			onClose={() => { setModalOptions({ ...modalOptions, open : false }) }}
+			onClose={() => {
+				setUseAllStamina(false)
+				setSelectedMode(undefined)
+				setModalOptions({ ...modalOptions, open : false })
+			}}
 			BackdropProps={{
 				timeout: 500,
 			}}
@@ -109,7 +113,13 @@ const TrainingModal = ({ modalOptions, setModalOptions }) => {
 									{
 										difficulties.map(d => (
 											<Grid key={d.name} item xs={4}>
-												<TrainingColumn difficulty={d} selectedMode={selectedMode} setSelectedMode={setSelectedMode} />
+												<TrainingColumn
+													player={modalOptions.player}
+													difficulty={d}
+													selectedMode={selectedMode}
+													useAllStamina={useAllStamina}
+													setSelectedMode={setSelectedMode}
+												/>
 											</Grid>
 										))
 									}

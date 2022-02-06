@@ -4,7 +4,7 @@ import TokenImage from '../../../images/token.png'
 import { BsFillLightningChargeFill } from 'react-icons/bs'
 import { useSelector } from 'react-redux'
 
-const TrainingColumn = ({ difficulty, selectedMode, setSelectedMode }) => {
+const TrainingColumn = ({ useAllStamina, difficulty, selectedMode, setSelectedMode, player }) => {
 	const { GBPrice } = useSelector(state => state.user)
 
 	return (
@@ -18,13 +18,23 @@ const TrainingColumn = ({ difficulty, selectedMode, setSelectedMode }) => {
 			<Divider flexItem variant="middle"/>
 			<Stack direction="row" spacing={1} alignItems="center">
 				<Typography variant="body2">
-                    + {difficulty.token * +GBPrice}
+                    + {
+						useAllStamina ?
+							difficulty.token * +GBPrice * (+player.currentStamina / 25)
+							:
+							difficulty.token * +GBPrice
+					}
 				</Typography>
 				<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
 			</Stack>
 			<Stack direction="row" spacing={2}>
 				<Typography variant="body2">
-                    + {difficulty.xp} XP
+                    + {
+						useAllStamina ?
+							difficulty.xp * (+player.currentStamina / 25)
+							:
+							difficulty.xp
+					} XP
 				</Typography>
 			</Stack>
 			<Divider/>
@@ -32,7 +42,12 @@ const TrainingColumn = ({ difficulty, selectedMode, setSelectedMode }) => {
 			<Divider flexItem variant="middle"/>
 			<Stack direction="row" spacing={1} alignItems="center">
 				<Typography variant="body2">
-                    - {difficulty.stamina}
+                    - {
+						useAllStamina ?
+							player.currentStamina
+							:
+							difficulty.stamina
+					}
 				</Typography>
 				<BsFillLightningChargeFill
 					style={{ color: 'yellow', width: '20px' }}/>

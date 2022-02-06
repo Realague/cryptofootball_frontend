@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Divider, Drawer, Stack, useMediaQuery, } from '@mui/material'
+import { CircularProgress, Divider, Drawer, Stack, useMediaQuery, } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import Strategy from '../../enums/Strategy'
 import { addPlayerToTeam } from '../../features/gameSlice'
@@ -8,9 +8,10 @@ import Header from './components/Header'
 import DraggingContent from './components/DraggingContent'
 import DrawerContent from './components/DrawerContent'
 import { useTheme } from '@emotion/react'
+import LoadingImage from '../../images/gifs/loading.gif'
 
 const TeamDrawer = ({ open, changeState }) => {
-	const { team } = useSelector(state => state.game)
+	const { team, fetching } = useSelector(state => state.game)
 	const { isDraggingPlayer } = useSelector(state => state.settings)
 	const dispatch = useDispatch()
 	const { enqueueSnackbar } = useSnackbar()
@@ -65,10 +66,15 @@ const TeamDrawer = ({ open, changeState }) => {
 				alignItems: 'center',
 			}}>
 				{
-					isDraggingPlayer ?
-						<DraggingContent onDrop={(v) => onPlayerDropped(v)}/>
+					fetching ?
+						<Stack height="100vh" width="100%" justifyContent="center" alignItems="center">
+							<CircularProgress color="secondary"/>
+						</Stack>
 						:
-						<DrawerContent lastPlayerDropped={lastPlayerDropped}/>
+						isDraggingPlayer ?
+							<DraggingContent onDrop={(v) => onPlayerDropped(v)}/>
+							:
+							<DrawerContent lastPlayerDropped={lastPlayerDropped}/>
 
 				}
 			</Stack>

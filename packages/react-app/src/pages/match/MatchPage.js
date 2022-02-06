@@ -139,36 +139,62 @@ const MatchPage = () => {
 	}
 
 	return (
-		<Stack justifyContent="center" alignItems="center" width="100%" height="500px" p={2}>
-			<Stack direction="row" width={isMobile ? '90%' : '100%' } height="100%" justifyContent={isMobile ? 'center' : ''}>
-				<Grid height={teamDrawerOpen ? '70%' : '100%'} hidden={isMobile} container width="60%" sx={{
-					background: 'url("/stadium.png")',
-					backgroundSize: '100% 100%',
-					backgroundRepeat: 'no-repeat',
-				}}>
-					{
-						myComposition !== undefined &&
+		<Stack justifyContent="center" alignItems="center" width="100%" p={2} spacing={1}>
+			<Stack
+				direction="row"
+				width={isMobile ? '90%' : '100%' }
+				height="100%"
+				justifyContent={isMobile ? 'center' : ''}
+			>
+				<Stack width="60%" hidden={isMobile} height={teamDrawerOpen ? '70%' : '100%'} spacing={1}>
+					<Typography variant="h4" color="secondary">Match</Typography>
+					<Divider flexItem/>
+					<Grid  container sx={{
+						background: 'url("/stadium.png")',
+						height: '500px',
+						backgroundSize: '100% 100%',
+						backgroundRepeat: 'no-repeat',
+					}}>
+						{
+							myComposition !== undefined &&
 						<RenderTeam composition={myComposition} />
-					}
-					{
-						selectedOpponent !== undefined &&
+						}
+						{
+							selectedOpponent !== undefined &&
 						<RenderTeam composition={selectedOpponent} reversed />
  					}
 
-				</Grid>
+					</Grid>
+				</Stack>
 				<Stack width={isMobile ? '100%': '40%'} justifyContent="flex-start" alignItems="center" spacing={2}>
 					<Typography variant="h5" color="secondary">Opponents</Typography>
 					<Stack spacing={1}>
 						<Divider/>
-						<Typography alignSelf="center" variant="body2">
+						<Stack direction="row" justifyContent="space-between" alignItems="center">
+							<Stack direction="row" alignItems="center" spacing={0.5}>
+								<Typography alignSelf="center" variant="body2">
+									My team score:
+								</Typography>
+								<Typography variant="body2" sx={{
+									textShadow: '0 0 1px yellow',
+								}}>
+									{
+										Math.round(
+											team.players.reduce((prev, current) => (prev || 0) + +current.score, 0) / 11
+										)
+									}
+								</Typography>
+							</Stack>
+							<Typography alignSelf="center" variant="body2">
 							Match available: {matchAvailable} / {
-								[2, 3, 4, 5, 6][
-									Math.round(
-										team.players.reduce((prev, current) => (prev || 0) + +current.frame, 0) / 11
-									)
-								]
-							}
-						</Typography>
+									[2, 3, 4, 5, 6][
+										Math.round(
+											team.players.reduce((prev, current) => (prev || 0) + +current.frame, 0) / 11
+										)
+									]
+								}
+							</Typography>
+						</Stack>
 						<Divider/>
 						<LoadingButton
 							variant="contained"

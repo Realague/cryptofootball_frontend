@@ -21,11 +21,22 @@ import {useTheme} from "@emotion/react";
 import PlayerListItem from "../../../layout/teamDrawer/components/PlayerListItem";
 import {addPlayerToTeam, removePlayerFromTeamById} from "../../../features/gameSlice";
 import Strategy from "../../../enums/Strategy";
+import GbImage from "../../../images/token.png";
+import BusdImage from "../../../images/busd.png";
+import TokenPrice from "../../tokenPrice/TokenPrice";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 
 const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, mobile, isTrainingPage = false}) => {
     const {account, GBBalance, GBPrice} = useSelector(state => state.user)
-    const {isMarketplaceOpen, isInTransaction, isLevelUpOpen, isTrainingOpen, isMatchOpen, isUpgradeFrameOpen} = useSelector(state => state.settings)
+    const {
+        isMarketplaceOpen,
+        isInTransaction,
+        isLevelUpOpen,
+        isTrainingOpen,
+        isMatchOpen,
+        isUpgradeFrameOpen
+    } = useSelector(state => state.settings)
     const {team} = useSelector(state => state.game)
     const [action, setAction] = useState(isTrainingPage ? "train" : undefined)
     const [maxGBToConsume, setMaxGBToConsume] = useState(0)
@@ -65,30 +76,33 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                         Remove from team
                     </Button>
                     :
-                <Button hidden={marketItem !== undefined}
-                        onClick={() => {
-                            dispatch(addPlayerToTeam(player))
-                        }}
-                        color="secondary"
-                        fullWidth
-                        disabled={
-                            team.players.length === 11 ||
-                            team.strategy === undefined ||
-                            Strategy.Strategies.find(s => s.id === team.strategy).composition[player.position] <= team.players.filter(p => p.position === player.position).length
-                        }
-                        variant="outlined"
-                >
-                   Add to team
-                </Button>
+                    <Button hidden={marketItem !== undefined}
+                            onClick={() => {
+                                dispatch(addPlayerToTeam(player))
+                            }}
+                            color="secondary"
+                            fullWidth
+                            disabled={
+                                team.players.length === 11 ||
+                                team.strategy === undefined ||
+                                Strategy.Strategies.find(s => s.id === team.strategy).composition[player.position] <= team.players.filter(p => p.position === player.position).length
+                            }
+                            variant="outlined"
+                    >
+                        Add to team
+                    </Button>
             }
 
-            <Button hidden={marketItem !== undefined} disabled={+player.score === 100 || !isLevelUpOpen} onClick={() => chooseAction('level-up')} fullWidth color="primary"
+            <Button hidden={marketItem !== undefined} disabled={+player.score === 100 || !isLevelUpOpen}
+                    onClick={() => chooseAction('level-up')} fullWidth color="primary"
                     variant="contained">Level
                 Up</Button>
-            <Button hidden={marketItem !== undefined} disabled={+player.frame === 4 || !isUpgradeFrameOpen} onClick={() => chooseAction('improve-frame')} fullWidth
+            <Button hidden={marketItem !== undefined} disabled={+player.frame === 4 || !isUpgradeFrameOpen}
+                    onClick={() => chooseAction('improve-frame')} fullWidth
                     color="primary" variant="contained">Improve
                 Frame</Button>
-            <Button hidden={marketItem !== undefined} disabled={!isMarketplaceOpen} onClick={() => chooseAction('sell')} fullWidth color="secondary"
+            <Button hidden={marketItem !== undefined} disabled={!isMarketplaceOpen} onClick={() => chooseAction('sell')}
+                    fullWidth color="secondary"
                     variant="contained"
                     my={4}>Sell</Button>
             <Button hidden={marketItem === undefined || marketItem.seller !== account}
@@ -130,64 +144,88 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
             if (sliderValue < 1) {
                 setSliderValue(1)
             } else if (sliderValue > maxGBToConsume) {
-                setSliderValue(maxGBToConsume)
+                setSliderValue(Math.round(maxGBToConsume))
             }
         }
 
         const handleInputChange = (event) => {
-            setSliderValue(event.target.value === '' ? '' : Number(event.target.value))
+            const value = Number(event.target.value)
+            if (value < 0) {
+                setSliderValue(0)
+            } else {
+                setSliderValue(Math.round(value > maxGBToConsume ? maxGBToConsume : value))
+            }
         }
 
         const handleSliderChange = (event, newValue) => {
-            setSliderValue(newValue)
+            setSliderValue(Math.round(newValue))
         }
 
-        return (<LayoutContent name="Level Up" ref={ref}>
-            <Typography id="input-slider" gutterBottom>
-                GB Token to use
-            </Typography>
-            <Grid container spacing={2} alignItems="center" columns={10} px={1}>
-                <Grid item xs={6}>
-                    <Slider
-                        value={typeof sliderValue === 'number' ? sliderValue : 1}
-                        onChange={handleSliderChange}
-                        aria-labelledby="input-slider"
-                        max={maxGBToConsume}
-                        min={1}
-                    />
-                </Grid>
-                <Grid item xs={4}>
-                    <Input
-                        value={sliderValue}
-                        size="small"
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        inputProps={{
-                            step: 1,
-                            min: 1,
-                            max: maxGBToConsume,
-                            type: 'number',
-                            'aria-labelledby': 'input-slider',
-                        }}
-                    />
-                </Grid>
-            </Grid>
-            <Stack spacing={2} alignItems="center">
-                <Typography gutterBottom>
-                    xp gained: {sliderValue * xpPerDollar / GBPrice}
-                </Typography>
-                <Typography gutterBottom>
-                    lvl
-                    gained: {footballHeroesService.calculateNewScore(sliderValue * xpPerDollar / GBPrice, player.xp, player.score) - player.score}
-                </Typography>
-            </Stack>
-            <Button fullWidth color="primary" variant="contained"
-                    onClick={() => footballHeroesService.payToLevelUp(player.id, sliderValue / GBPrice)}>Confirm</Button>
-        </LayoutContent>)
+        return (
+            <LayoutContent name="Level Up" ref={ref}>
+                <Stack spacing={1}>
+                    <Stack direction="row" spacing={0.5} alignItems="center" p={1}>
+                        <Typography variant="subtitle1" color="secondary">
+                            Select the amount of
+                        </Typography>
+                        <img style={{width: 15, height: 15}} src={GbImage} alt="gb token"/>
+                        <Typography variant="subtitle1" color="secondary">
+                            to use
+                        </Typography>
+                    </Stack>
+                    <Divider flexItem />
+                    <Grid container spacing={2} alignItems="center" columns={10} px={1}>
+                        <Grid item xs={6.5}>
+                            <Slider
+                                color="secondary"
+                                value={typeof sliderValue === 'number' ? sliderValue : 1}
+                                onChange={handleSliderChange}
+                                aria-labelledby="input-slider"
+                                max={maxGBToConsume}
+                                min={1}
+                            />
+                        </Grid>
+                        <Grid item xs={3.5}>
+                            <Input
+                                sx={{
+                                    padding: '2px',
+                                }}
+                                color="secondary"
+                                value={sliderValue}
+                                size="small"
+                                endAdornment={
+
+                                    <img style={{width: 20, height: 20}} src={GbImage} alt="gb token"/>
+                                }
+                                onChange={handleInputChange}
+                                onBlur={handleBlur}
+                                inputProps={{
+                                    step: 1,
+                                    min: 1,
+                                    max: maxGBToConsume,
+                                    type: 'number',
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
+                </Stack>
+
+                <Stack spacing={2} alignItems="center">
+                    <Typography gutterBottom>
+                        xp gained: {sliderValue * xpPerDollar / GBPrice}
+                    </Typography>
+                    <Typography gutterBottom>
+                        lvl
+                        gained: {footballHeroesService.calculateNewScore(sliderValue * xpPerDollar / GBPrice, player.xp, player.score) - player.score}
+                    </Typography>
+                </Stack>
+                <Button fullWidth color="primary" variant="contained"
+                        onClick={() => footballHeroesService.payToLevelUp(player.id, sliderValue / GBPrice)}>Confirm</Button>
+            </LayoutContent>)
     })
 
     const ImproveFrameContent = forwardRef(({children}, ref) => {
-        const { collection } = useSelector(state => state.game)
+        const {collection} = useSelector(state => state.game)
         const compatiblePlayer = collection.filter(p =>
             p.imageId == player.imageId
             && p.rarity == player.rarity
@@ -198,36 +236,58 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
         )
 
         return (
-        <LayoutContent description="Selected player will be deleted" name="Improve Frame" width="100%" ref={ref}>
+            <LayoutContent description="Selected player will be deleted" name="Improve Frame" width="100%" ref={ref}>
                 <Stack spacing={1} height="200px" sx={{overflowY: 'scroll'}}>
                     {
-                        compatiblePlayer.map(p =>(
-                    <PlayerListItem
-                        key={p.id}
-                        player={p}
-                        onClick={async () => {
-                            await footballHeroesService.upgradeFrame(player.id, p.id)
-                            chooseAction(undefined)
-                        }}
-                        icon={
-                            isInTransaction ?
-                                <CircularProgress/>
-                                :
-                                <Done/>
-                        }
-                    />
-                    ))
+                        compatiblePlayer.map(p => (
+                            <PlayerListItem
+                                key={p.id}
+                                player={p}
+                                button={
+                                        <LoadingButton
+                                            loading={isInTransaction}
+                                            onClick={async () => {
+                                                await footballHeroesService.upgradeFrame(player.id, p.id)
+                                                chooseAction(undefined)
+                                            }}
+                                            variant="contained"
+                                            color="primary"
+                                            endIcon={
+                                                <Stack>
+                                                    <TokenPrice
+                                                        typoVariant="caption"
+                                                        price={100}
+                                                        size={15}
+                                                        token="gb"
+                                                    />
+                                                    <TokenPrice
+                                                        typoVariant="caption"
+                                                        size={15}
+                                                        price={100}
+                                                        token="busd"
+                                                    />
+                                                </Stack>
+                                            }
+                                        >
+                                            USE
+                                        </LoadingButton>
+
+                                }
+                            />
+                        ))
                     }
                 </Stack>
 
-        </LayoutContent>
-    )})
+            </LayoutContent>
+        )
+    })
 
     const TrainContent = forwardRef(({children}, ref) => (
         <LayoutContent name="Train" ref={ref}>
             {
                 +player.currentStamina < 20 ?
-                    <Typography variant="subtitle1" color="error" textAlign="center">This player doesn't have enough stamina to train.</Typography>
+                    <Typography variant="subtitle1" color="error" textAlign="center">This player doesn't have enough
+                        stamina to train.</Typography>
                     :
                     <>
                         <Button

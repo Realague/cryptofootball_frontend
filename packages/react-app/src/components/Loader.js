@@ -81,7 +81,6 @@ const Loader = () => {
 			} else if (receipt.events.LevelUp) {
 				setRewards(receipt.events.LevelUp.returnValues)
 				setTransactionState('levelUp')
-				dispatch(fetchData())
 				dispatch(fireConffeti())
 				dispatch(updatePlayerInCollection(await footballHeroesService.getFootballPlayer(rewards.playerId)))
 			} else {
@@ -221,7 +220,7 @@ const Loader = () => {
 									</Stack>,
 							'improveFrame':
 								<Stack alignItems="center" spacing={2}>
-									<Typography variant="h4">Improve Frame</Typography>
+									<Typography variant="h4">Improve Tier</Typography>
 									<Divider/>
 									<Card player={player} marketItem={undefined} />
 									<Divider/>

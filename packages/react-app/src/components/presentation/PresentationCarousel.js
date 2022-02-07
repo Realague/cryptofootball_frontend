@@ -3,12 +3,13 @@ import football1 from '../../images/football-1.jpg'
 import football3 from '../../images/football-3.jpg'
 import React from 'react'
 import Box from '@mui/material/Box'
-import { Button, Divider, Stack, Typography } from '@mui/material'
+import { Button, Divider, Stack, Typography, useMediaQuery } from '@mui/material'
 import theme from '../../theme'
 import { useNavigate } from 'react-router-dom'
 
 function PresentationCarousel() {
 	const navigate = useNavigate()
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
 	return (
 		<Carousel style={{ height: '100vh' }}>
@@ -26,10 +27,14 @@ function PresentationCarousel() {
 					alignItems="center"
 					sx={{
 						position: 'absolute',
-						bottom: 0,
+						bottom: '0%',
 						left: '50%',
+						width: isMobile ? '95%' : '60%',
 						transform: 'translate(-50%, -50%)',
+						backdropFilter: 'blur(3px)',
+						borderRadius: '3px',
 					}}
+					p={1}
 					spacing={1}
 				>
 					<Typography

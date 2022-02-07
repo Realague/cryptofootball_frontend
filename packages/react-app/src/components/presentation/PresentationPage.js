@@ -7,7 +7,7 @@ import { Stack } from '@mui/material'
 
 function PresentationPage() {
 	return (
-		<Stack spacing={2}>
+		<Stack>
 			<PresentationCarousel/>
 			<Contact/>
 			<Presentation/>

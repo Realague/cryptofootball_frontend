@@ -25,6 +25,7 @@ import GbImage from "../../../images/token.png";
 import BusdImage from "../../../images/busd.png";
 import TokenPrice from "../../tokenPrice/TokenPrice";
 import LoadingButton from "@mui/lab/LoadingButton";
+import Web3 from "web3";
 
 
 const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, mobile, isTrainingPage = false}) => {
@@ -145,7 +146,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
             if (sliderValue < 1) {
                 setSliderValue(1)
             } else if (sliderValue > maxGBToConsume) {
-                setSliderValue(Math.round(maxGBToConsume))
+                setSliderValue(maxGBToConsume)
             }
         }
 
@@ -168,14 +169,14 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
             if (value < 0) {
                 setSliderValue(0)
             } else {
-                setSliderValue(Math.round(value > maxGBToConsume ? maxGBToConsume : value))
+                setSliderValue(Math.ceil(value > maxGBToConsume ? maxGBToConsume : value))
                 setLevelValue(footballHeroesService.calculateNewScore(sliderValue * xpPerDollar / GBPrice, player.xp, player.score) - player.score)
             }
         }
 
         const handleSliderChange = (event, newValue) => {
             setLevelValue(footballHeroesService.calculateNewScore(sliderValue * xpPerDollar / GBPrice, player.xp, player.score) - player.score)
-            setSliderValue(Math.round(newValue))
+            setSliderValue(newValue)
         }
 
         return (
@@ -260,7 +261,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                     fullWidth
                     color="primary"
                     variant="contained"
-                    onClick={() => footballHeroesService.payToLevelUp(player.id, sliderValue / GBPrice)}
+                    onClick={() => footballHeroesService.payToLevelUp(player.id, (sliderValue / GBPrice))}
                     endIcon={
                         <TokenPrice
                             typoVariant="caption"

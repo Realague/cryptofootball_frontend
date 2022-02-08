@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Card from './card/Card'
 import LoadingImage from '../images/gifs/loading.gif'
 import { CancelOutlined, CheckCircleOutlined } from '@mui/icons-material'
-import { Modal, Button, Stack, Typography, Divider, Box, Grid } from '@mui/material'
+import { Modal, Button, Stack, Typography, Divider, Box, Grid, Checkbox } from '@mui/material'
 import { darkModal, trainingModal } from '../css/style'
 import { useDispatch, useSelector } from 'react-redux'
 import footballHeroesService from '../services/FootballPlayerService'
@@ -10,12 +10,13 @@ import {
 	addPlayersToCollection,
 	addPlayerToCollection,
 	fetchData,
-	fireConffeti,
+	fireConffeti, setTeam,
 	updatePlayerInCollection
 } from '../features/gameSlice'
 import { updateBalances } from '../features/userSlice'
 import Web3 from 'web3'
 import TokenPrice from './tokenPrice/TokenPrice'
+import Position from '../enums/Position'
 
 const Loader = () => {
 	const [transactionState, setTransactionState] = useState('')
@@ -23,6 +24,7 @@ const Loader = () => {
 	const [rewards, setRewards] = useState(0)
 	const [player, setPlayer] = useState(undefined)
 	const [players, setPlayers] = useState([])
+	const [useAsTeam, setUseAsTeam] = useState(false)
 	const dispatch = useDispatch()
 
 	const { transaction } = useSelector(state => state.settings)
@@ -32,6 +34,7 @@ const Loader = () => {
 			callBack()
 		}
 	}, [transaction])
+
 
 	const refreshBalances = async () => {
 		const jobs  = []
@@ -214,12 +217,68 @@ const Loader = () => {
 											}
 										</Grid>
 										<Divider/>
+										<Stack direction="row" alignItems="center" justifyContent="center" spacing={1} width="100%">
+											<Typography variant="body2">Use as team</Typography>
+											<Checkbox
+												color="secondary"
+												checked={useAsTeam}
+												onChange={(event) => {
+													setUseAsTeam(event.target.checked)
+												}}
+												inputProps={{ 'aria-label': 'controlled' }}
+											/>
+										</Stack>
+										<Divider/>
 										<Button
 											sx={{ mt: 2 }}
 											variant="contained"
 											color="secondary"
 											fullWidth
-											onClick={onHide}
+											onClick={async () => {
+												const composition = {
+													goalkeeper: undefined,
+													defenders: [],
+													midfielders: [],
+													attackers: [],
+												}
+												players.forEach(p => {
+													switch (+p.position) {
+													case Position.Attacker.id:
+														composition.attackers.push(+p.id)
+														break
+													case Position.Midfielder.id:
+														composition.midfielders.push(+p.id)
+														break
+													case Position.Defender.id:
+														composition.defenders.push(+p.id)
+														break
+													case Position.GoalKeeper.id:
+														composition.goalkeeper = +p.id
+														break
+													}
+												})
+												const compositions = await footballHeroesService.getCompositionList()
+												let compositionId = undefined
+												console.log(compositions)
+												compositions.forEach((compo, id) => {
+													if (
+														+compo.attackerNb === composition.attackers.length
+														&& +compo.defenderNb === composition.defenders.length
+														&& +compo.midfielderNb === composition.midfielders.length
+													) {
+														compositionId = id
+													}
+												})
+												onHide()
+												await footballHeroesService.setPlayerTeam(
+													compositionId,
+													+composition.goalkeeper,
+													composition.defenders,
+													composition.midfielders,
+													composition.attackers,
+												)
+												dispatch(setTeam((players)))
+											}}
 										>
 											Collect
 										</Button>

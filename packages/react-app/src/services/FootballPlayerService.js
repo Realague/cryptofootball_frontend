@@ -358,7 +358,7 @@ class FootballHeroesService {
             if (parseInt(Web3.utils.fromWei(GBAllowance)) < [5, 10, 15, 20, 30][frame] * store.getState().user.GBPrice) {
                 await this.approveGb(addresses.FootballPlayers)
             }
-            let isApproved = result[3]
+            let isApproved = result[2]
             if (!isApproved) {
                 await this.approveFootballPlayer(addresses.FootballPlayers)
             }

@@ -104,7 +104,22 @@ class FootballHeroesService {
     }
 
     async getFootballPlayer(playerId) {
-        return await this.storageContract.methods.getPlayer(playerId).call();
+        return new Promise(resolve => {
+            this.storageContract.methods.getPlayer(playerId).call().then(player => {
+                const stamina = +player.currentStamina + (Date.now() / 1000 - +player.lastTraining) / 3600 * {
+                    0: 70,
+                    1: 80,
+                    2: 100,
+                    3: 120,
+                    4: 140,
+                }[+player.frame] / 24
+                resolve({
+                    ...player,
+                    currentStamina: (stamina > 100 ? 100 : Math.round(stamina))
+                })
+            })
+
+        })
     }
 
     async getMintPrice() {
@@ -175,8 +190,8 @@ class FootballHeroesService {
         return await this.gameContract.methods.getRemainingClaimCooldown().call();
     }
 
-    getCurrentStamina(playerId) {
-        return this.gameContract.methods.getCurrentStamina(playerId).call();
+    async getCurrentStamina(playerId) {
+        return await this.gameContract.methods.getCurrentStamina(playerId).call();
     }
 
     getXpRequireToLvlUp(score) {

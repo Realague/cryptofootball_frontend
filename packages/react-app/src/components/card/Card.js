@@ -15,6 +15,18 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 	const [openedModal, setOpenedModal] = useState(undefined)
 	const [anchorElExperience, setAnchorElExperience] = useState(undefined)
 	const [anchorElStamina, setAnchorElStamina] = useState(undefined)
+	const [currentStamina, setCurrentStamina] = useState(0)
+
+	useEffect(() => {
+		const stamina = +player.currentStamina + (Date.now() / 1000 - +player.lastTraining) / 3600 * {
+			0: 70,
+			1: 80,
+			2: 100,
+			3: 120,
+			4: 140,
+		}[+player.frame] / 24
+		setCurrentStamina(stamina > 100 ? 100 : stamina)
+	}, [])
 
 	const renderCard = () => (
 		<Stack
@@ -137,7 +149,7 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 							setAnchorElStamina(undefined)
 						}}
 						variant="determinate"
-						value={+player.currentStamina}
+						value={currentStamina}
 					/>
 					<Popover
 						id="mouse-over-popover"
@@ -157,7 +169,7 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 						onClose={() => setAnchorElStamina(undefined)}
 						disableRestoreFocus
 					>
-						<Typography sx={{ p: 1 }}>{+player.currentStamina} / 100</Typography>
+						<Typography sx={{ p: 1 }}>{currentStamina} / 100</Typography>
 					</Popover>
 
 				</Stack>

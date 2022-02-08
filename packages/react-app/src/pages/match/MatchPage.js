@@ -8,9 +8,10 @@ import PlayerIcon from './components/PlayerIcon'
 import { useTheme } from '@emotion/react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import TokenImage from '../../images/token.png'
+import { useNavigate } from 'react-router-dom'
 
 const MatchPage = () => {
-	const { team } = useSelector(state => state.game)
+	const { team, collection } = useSelector(state => state.game)
 	const { teamDrawerOpen, isInTransaction } = useSelector(state => state.settings)
 	const [opponents, setOpponents] = useState([])
 	const [myComposition, setMyComposition] = useState(undefined)
@@ -20,6 +21,7 @@ const MatchPage = () => {
 	const [isFetchingOpponents, setIsFetchingOpponents] = useState(true)
 	const [matchAvailable, setMatchAvailable] = useState(0)
 	const [refreshPrice, setRefreshPrice] = useState(0)
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		fetchOpponents()
@@ -87,6 +89,34 @@ const MatchPage = () => {
 
 
 	if (team.strategy === undefined || team.players.length !== 11) {
+		if (collection.length === 0) {
+			return (
+				<Stack
+					sx={{
+						height: '80vh',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+					spacing={2}
+					p={2}
+				>
+					<Typography textAlign='center' variant="body2">
+						You don't have any player in your collection
+					</Typography>
+					<Typography textAlign='center'>
+						you can open the mint's page by clicking on the button below
+					</Typography>
+					<Button
+						variant="contained"
+						onClick={() => {
+							navigate('/mint')
+						}}
+					>
+						Mint player
+					</Button>
+				</Stack>
+			)
+		}
 		return (
 			<Stack justifyContent="center" alignItems="center" height="80vh" width="100%">
 				<Typography variant="h6">

@@ -169,7 +169,7 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 						onClose={() => setAnchorElStamina(undefined)}
 						disableRestoreFocus
 					>
-						<Typography sx={{ p: 1 }}>{currentStamina} / 100</Typography>
+						<Typography sx={{ p: 1 }}>{currentStamina.toFixed(0)} / 100</Typography>
 					</Popover>
 
 				</Stack>

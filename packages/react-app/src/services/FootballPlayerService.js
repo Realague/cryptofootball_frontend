@@ -16,15 +16,15 @@ class FootballHeroesService {
     ], [["MARQUINHAS", "ALOBA", "VORANE", "HERNANDO"],
         ["SILVI", "HAKAMA", "POPE", "PIQUA", "BONUCCO"],
         ["RAMAS", "MARCILO", "VAN DOJK", "ALVAS", "HUMMOLS", "LOHM"],
-        ["CORLOS", "COFE", "MALDANI", "PUYEL"]
+        ["CORLOS", "COFE", "MALDANI", "PUYEL", "NAGATOMI"]
     ], [["MAHRAZ", "PAGBO", "KEKO", "COSEMIRO", "FROD"],
         ["DE BRUYONE", "FERNANDOS", "VERROTTI", "DI MARIO", "JARGINHO", "GEGE"],
-        ["MODROC", "MOLLER", "KANTO", "ERIKSAN", "XAVO"],
-        ["ZIZOU", "PELO", "INIOSTA", "MARODONA", "RANOLDINHO", "PORLI"]
+        ["MODROC", "MOLLER", "KANTO", "ERIKSAN", "XAVO", "HADETOSHI", "IZOL"],
+        ["ZIZOU", "PELO", "INIOSTA", "MARODONA", "RANOLDINHO", "PORLI", "CHUNG-YANG"]
     ], [["LUKAKO", "HAZIRD", "WERNAR", "CAVONI", "ICORDI", "JASUS", "GAROUD", "HOLK"],
-        ["SOLAH", "KONE", "DZAKO", "VURDY", "RABINHO", "ADRIUNO"],
+        ["SOLAH", "KONE", "DZAKO", "VURDY", "JONUNHO", "ADRIUNO"],
         ["NEYMUR", "MBOPPE", "LEWANDOWSKU", "BENZIMA", "HAULAND", "UBRAHIMOVIC"],
-        ["MASSI", "RENALDO", "DRAGBO", "HENRA", "RAOUL"]
+        ["MASSI", "RENALDO", "DRAGBO", "HENRA", "RAOUL", "MINAMINA", "HEUNG-MON"]
     ]]
 
     init(provider, address) {

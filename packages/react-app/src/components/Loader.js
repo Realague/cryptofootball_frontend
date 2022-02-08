@@ -34,10 +34,16 @@ const Loader = () => {
 	}, [transaction])
 
 	const refreshBalances = async () => {
-		const BUSDBalance = Web3.utils.fromWei(await footballHeroesService.getBusdBalance())
-		const GBBalance = Web3.utils.fromWei(await footballHeroesService.getGbBalance())
-		console.log(BUSDBalance, GBBalance)
-		dispatch(updateBalances({ BUSDBalance, GBBalance }))
+		const jobs  = []
+		jobs.push(footballHeroesService.getRewards())
+		jobs.push(footballHeroesService.getGbBalance())
+		jobs.push(footballHeroesService.getBusdBalance())
+		const jobsResult = await Promise.all(jobs)
+		dispatch(updateBalances({
+			BUSDBalance: Web3.utils.fromWei(jobsResult[2]),
+			GBBalance: Web3.utils.fromWei(jobsResult[1]),
+			rewards: jobsResult[0]
+		}))
 	}
 
 	const callBack = async () => {

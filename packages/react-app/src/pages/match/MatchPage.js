@@ -86,13 +86,13 @@ const MatchPage = () => {
 	}
 
 
-	if (team.strategy === undefined || team.players.length === 0) {
+	if (team.strategy === undefined || team.players.length !== 11) {
 		return (
-			<Box display="flex" justifyContent="center" direction="column" width="100%" p={2}>
+			<Stack justifyContent="center" alignItems="center" height="80vh" width="100%">
 				<Typography variant="h6">
-					You need to create a team in order to play.
+					You have to create a team of 11 players in order to play.
 				</Typography>
-			</Box>
+			</Stack>
 		)
 	}
 

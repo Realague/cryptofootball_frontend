@@ -26,6 +26,7 @@ export const userSlice = createSlice({
 				...state,
 				BUSDBalance: action.payload.BUSDBalance,
 				GBBalance: action.payload.GBBalance,
+				rewards: action.payload.rewards || state.rewards,
 			}
 		},
 		updateAccount: (state, action) => {

@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import {
 	Grid,
-	Stack,
+	Stack, useMediaQuery,
 } from '@mui/material'
 import { useSelector } from 'react-redux'
 import Card from '../../components/card/Card'
 import SortRow from './components/SortRow'
 import LoadingImage from '../../images/gifs/loading.gif'
 import TrainingModal from './components/TrainingModal'
+import theme from '../../theme'
 
 const TrainingPage = () => {
 	const { collection, fetching } = useSelector(state => state.game)
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const [modalOptions, setModalOptions] = useState({
 		open: false,
 		player: undefined,
@@ -44,6 +46,7 @@ const TrainingPage = () => {
 									<Card
 										player={player}
 										isTrainingPage
+										mobile={isMobile}
 										onClick={(p) => {
 											setModalOptions({
 												open: true,

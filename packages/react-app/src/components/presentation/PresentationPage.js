@@ -7,7 +7,9 @@ import { Stack } from '@mui/material'
 
 function PresentationPage() {
 	return (
-		<Stack>
+		<Stack sx={{
+			width: '100%',
+		}}>
 			<PresentationCarousel/>
 			<Contact/>
 			<Presentation/>

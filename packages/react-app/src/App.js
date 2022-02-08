@@ -16,7 +16,7 @@ import { SnackbarProvider } from 'notistack'
 import ReactCanvasConfetti from 'react-canvas-confetti'
 import { setTeamDrawerState } from './features/settingsSlice'
 import Box from '@mui/material/Box'
-
+import { detectAnyAdblocker } from 'just-detect-adblock'
 
 function randomInRange(min, max) {
 	return Math.random() * (max - min) + min
@@ -57,6 +57,13 @@ const App = () => {
 	const toggleThemeMode = () => {
 		setThemeMode(themeMode === 'dark' ? 'light' : 'dark')
 	}
+
+	detectAnyAdblocker().then((detected) => {
+		// console.log('deteced', detected)
+		if(detected){
+			// an adblocker is detected
+		}
+	})
 
 	useEffect(() => {
 		if (isReady) {

@@ -12,7 +12,6 @@ import { useTheme } from '@emotion/react'
 import { Remove } from '@mui/icons-material'
 import { theme } from '../../../theme'
 import { useNavigate } from 'react-router-dom'
-import { TourProvider, useTour } from '@reactour/tour'
 import Helper from '../../../components/helper/Helper'
 
 const DrawerContent = ({ lastPlayerDropped }) => {

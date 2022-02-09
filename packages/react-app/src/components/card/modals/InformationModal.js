@@ -271,7 +271,9 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                             token="busd"
                         />
                     }
-                >Confirm</Button>
+                >
+                    Confirm
+                </Button>
             </LayoutContent>)
     })
 

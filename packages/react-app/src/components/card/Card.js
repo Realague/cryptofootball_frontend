@@ -112,7 +112,7 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 							setAnchorElExperience(undefined)
 						}}
 						variant="determinate"
-						value={(player.xp / footballHeroesService.getXpRequireToLvlUp(player.score))  * 100}
+						value={((player.xp || 0) / footballHeroesService.getXpRequireToLvlUp((player.score || 1)))  * 100}
 					/>
 					<Popover
 						id="mouse-over-popover"
@@ -149,7 +149,7 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 							setAnchorElStamina(undefined)
 						}}
 						variant="determinate"
-						value={player.currentStamina}
+						value={(player.currentStamina || 0)}
 					/>
 					<Popover
 						id="mouse-over-popover"
@@ -169,7 +169,7 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 						onClose={() => setAnchorElStamina(undefined)}
 						disableRestoreFocus
 					>
-						<Typography sx={{ p: 1 }}>{player.currentStamina.toFixed(0)} / 100</Typography>
+						<Typography sx={{ p: 1 }}>{(player.currentStamina || 0).toFixed(0)} / 100</Typography>
 						<Typography sx={{ p: 1 }}>Regeneration: {
 							({
 								0: 70,

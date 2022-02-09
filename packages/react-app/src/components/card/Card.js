@@ -170,6 +170,15 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 						disableRestoreFocus
 					>
 						<Typography sx={{ p: 1 }}>{player.currentStamina.toFixed(0)} / 100</Typography>
+						<Typography sx={{ p: 1 }}>Regeneration: {
+							({
+								0: 70,
+								1: 80,
+								2: 100,
+								3: 120,
+								4: 140,
+							}[+player.frame] / 24).toFixed(2)
+						} / h</Typography>
 					</Popover>
 
 				</Stack>

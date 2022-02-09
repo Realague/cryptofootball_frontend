@@ -6,16 +6,14 @@ import Position from '../../../enums/Position'
 import LayoutContent from '../../../components/LayoutContent'
 import PlayerListItem from './PlayerListItem'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchData, removePlayerFromTeamById, resetTeam, setStrategy } from '../../../features/gameSlice'
+import { removePlayerFromTeamById, resetTeam, setStrategy } from '../../../features/gameSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
 import { Remove } from '@mui/icons-material'
-import { theme } from '../../../theme'
 import { useNavigate } from 'react-router-dom'
-import Helper from '../../../components/helper/Helper'
 
 const DrawerContent = ({ lastPlayerDropped }) => {
-	const { team, fetching, collection } = useSelector(state => state.game)
+	const { team, collection } = useSelector(state => state.game)
 	const dispatch = useDispatch()
 	const theme = useTheme()
 	const [compositions, setCompositions] = useState([])

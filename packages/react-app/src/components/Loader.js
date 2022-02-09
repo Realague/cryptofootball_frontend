@@ -166,7 +166,7 @@ const Loader = () => {
 							<Divider/>
 							<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
 								<Typography variant="subtitle1">Rewards: </Typography>
-								<TokenPrice typoVariant="subtitle2" price={rewards.rewards} token="gb"/>
+								<TokenPrice typoVariant="subtitle2" price={parseFloat(Web3.utils.fromWei(rewards.rewards || '0', 'ether')).toFixed(2)} token="gb"/>
 							</Stack>
 							<Divider/>
 							<Button
@@ -314,7 +314,7 @@ const Loader = () => {
                             	<Divider/>
                             	<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                             		<Typography variant="subtitle1">Rewards: </Typography>
-                            		<TokenPrice typoVariant="subtitle2" price={rewards.rewards} token="gb"/>
+                            		<TokenPrice typoVariant="subtitle2" price={parseFloat(Web3.utils.fromWei(rewards.rewards || '0', 'ether')).toFixed(2)} token="gb"/>
                             	</Stack>
                             	<Stack width="100%" direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                             		<Typography variant="subtitle1">Xp earnt: </Typography>

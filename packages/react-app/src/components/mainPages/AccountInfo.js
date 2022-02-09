@@ -9,6 +9,7 @@ import TokenImage from '../../images/token.png'
 import BusdImage from '../../images/busd.png'
 import footballHeroesService from '../../services/FootballPlayerService'
 import { theme } from '../../theme'
+import Web3 from 'web3'
 
 const AccountInfo = () => {
 	const {
@@ -105,7 +106,7 @@ const AccountInfo = () => {
 						<Typography variant="subtitle2">
                             Rewards:
 						</Typography>
-						<Typography variant="subtitle1">{parseFloat(rewards).toFixed(2)}</Typography>
+						<Typography variant="subtitle1">{parseFloat(Web3.utils.fromWei(rewards, 'ether')).toFixed(2)}</Typography>
 						<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
 					</Stack>
 					<Stack

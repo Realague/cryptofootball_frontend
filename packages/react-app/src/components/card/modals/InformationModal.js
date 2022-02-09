@@ -176,7 +176,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
 
         const handleSliderChange = (event, newValue) => {
             setLevelValue(footballHeroesService.calculateNewScore(sliderValue * xpPerDollar / GBPrice, player.xp, player.score) - player.score)
-            setSliderValue(newValue)
+            setSliderValue(Math.ceil(newValue))
         }
 
         return (
@@ -195,6 +195,7 @@ const InformationModal = ({open, onClose, frame, isInTeam, player, marketItem, m
                     <Grid container spacing={2} alignItems="center" columns={10} px={1}>
                         <Grid item xs={6.5}>
                             <Slider
+                                disabled={+player.score === 100}
                                 color="secondary"
                                 value={typeof sliderValue === 'number' ? sliderValue : 1}
                                 onChange={handleSliderChange}

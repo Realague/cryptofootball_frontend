@@ -9,6 +9,7 @@ import { useTheme } from '@emotion/react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import TokenImage from '../../images/token.png'
 import { useNavigate } from 'react-router-dom'
+import Helper from '../../components/helper/Helper'
 
 const MatchPage = () => {
 	const { team, collection } = useSelector(state => state.game)
@@ -177,7 +178,35 @@ const MatchPage = () => {
 				justifyContent={isMobile ? 'center' : ''}
 			>
 				<Stack width="60%" hidden={isMobile}  spacing={1} p={teamDrawerOpen ? 2 : 0}>
-					<Typography variant="h4" color="secondary">Match</Typography>
+					<Stack direction="row" alignItems="center" spacing={2}>
+						<Typography variant="h4" color="secondary">Match</Typography>
+						<Helper size="16px">
+							<Stack p={2} sx={{
+								width: '200px'
+							}}
+								   spacing={2}
+							>
+								<Typography lineHeight={1.4}>
+									You will be able to play matches and earn our tokens from this page.
+									In order to start a match you will first need a <strong>team of 11 players</strong>
+								</Typography>
+								<Divider flexItem variant="middle" />
+								<Typography lineHeight={1.4}>
+									Once you have a team three opponents will be displayed with their team score which
+									is the average of all the players score in the team
+								</Typography>
+								<Typography lineHeight={1.4}>
+									If you feel like the opponents may be too strong you are allowed to refresh them
+									with the "Refresh opponents" button
+								</Typography>
+								<Divider flexItem variant="middle" />
+								<Typography lineHeight={1.4}>
+									The amount of match available will depend of the average team's frame, same for the
+									regeneration which will be higher if your team's frame is higher
+								</Typography>
+							</Stack>
+						</Helper>
+					</Stack>
 					<Divider flexItem/>
 					<Grid  container sx={{
 						background: 'url("/stadium.png")',

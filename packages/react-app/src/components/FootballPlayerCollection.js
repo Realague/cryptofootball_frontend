@@ -122,7 +122,6 @@ const FootballPlayerCollection = ({ isTrainingPage = false }) => {
                     			<MenuItem value={'score'}>Score</MenuItem>
                     			<MenuItem value={'id'}>Id</MenuItem>
                     			<MenuItem value={'frame'}>Frame</MenuItem>
-                    			<MenuItem value={'rarity'}>Rarity</MenuItem>
                     		</Select>
                     		<Button
                     			sx={{

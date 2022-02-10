@@ -20,7 +20,6 @@ const SortRow = ({ setSortOptions, sortOptions }) => {
 			>
 				<MenuItem value={'currentStamina'}>Stamina</MenuItem>
 				<MenuItem value={'score'}>Score</MenuItem>
-				<MenuItem value={'rarity'}>Rarity</MenuItem>
 				<MenuItem value={'frame'}>Tier</MenuItem>
 			</Select>
 			<Button

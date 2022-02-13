@@ -9,6 +9,7 @@ import StaminaProgressBar from './components/StaminaProgressBar'
 import footballHeroesService from '../../services/FootballPlayerService'
 import { useSelector } from 'react-redux'
 import theme from '../../theme'
+import { Carousel } from 'react-bootstrap'
 
 const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, isTrainingPage = false }) => {
 	const { team } = useSelector(state => state.game)
@@ -84,9 +85,9 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 					{player.score}
 				</Typography>
 			</Stack>
-			<Box display="flex" justifyContent="center">
+			<Box display="flex" justifyContent="center" sx={{ position: 'relative' }}>
 				<img
-					src={`/footballplayer/${player.position}-${player.rarity}-${player.imageId}.png`}
+					src={'https://www.petanqueshop.com/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/1/0/100334110_1.png'}
 					style={{
 						height: mobile ? '76px' : '126px',
 						width: mobile ? '76px' : '126px',
@@ -97,6 +98,19 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 						outline: 'none',
 					}}
 				/>
+				<Stack
+					alignItems="center"
+					sx={{
+						position: 'absolute',
+						top: '35%',
+						left: '50%',
+						transform: 'translate(-50%, -50%)',
+					}}
+					spacing={0.5}
+				>
+					<Typography color="black" fontSize={mobile ? 4 : 6}>{footballHeroesService.getPlayersName(player)}</Typography>
+					<Typography color="black" fontSize={10}>{player.id}</Typography>
+				</Stack>
 			</Box>
 			<Stack justifyContent="center" alignItems="center" spacing={0.25}>
 				<Typography variant="h6">

@@ -6,15 +6,17 @@ import Position from '../../../enums/Position'
 import LayoutContent from '../../../components/LayoutContent'
 import PlayerListItem from './PlayerListItem'
 import { useDispatch, useSelector } from 'react-redux'
-import { removePlayerFromTeamById, resetTeam, setStrategy } from '../../../features/gameSlice'
+import { addPlayerToTeam, removePlayerFromTeamById, resetTeam, setStrategy, setTeam } from '../../../features/gameSlice'
 import footballHeroesService from '../../../services/FootballPlayerService'
 import { useTheme } from '@emotion/react'
 import { Remove } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
 const DrawerContent = ({ lastPlayerDropped }) => {
 	const { team, collection } = useSelector(state => state.game)
 	const dispatch = useDispatch()
+	const { enqueueSnackbar } = useSnackbar()
 	const theme = useTheme()
 	const [compositions, setCompositions] = useState([])
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -39,6 +41,42 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 					}))
 			})
 		}
+	}
+
+	const autoCreate = async() => {
+		const team = []
+		const tempTeam = []
+
+		const attackers = collection
+			.filter(p => p.position == Position.Attacker.id)
+			.sort((a, b) => (parseFloat(b.score) + (b.frame * 10)) - (parseFloat(a.score) + (b.frame * 10)))
+		const midfielders = collection
+			.filter(p => p.position == Position.Midfielder.id)
+			.sort((a, b) => (parseFloat(b.score) + (b.frame * 10)) - (parseFloat(a.score) + (b.frame * 10)))
+		const defenders = collection
+			.filter(p => p.position == Position.Defender.id)
+			.sort((a, b) => (parseFloat(b.score) + (b.frame * 10)) - (parseFloat(a.score) + (b.frame * 10)))
+		const goalkeepers = collection
+			.filter(p => p.position == Position.GoalKeeper.id)
+			.sort((a, b) => (parseFloat(b.score) + (b.frame * 10)) - (parseFloat(a.score) + (b.frame * 10)))
+
+		const strategy = Strategy.Strategies.find(s => (
+			attackers.length >= +s.composition[Position.Attacker.id]
+				&& midfielders.length >= +s.composition[Position.Midfielder.id]
+				&& defenders.length >= +s.composition[Position.Defender.id]
+				&& goalkeepers.length >= 1
+		))
+		if (strategy === undefined) {
+			enqueueSnackbar('You don\'t have enough player to create a team', { variant: 'error' })
+			return
+		}
+		dispatch(setStrategy(+strategy.id))
+		dispatch(setTeam([
+			...attackers.slice(0, +strategy.composition[Position.Attacker.id]),
+			...midfielders.slice(0, +strategy.composition[Position.Midfielder.id]),
+			...defenders.slice(0, +strategy.composition[Position.Defender.id]),
+			goalkeepers[0]])
+		)
 	}
 
 	const selectStrategy = async (strategy) => {
@@ -145,6 +183,14 @@ const DrawerContent = ({ lastPlayerDropped }) => {
 								}
 							</Grid>
 
+							<Divider sx={{ m: 2 }} variant="middle" flexItem/>
+							<Button
+								onClick={() => autoCreate()}
+								variant="contained"
+								color="secondary"
+							>
+								Auto create team
+							</Button>
 						</Stack>
 						: // strategy selected
 						<Stack alignItems="center" sx={{ width: '100%', backgroundColor: theme.palette.background.valueOf() }} spacing={2}>

@@ -17,6 +17,7 @@ import { updateBalances } from '../features/userSlice'
 import Web3 from 'web3'
 import TokenPrice from './tokenPrice/TokenPrice'
 import Position from '../enums/Position'
+import ReactPlayer from 'react-player'
 
 const Loader = () => {
 	const [transactionState, setTransactionState] = useState('')
@@ -25,6 +26,8 @@ const Loader = () => {
 	const [player, setPlayer] = useState(undefined)
 	const [players, setPlayers] = useState([])
 	const [useAsTeam, setUseAsTeam] = useState(false)
+	const [animationEnded, setAnimationEnded] = useState(undefined)
+	const [showAnimation, setShowAnimation] = useState(false)
 	const dispatch = useDispatch()
 
 	const { transaction } = useSelector(state => state.settings)
@@ -83,7 +86,9 @@ const Loader = () => {
 				const newPlayer = await getPlayer(receipt.events.NewPlayer.returnValues.playerId, 'mint')
 				console.log('player added', newPlayer)
 				dispatch(addPlayerToCollection(newPlayer))
-				dispatch(fireConffeti())
+				setAnimationEnded(false)
+				setShowAnimation(true)
+				//dispatch(fireConffeti())
 			} else if (receipt.events.NewPlayers) {
 				await getPlayers(receipt.events.NewPlayers.returnValues.playersId, 'mintTeam')
 				dispatch(fireConffeti())
@@ -122,6 +127,7 @@ const Loader = () => {
 			setTransactionState('')
 		}
 	}
+
 
 	return (
 		<>
@@ -181,21 +187,46 @@ const Loader = () => {
 						</Stack>,
 							'mint':
                             <>
-                            	<Stack alignItems="center" spacing={2}>
-                            		<Typography variant="h4">Mint result</Typography>
-                            		<Divider/>
-                            		<Card player={player} marketItem={undefined}/>
-                            		<Divider/>
-                            		<Button
-                            			sx={{ mt: 2 }}
-                            			variant="contained"
-                            			color="secondary"
-                            			fullWidth
-                            			onClick={onHide}
-                            		>
-										Collect
-                            		</Button>
-                            	</Stack>
+                            	{
+                            		showAnimation &&
+                            				<ReactPlayer
+                            					height="100vh"
+                            					width="100vw"
+                            					style={{
+                            						position: 'absolute',
+                            						backgroundColor: 'black',
+                            					}}
+                            					playing
+                            					muted
+                            					onEnded={() => {
+                            						dispatch(fireConffeti())
+                            						setAnimationEnded(true)
+                            					}}
+                            					controls={false}
+                            					url='videos/mint_1.mp4'
+                            				/>
+                            	}
+                            	{
+                            		animationEnded === true &&
+									<Stack alignItems="center" spacing={2} sx={darkModal}>
+										<Typography variant="h4">Mint result</Typography>
+										<Divider/>
+										<Card player={player} marketItem={undefined}/>
+										<Divider/>
+										<Button
+											sx={{ mt: 2 }}
+											variant="contained"
+											color="secondary"
+											fullWidth
+											onClick={() => {
+												onHide()
+												setShowAnimation(false)
+											}}
+										>
+											Collect
+										</Button>
+									</Stack>
+                            	}
                             </>,
 							'mintTeam':
 									<Stack sx={{
@@ -369,7 +400,6 @@ const Loader = () => {
 				</Stack>
 			</Modal>
 		</>
-
 	)
 }
 

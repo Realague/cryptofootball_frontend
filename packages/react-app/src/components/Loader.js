@@ -87,7 +87,7 @@ const Loader = () => {
 				console.log('player added', newPlayer)
 				dispatch(addPlayerToCollection(newPlayer))
 				setAnimationEnded(false)
-				setShowAnimation(true)
+				setShowAnimation(newPlayer.frame)
 				//dispatch(fireConffeti())
 			} else if (receipt.events.NewPlayers) {
 				await getPlayers(receipt.events.NewPlayers.returnValues.playersId, 'mintTeam')

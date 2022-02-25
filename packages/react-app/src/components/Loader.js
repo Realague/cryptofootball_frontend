@@ -349,14 +349,17 @@ const Loader = () => {
 												})
 												onHide()
 												setShowAnimation(false)
-												await footballHeroesService.setPlayerTeam(
-													compositionId,
-													+composition.goalkeeper,
-													composition.defenders,
-													composition.midfielders,
-													composition.attackers,
-												)
-												dispatch(setTeam((players)))
+												if (useAsTeam) {
+													await footballHeroesService.setPlayerTeam(
+														compositionId,
+														+composition.goalkeeper,
+														composition.defenders,
+														composition.midfielders,
+														composition.attackers,
+													)
+													dispatch(setTeam((players)))
+												}
+
 											}}
 										>
 											Collect

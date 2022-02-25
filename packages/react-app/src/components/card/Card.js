@@ -87,7 +87,7 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 			</Stack>
 			<Box display="flex" justifyContent="center" sx={{ position: 'relative' }}>
 				<img
-					src={'https://www.petanqueshop.com/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/1/0/100334110_1.png'}
+					src={`/footballplayer/shirt_${player.frame}.png`}
 					style={{
 						height: mobile ? '76px' : '126px',
 						width: mobile ? '76px' : '126px',

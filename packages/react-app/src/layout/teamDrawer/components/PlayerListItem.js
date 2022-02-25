@@ -29,7 +29,7 @@ const PlayerListItem = ({ player, onClick, button = undefined, icon = <Remove />
 		}} direction="row" spacing={2} p={1}>
 			<Stack direction={isMobile ? 'column' : 'row'} spacing={2} alignItems="center">
 				<img
-					src={`/footballplayer/${player.position}-${player.rarity}-${player.imageId}.png`}
+					src={`/footballplayer/shirt_${player.frame}.png`}
 					style={{
 						height: '70px',
 						width: '60px',

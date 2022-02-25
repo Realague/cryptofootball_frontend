@@ -84,14 +84,38 @@ const Loader = () => {
 				dispatch(updatePlayerInCollection(await footballHeroesService.getFootballPlayer(receipt.events.UpgradeFrame.returnValues.playerId)))
 			} else if (receipt.events.NewPlayer) {
 				const newPlayer = await getPlayer(receipt.events.NewPlayer.returnValues.playerId, 'mint')
-				console.log('player added', newPlayer)
 				dispatch(addPlayerToCollection(newPlayer))
 				setAnimationEnded(false)
-				setShowAnimation(newPlayer.frame)
+				setShowAnimation(
+					{
+						0: '1',
+						1: '1',
+						2: '1',
+						3: '2',
+						4: '3',
+					}[+newPlayer.frame])
 				//dispatch(fireConffeti())
 			} else if (receipt.events.NewPlayers) {
-				await getPlayers(receipt.events.NewPlayers.returnValues.playersId, 'mintTeam')
-				dispatch(fireConffeti())
+				const players = await Promise.all(receipt.events.NewPlayers.returnValues.playersId.map(id => footballHeroesService.getFootballPlayer(id)))
+				setPlayers(players)
+				dispatch(addPlayersToCollection(players))
+				setTransactionState('mintTeam')
+				let lowestFrame = 0
+				players.forEach(p => {
+					if (+p.frame > lowestFrame) {
+						lowestFrame = +p.frame
+					}
+				})
+				setAnimationEnded(false)
+				setShowAnimation(
+					{
+						0: '1',
+						1: '1',
+						2: '1',
+						3: '2',
+						4: '3',
+					}[lowestFrame])
+				//dispatch(fireConffeti())
 			} else if (receipt.events.LevelUp) {
 				setRewards(receipt.events.LevelUp.returnValues)
 				setTransactionState('levelUp')
@@ -115,7 +139,6 @@ const Loader = () => {
 
 	const getPlayers = async (playersId, state = 'mint') => {
 		const players = await Promise.all(playersId.map(id => footballHeroesService.getFootballPlayer(id)))
-		console.log(players)
 		setPlayers(players)
 		dispatch(addPlayersToCollection(players))
 		setTransactionState(state)
@@ -203,7 +226,7 @@ const Loader = () => {
                             						setAnimationEnded(true)
                             					}}
                             					controls={false}
-                            					url='videos/mint_1.mp4'
+                            					url={`videos/mint_${showAnimation}.mp4`}
                             				/>
                             	}
                             	{
@@ -229,7 +252,30 @@ const Loader = () => {
                             	}
                             </>,
 							'mintTeam':
+							<>
+								{
+									showAnimation &&
+									<ReactPlayer
+										height="100vh"
+										width="100vw"
+										style={{
+											position: 'absolute',
+											backgroundColor: 'black',
+										}}
+										playing
+										muted
+										onEnded={() => {
+											dispatch(fireConffeti())
+											setAnimationEnded(true)
+										}}
+										controls={false}
+										url={`videos/mint_${showAnimation}.mp4`}
+									/>
+								}
+								{
+									animationEnded === true &&
 									<Stack sx={{
+										...darkModal,
 										...trainingModal,
 										alignItem: 'center',
 										width: '75vw',
@@ -248,7 +294,8 @@ const Loader = () => {
 											}
 										</Grid>
 										<Divider/>
-										<Stack direction="row" alignItems="center" justifyContent="center" spacing={1} width="100%">
+										<Stack direction="row" alignItems="center" justifyContent="center" spacing={1}
+											   width="100%">
 											<Typography variant="body2">Use as team</Typography>
 											<Checkbox
 												color="secondary"
@@ -301,6 +348,7 @@ const Loader = () => {
 													}
 												})
 												onHide()
+												setShowAnimation(false)
 												await footballHeroesService.setPlayerTeam(
 													compositionId,
 													+composition.goalkeeper,
@@ -313,7 +361,10 @@ const Loader = () => {
 										>
 											Collect
 										</Button>
-									</Stack>,
+									</Stack>
+								}
+							</>
+							,
 							'improveFrame':
 								<Stack alignItems="center" spacing={2}>
 									<Typography variant="h4">Improve Tier</Typography>

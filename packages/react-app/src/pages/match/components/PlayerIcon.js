@@ -20,7 +20,7 @@ const PlayerIcon = ({ player, isNpc }) => {
 		<Avatar
 			onMouseEnter={handlePopoverOpen}
 			onMouseLeave={handlePopoverClose}
-			src={`/footballplayer/${player.position}-${player.rarity}-${player.imageId}.png`}
+			src={`/footballplayer/shirt_${player.frame}.png`}
 			style={{
 				boxShadow: `0px 0px 5px ${Frame.TierList[player.frame].color.dark}, inset 0px 0px 50px ${Frame.TierList[player.frame].color.main}`,
 				background: 'radial-gradient(at 50% 0, black, transparent 70%),linear-gradient(0deg, black, transparent 50%) bottom',

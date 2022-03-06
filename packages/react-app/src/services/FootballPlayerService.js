@@ -270,7 +270,7 @@ class FootballHeroesService {
         }
       }
 
-    async mintTeam(composition) {
+    async mintTeam() {
         try {
             store.dispatch(setTransactionState(true))
             const userStore = store.getState().user
@@ -285,7 +285,7 @@ class FootballHeroesService {
             if (parseInt(Web3.utils.fromWei(allowances.gb)) < Web3.utils.fromWei((result[0] * userStore.GBPrice).toString())) {
                 await this.approveGb(addresses.FootballPlayers)
             }
-            store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.mintTeam(composition, addresses.Game).send()}))
+            store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.mintTeam(addresses.Game).send()}))
         } catch (e) {
             throw e
         } finally {

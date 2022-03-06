@@ -212,22 +212,46 @@ const Loader = () => {
                             <>
                             	{
                             		showAnimation &&
-                            				<ReactPlayer
-                            					height="100vh"
-                            					width="100vw"
-                            					style={{
-                            						position: 'absolute',
-                            						backgroundColor: 'black',
-                            					}}
-                            					playing
-                            					muted
-                            					onEnded={() => {
-                            						dispatch(fireConffeti())
-                            						setAnimationEnded(true)
-                            					}}
-                            					controls={false}
-                            					url={`videos/mint_${showAnimation}.mp4`}
-                            				/>
+										<>
+											{
+												!animationEnded &&
+												<Box
+													sx={{
+														position: 'absolute',
+														zIndex: 9999,
+														width: '100vw',
+														height: '100vh',
+													}}
+												>
+													<Button
+														variant="contained"
+														color="secondary"
+														onClick={() => {
+															dispatch(fireConffeti())
+															setAnimationEnded(true)
+														}}
+													>
+														Skip
+													</Button>
+												</Box>
+											}
+											<ReactPlayer
+												height="100vh"
+												width="100vw"
+												style={{
+													position: 'absolute',
+													backgroundColor: 'black',
+												}}
+												playing
+												muted
+												onEnded={() => {
+													dispatch(fireConffeti())
+													setAnimationEnded(true)
+												}}
+												controls={false}
+												url={`videos/mint_${showAnimation}.mp4`}
+											/>
+										</>
                             	}
                             	{
                             		animationEnded === true &&
@@ -255,22 +279,46 @@ const Loader = () => {
 							<>
 								{
 									showAnimation &&
-									<ReactPlayer
-										height="100vh"
-										width="100vw"
-										style={{
-											position: 'absolute',
-											backgroundColor: 'black',
-										}}
-										playing
-										muted
-										onEnded={() => {
-											dispatch(fireConffeti())
-											setAnimationEnded(true)
-										}}
-										controls={false}
-										url={`videos/mint_${showAnimation}.mp4`}
-									/>
+										<>
+											{
+												!animationEnded &&
+												<Box
+													sx={{
+														position: 'absolute',
+														zIndex: 9999,
+														width: '100vw',
+														height: '100vh',
+													}}
+												>
+													<Button
+														variant="contained"
+														color="secondary"
+														onClick={() => {
+															dispatch(fireConffeti())
+															setAnimationEnded(true)
+														}}
+													>
+														Skip
+													</Button>
+												</Box>
+											}
+											<ReactPlayer
+												height="100vh"
+												width="100vw"
+												style={{
+													position: 'absolute',
+													backgroundColor: 'black',
+												}}
+												playing
+												muted
+												onEnded={() => {
+													dispatch(fireConffeti())
+													setAnimationEnded(true)
+												}}
+												controls={false}
+												url={`videos/mint_${showAnimation}.mp4`}
+											/>
+										</>
 								}
 								{
 									animationEnded === true &&

@@ -125,37 +125,6 @@ const MintPage = () => {
 									src={football1}
 								/>
 								<Divider flexItem />
-								{
-									availableCompositions.length === 0 ?
-										<CircularProgress color="secondary"/>
-										:
-										<Stack direction="row" spacing={2} alignItems="center">
-											<Typography color="secondary" variant="body2">
-												Composition to mint:
-											</Typography>
-											<Select
-												value={mintTeamComposition}
-												label="Sort"
-												color="secondary"
-												onChange={(event) => {
-													setMintTeamComposition(event.target.value)
-												}}
-												sx={{
-													height: '30px',
-													width: '100px',
-												}}
-											>
-												{
-													availableCompositions.map((c, i) => (
-														<MenuItem key={i} value={i}>
-															{`${c.attackerNb}-${c.midfielderNb}-${c.defenderNb}`}
-														</MenuItem>)
-													)
-												}
-											</Select>
-										</Stack>
-								}
-								<Divider flexItem />
 								<Stack direction="row" justifyContent="space-between" spacing={2} alignItems="center">
 									<Stack direction="row" spacing={1} alignItems="center">
 										<Typography variant="caption">
@@ -173,12 +142,11 @@ const MintPage = () => {
 								<Divider flexItem />
 								<Button
 									fullWidth
-									disabled={mintTeamComposition === -1 || isInTransaction}
+									disabled={isInTransaction}
 									variant="contained"
 									color="secondary"
 									onClick={() => {
-										console.log('composition to mint: ' + mintTeamComposition)
-										footballHeroesService.mintTeam(mintTeamComposition)
+										footballHeroesService.mintTeam()
 									}}
 								>
 									{

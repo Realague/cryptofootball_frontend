@@ -108,8 +108,14 @@ const Card = ({ player, marketItem, mobile = false, isNpc, onClick = undefined, 
 					}}
 					spacing={0.5}
 				>
-					<Typography color="black" fontSize={mobile ? 4 : 6}>{footballHeroesService.getPlayersName(player)}</Typography>
-					<Typography color="black" fontSize={10}>{player.id}</Typography>
+					<Typography color={
+						player.frame === 3 ?
+							'#b3b3b3' : 'black'
+					} fontSize={mobile ? 4 : 6}>{footballHeroesService.getPlayersName(player)}</Typography>
+					<Typography color={
+						player.frame === 3 ?
+							'#b3b3b3' : 'black'
+					}  fontSize={10}>{player.id}</Typography>
 				</Stack>
 			</Box>
 			<Stack justifyContent="center" alignItems="center" spacing={0.25}>

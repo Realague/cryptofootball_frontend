@@ -9,6 +9,7 @@ const RandomPlayer = ({ tier = undefined }) => {
 		rarity: 3,
 		position: 3,
 		score: 80,
+		id: 0,
 	})
 
 	const randomNumber = (max) => Math.floor(Math.random() * max)
@@ -19,10 +20,10 @@ const RandomPlayer = ({ tier = undefined }) => {
 				imageId: 0,
 				frame: tier === undefined ? randomNumber(4) : tier,
 				rarity: randomNumber(2),
-				position: randomNumber(3),
+				position: randomNumber(2),
 				score: randomNumber(100),
+				id: randomNumber(200),
 			}
-
 			fakePlayer.imageId = randomNumber(footballHeroesService.names[fakePlayer.position][fakePlayer.position].length - 1)
 			setFakePlayer(fakePlayer)
 		}, 1000)

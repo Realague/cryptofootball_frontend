@@ -24,6 +24,7 @@ export const lightTheme = createTheme({
 	},
 	typography: {
 		fontFamily: [
+			'Poppins',
 			'noto-sans',
 			'Roboto',
 			'-apple-system',
@@ -90,6 +91,7 @@ export const theme = createTheme({
 	},
 	typography: {
 		fontFamily: [
+			'Poppins',
 			'noto-sans',
 			'Roboto',
 			'-apple-system',

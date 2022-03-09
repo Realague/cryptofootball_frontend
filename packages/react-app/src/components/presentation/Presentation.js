@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import '../../css/presentation.css'
-import { Box, Divider, Slide, Stack, Typography, useMediaQuery } from '@mui/material'
+import { Box, Divider, Grid, Slide, Stack, Typography, useMediaQuery } from '@mui/material'
 import TokenImage from '../../images/token.png'
 import theme from '../../theme'
 import VisibilitySensor from 'react-visibility-sensor'
@@ -9,6 +9,7 @@ function Presentation() {
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const boxStyle = (color) => ({
 		borderRadius: '5px',
+		backgroundColor: theme.palette.background.paper,
 		boxShadow: `0 0 10px ${color}`,
 		borderTop: `3px solid ${color}`,
 		height: '220px',
@@ -19,24 +20,10 @@ function Presentation() {
 	})
 
 	const PresentationBox = ({ color, children }) => {
-		const [isComponentVisible, setIsVisible] = useState(false)
-
 		return (
-			<VisibilitySensor
-				partialVisibility
-				minTopValue={75}
-				onChange={(isVisible) => {
-					if (!isComponentVisible && isVisible) {
-						setIsVisible(isVisible)
-					}
-				}}
-			>
-				<Slide direction="left" in={isComponentVisible}>
-					<Stack sx={boxStyle(color)} spacing={1}>
-						{ children }
-					</Stack>
-				</Slide>
-			</VisibilitySensor>
+			<Stack sx={boxStyle(color)} spacing={1}>
+				{ children }
+			</Stack>
 		)
 	}
 
@@ -50,11 +37,11 @@ function Presentation() {
                     Train them by taking penalties.
 			</Typography>
 
-			<PresentationBox color="red">
-				<Typography variant="h4">Recruit your players</Typography>
-				<img src="/demo-card.png" style={{ width: '64px', height: '100px', alignSelf: 'flex-end' }}/>
-			</PresentationBox>
-			<Stack direction={isMobile ? 'column' : 'row'} justifyContent="space-around">
+			<Grid container alignItems="center" justifyContent="center">
+				<PresentationBox color="red">
+					<Typography variant="h4">Recruit your players</Typography>
+					<img src="/demo-card.png" style={{ width: '64px', height: '100px', alignSelf: 'flex-end' }}/>
+				</PresentationBox>
 				<PresentationBox color={theme.palette.secondary.main}>
 					<Typography variant="h4">Play with your players</Typography>
 					<img src="/stadium.png" style={{ width: '128px', height: '75px', alignSelf: 'flex-end' }} alt=""/>
@@ -63,11 +50,12 @@ function Presentation() {
 					<Typography variant="h4">Train your players</Typography>
 					<img src="/coupetrans.png" style={{ width: '64px', height: '80px', alignSelf: 'flex-end' }} alt=""/>
 				</PresentationBox>
-			</Stack>
-			<PresentationBox color="green">
-				<Typography variant="h4">Earn our tokens</Typography>
-				<img style={{ width: '64px', height: '64px', alignSelf: 'flex-end' }} src={TokenImage} alt="token"/>
-			</PresentationBox>
+				<PresentationBox color="green">
+					<Typography variant="h4">Earn our tokens</Typography>
+					<img style={{ width: '64px', height: '64px', alignSelf: 'flex-end' }} src={TokenImage} alt="token"/>
+				</PresentationBox>
+			</Grid>
+
 		</Stack>
 	)
 }

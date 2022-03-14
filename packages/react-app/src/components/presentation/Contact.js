@@ -22,7 +22,7 @@ function Contact() {
 				<IconButton onClick={() => window.open('https://t.me/+ZNuorcKy0NE4OTA8')}>
 					<Telegram sx={iconStyle}/>
 				</IconButton>
-				<IconButton onClick={() => window.open('https://twitter.com/footballheroes8')}>
+				<IconButton onClick={() => window.open('https://twitter.com/FBHeroes_BSC')}>
 					<Twitter sx={iconStyle}/>
 				</IconButton>
 			</Stack>

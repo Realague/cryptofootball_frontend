@@ -49,6 +49,9 @@ class FootballHeroesService {
         this.marketplaceContract = new web3Contract(abis.marketplace, addresses.Marketplace, {
             from: address,
         })
+        this.presaleContract = new web3Contract(abis.presale, addresses.presale, {
+            from: address,
+        })
     }
 
     async getGbBalance() {
@@ -247,6 +250,10 @@ class FootballHeroesService {
         return await this.gameContract.methods.getCurrentMatchAvailable().call()
     }
 
+    async getPresaleToken() {
+        return await this.presaleContract.methods.getPresaleToken().call()
+    }
+
     async mint() {
         try {
             const userStore = store.getState().user
@@ -270,6 +277,47 @@ class FootballHeroesService {
         }
       }
 
+      async mintPlayerWithPresaleToken() {
+          try {
+              const userStore = store.getState().user
+              store.dispatch(setTransactionState(true))
+              const result = await Promise.all([this.getMintPrice(), this.getMintFees()])
+              if (parseInt(Web3.utils.toWei(userStore.BUSDBalance, 'ether')) < parseInt(result[1]) && parseInt(userStore.presaleTokens) < result[0] * userStore.GBPrice) {
+                  return
+              }
+              let allowances = await this.getAllowances(addresses.FootballPlayers)
+              if (parseInt(Web3.utils.fromWei(allowances.busd)) < parseInt(Web3.utils.fromWei(result[1]))) {
+                  await this.approveBusd(addresses.FootballPlayers)
+              }
+              store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.mintPlayerWithPresaleToken().send()}))
+          } catch (e) {
+              throw e
+          } finally {
+              store.dispatch(setTransactionState(false))
+          }
+      }
+
+    async mintPlayerWithRewards() {
+        try {
+            const userStore = store.getState().user
+            console.log(userStore)
+            store.dispatch(setTransactionState(true))
+            const result = await Promise.all([this.getMintPrice(), this.getMintFees()])
+            if (parseInt(Web3.utils.toWei(userStore.BUSDBalance, 'ether')) < parseInt(result[1]) && parseInt(Web3.utils.toWei(userStore.rewards, 'ether')) < result[0] * userStore.GBPrice) {
+                return
+            }
+            let allowances = await this.getAllowances(addresses.FootballPlayers)
+            if (parseInt(Web3.utils.fromWei(allowances.busd)) < parseInt(Web3.utils.fromWei(result[1]))) {
+                await this.approveBusd(addresses.FootballPlayers)
+            }
+            store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.mintPlayerWithRewards().send()}))
+        } catch (e) {
+            throw e
+        } finally {
+            store.dispatch(setTransactionState(false))
+        }
+    }
+
     async mintTeam() {
         try {
             store.dispatch(setTransactionState(true))
@@ -292,6 +340,49 @@ class FootballHeroesService {
             store.dispatch(setTransactionState(false))
         }
      }
+
+    async mintTeamWithRewards() {
+        try {
+            store.dispatch(setTransactionState(true))
+            const userStore = store.getState().user
+            const result = await Promise.all([this.getMintPrice(), this.getMintFees()])
+            if (parseInt(Web3.utils.toWei(userStore.BUSDBalance, 'ether')) < parseInt(result[1]) && parseInt(Web3.utils.toWei(userStore.rewards, 'ether')) < result[0] * userStore.GBPrice) {
+                return
+            }
+            let allowances = await this.getAllowances(addresses.FootballPlayers)
+            if (parseInt(Web3.utils.fromWei(allowances.busd)) < parseInt(Web3.utils.fromWei(result[1]))) {
+                await this.approveBusd(addresses.FootballPlayers)
+            }
+            store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.mintTeamWithRewards(addresses.Game).send()}))
+        } catch (e) {
+            throw e
+        } finally {
+            store.dispatch(setTransactionState(false))
+        }
+    }
+
+    async mintTeamWithPresale() {
+        try {
+            store.dispatch(setTransactionState(true))
+            const userStore = store.getState().user
+            const result = await Promise.all([this.getMintPrice(), this.getMintFees()])
+            if (parseInt(Web3.utils.toWei(userStore.BUSDBalance, 'ether')) < parseInt(result[1]) && parseInt(userStore.presaleTokens) < result[0] * userStore.GBPrice) {
+                return
+            }
+            let allowances = await this.getAllowances(addresses.FootballPlayers)
+            if (parseInt(Web3.utils.fromWei(allowances.busd)) < parseInt(Web3.utils.fromWei(result[1]))) {
+                await this.approveBusd(addresses.FootballPlayers)
+            }
+            if (parseInt(Web3.utils.fromWei(allowances.gb)) < Web3.utils.fromWei((result[0] * userStore.GBPrice).toString())) {
+                await this.approveGb(addresses.FootballPlayers)
+            }
+            store.dispatch(setTransaction({transaction: this.footballPlayersContract.methods.mintTeamWithPresaleToken(addresses.Game).send()}))
+        } catch (e) {
+            throw e
+        } finally {
+            store.dispatch(setTransactionState(false))
+        }
+    }
 
     async listFootballPlayer(price, playerId) {
         if (!price || parseInt(price) <= 0) {
@@ -506,6 +597,7 @@ class FootballHeroesService {
     async playMatch(opponentTeamId) {
         store.dispatch(setTransaction({transaction: this.gameContract.methods.playMatch(opponentTeamId).send()}))
     }
+
 }
 
 let footballHeroesService = new FootballHeroesService()

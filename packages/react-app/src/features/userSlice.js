@@ -8,6 +8,7 @@ const initialState = {
 	GBExactPrice: '0.00',
 	claimFee: '0',
 	rewards: '0',
+	presaleTokens: '0.00',
 	playersId: [],
 	isConnected: false,
 	fetching: false,
@@ -39,6 +40,7 @@ export const userSlice = createSlice({
 				claimFee: action.payload.claimFee,
 				rewards: action.payload.rewards,
 				playersId: action.payload.playersId,
+				presaleTokens: action.payload.presaleTokens,
 			}
 		},
 		logout: () => {

@@ -18,6 +18,7 @@ const AccountInfo = () => {
 		GBBalance,
 		claimFee,
 		rewards,
+		presaleTokens
 	} = useSelector(state => state.user)
 	const [open, setOpen] = useState(false)
 	const [time, setTime] = useState({ 'h': 0, 'm': 0, 's': 0 })
@@ -128,6 +129,17 @@ const AccountInfo = () => {
 							<Button variant="contained" onClick={checkClaimRewards}>Claim</Button>
 							: ''
 					}
+					<Stack
+						direction="row"
+						alignItems="center"
+						spacing={1}
+					>
+						<Typography variant="subtitle2">
+							Presale:
+						</Typography>
+						<Typography variant="subtitle1">{presaleTokens}</Typography>
+						<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
+					</Stack>
 				</Stack>
 				<Stack
 					direction="row" sx={{

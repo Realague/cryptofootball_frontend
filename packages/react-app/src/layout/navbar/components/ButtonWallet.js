@@ -27,7 +27,7 @@ const WalletButton = () => {
 	//const {isReady} = useSelector(state => state.game)
 	const dispatch = useDispatch()
 
-	function saveAccountInfo(GBPrice, GBExactPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId) {
+	function saveAccountInfo(GBPrice, GBExactPrice, rewards, claimFee, GBBalance, BUSDBalance, playersId, presale) {
 		dispatch(updateAccount({
 			GBPrice: GBPrice,
 			GBExactPrice: GBExactPrice,
@@ -35,7 +35,8 @@ const WalletButton = () => {
 			claimFee: claimFee,
 			GBBalance: GBBalance,
 			BUSDBalance: BUSDBalance,
-			playersId: playersId
+			playersId: playersId,
+			presaleTokens: presale,
 		}))
 	}
 
@@ -48,6 +49,7 @@ const WalletButton = () => {
 		jobs.push(footballHeroesService.getGbBalance())
 		jobs.push(footballHeroesService.getBusdBalance())
 		jobs.push(footballHeroesService.getFootballPlayerList())
+		jobs.push(footballHeroesService.getPresaleToken())
 		const jobsResult = await Promise.all(jobs)
 		saveAccountInfo(
 			jobsResult[0],
@@ -56,7 +58,8 @@ const WalletButton = () => {
 			jobsResult[3],
 			Web3.utils.fromWei(jobsResult[4]), // GB Balance
 			Web3.utils.fromWei(jobsResult[5]), // BUSD Balance
-			jobsResult[6]
+			jobsResult[6],
+			Web3.utils.fromWei(jobsResult[7])
 		)
 	}
 

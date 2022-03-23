@@ -4,6 +4,7 @@ import marketplaceAbi from './abis/marketplace.json'
 import footballPlayersAbi from './abis/footballPlayer.json'
 import footballHeroesStorage from './abis/footballHeroesStorage.json'
 import presaleAbi from './abis/presale.json'
+import demoAbi from './abis/demo.json'
 
 const abis = {
 	erc20: erc20Abi,
@@ -12,6 +13,7 @@ const abis = {
 	footballPlayer: footballPlayersAbi,
 	footballHeroesStorage: footballHeroesStorage,
 	presale: presaleAbi,
+	demo: demoAbi,
 }
 
 export default abis

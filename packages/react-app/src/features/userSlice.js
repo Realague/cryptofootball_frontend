@@ -30,6 +30,12 @@ export const userSlice = createSlice({
 				rewards: action.payload.rewards || state.rewards,
 			}
 		},
+		updateGBBalance: (state, action) => {
+			return {
+				...state,
+				GBBalance: action.payload,
+			}
+		},
 		updateAccount: (state, action) => {
 			return {
 				...state,
@@ -54,6 +60,7 @@ export const {
 	updateAccount,
 	updateBalances,
 	logout,
+	updateGBBalance,
 } = userSlice.actions
 
 export default userSlice.reducer

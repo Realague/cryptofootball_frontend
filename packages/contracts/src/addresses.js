@@ -9,6 +9,7 @@ const addresses = {
 	FootballPlayers: '0x71C9013F9EdE139fFB9F3A80c5164B0Fdceb2115',
 	FootballHeroesStorage: '0x4aD98cFbA873e475D69Fea4093Ad354a0E8D1C3C',
 	presale: '0xd4374a73F53C8D0a7f68404665BDdDA97150d39C',
+	demo: '0x451B71A6d32b0cd6e8589adC2ac30BAcbc791E17',
 }
 /*
 

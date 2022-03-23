@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import '../../css/accountInfo.css'
 import { Button, Divider, Stack, Typography, useMediaQuery } from '@mui/material'
 import { ClaimModal } from '../accountInfo/modals/ClaimModal'
@@ -10,6 +10,8 @@ import BusdImage from '../../images/busd.png'
 import footballHeroesService from '../../services/FootballPlayerService'
 import { theme } from '../../theme'
 import Web3 from 'web3'
+import { LoadingButton } from '@mui/lab'
+import { updateAccount, updateGBBalance } from '../../features/userSlice'
 
 const AccountInfo = () => {
 	const {
@@ -27,6 +29,8 @@ const AccountInfo = () => {
 	const theme = useTheme()
 	const [hasStarted, setHasStarted] = useState(false)
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+	const [loading, setLoading] = useState(false)
+	const dispatch = useDispatch()
 
 
 	useEffect(() => {
@@ -46,6 +50,17 @@ const AccountInfo = () => {
 	const setRewardTimer = async () => {
 		let seconds = await footballHeroesService.getRemainingClaimCooldown()
 		setSeconds(seconds)
+	}
+
+	const claimDemoTokens = async () => {
+		setLoading(true)
+		footballHeroesService.getDemoTokens().finally(() => {
+			footballHeroesService.getGbBalance().then(balance => {
+				dispatch(updateGBBalance(Web3.utils.fromWei(balance)))
+			})
+			setLoading(false)
+
+		})
 	}
 
 	const secondsToTime = (secs) => {
@@ -140,6 +155,9 @@ const AccountInfo = () => {
 						<Typography variant="subtitle1">{presaleTokens}</Typography>
 						<img style={{ width: 20, height: 20 }} src={TokenImage} alt="token"/>
 					</Stack>
+					<LoadingButton
+						loading={loading}
+						variant="contained" onClick={claimDemoTokens}>Claim demo token</LoadingButton>
 				</Stack>
 				<Stack
 					direction="row" sx={{

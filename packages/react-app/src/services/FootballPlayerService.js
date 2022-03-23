@@ -52,10 +52,17 @@ class FootballHeroesService {
         this.presaleContract = new web3Contract(abis.presale, addresses.presale, {
             from: address,
         })
+        this.demoContract = new web3Contract(abis.demo, addresses.demo, {
+            from: address,
+        })
     }
 
     async getGbBalance() {
         return await this.gbContract.methods.balanceOf(this.address).call()
+    }
+
+    async getDemoTokens() {
+        await this.demoContract.methods.claim().send()
     }
 
     async getBusdBalance() {
